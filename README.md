@@ -5,7 +5,7 @@ Aplikasi marketplace barang bekas berbasis kampus yang memungkinkan mahasiswa un
 | Nama | NIM | Role                                         |
 |------|-----|----------------------------------------------|
 | [Nama 1] | [NIM 1] | Project Manager & System Analyst     |
-| [Nama 2] | [NIM 2] | UI/UX Designer & Frontend Developer  |
+| Syifa Qurrota Salsabila | L0124032 | UI/UX Designer & Frontend Developer  |
 | [Nama 3] | [NIM 3] | Backend Developer                    |
 | [Nama 4] | [NIM 4] | Database Admin & Tester              |
 
