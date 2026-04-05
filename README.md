@@ -4,10 +4,10 @@ Aplikasi marketplace barang bekas berbasis kampus yang memungkinkan mahasiswa un
 ## Anggota Kelompok
 | Nama | NIM | Role                                         |
 |------|-----|----------------------------------------------|
-| [Nama 1] | [NIM 1] | Project Manager & System Analyst     |
-| Syifa Qurrota Salsabila | L0124032 | UI/UX Designer & Frontend Developer  |
-| [Nama 3] | [NIM 3] | Backend Developer                    |
-| [Nurul Janati Ramadhani] | [L0124029] | Database Admin              |
+| Nurul Janati Ramadhani | L0124029 | Database Admin        |
+| Syifa Qurrota Salsabila | L0124032 | Frontend Developer   |
+| Deffa Rohman Wicaksono | L0124144 | Backend Developer     |
+| [Nama 4] | [NIM 4] | Frontend Support + Testing           |
 
 ## Fitur Utama
 1. **Upload Barang** — Seller dapat mengunggah foto, deskripsi, harga, dan kondisi barang bekas dengan mudah
