@@ -1,5 +1,5 @@
 # SeMart 🛒
-Aplikasi marketplace barang bekas berbasis kampus yang memungkinkan mahasiswa untuk menjual dan membeli barang bekas dengan mudah dan aman. SeMart dirancang khusus untuk ekosistem kampus, sehingga hanya mahasiswa terverifikasi yang dapat bertransaksi. Dengan SeMart, mahasiswa bisa mendapatkan barang kebutuhan kuliah dengan harga lebih terjangkau sekaligus mengurangi pemborosan.
+Aplikasi marketplace barang bekas untuk mahasiswa Universitas Sebelas Maret sebagai sarana menjual dan membeli barang bekas dengan mudah dan aman. SeMart dirancang khusus untuk ekosistem kampus, sehingga hanya mahasiswa terverifikasi yang dapat bertransaksi. Dengan SeMart, mahasiswa bisa mendapatkan barang kebutuhan dengan harga lebih terjangkau sekaligus mengurangi limbah dengan memanfaatkan barang yang masih layak pakai.
 
 ## Anggota Kelompok
 | Nama | NIM | Role                                         |
@@ -11,9 +11,9 @@ Aplikasi marketplace barang bekas berbasis kampus yang memungkinkan mahasiswa un
 
 ## Fitur Utama
 1. **Upload Barang** — Seller dapat mengunggah foto, deskripsi, harga, dan kondisi barang bekas dengan mudah
-2. **Penelusuran & Filter Barang** — Pembeli dapat mencari barang berdasarkan kategori, harga, dan kondisi barang
-3. **Chat dengan Seller** — Fitur pesan langsung antar pengguna untuk negosiasi dan konfirmasi transaksi
-4. **Checkout & Pembayaran** — Proses pembelian dengan pilihan COD dalam kampus atau transfer digital
+2. **Penelusuran Barang Bekas** — Buyer dapat mencari barang bekas yang dibutuhkan 
+3. **Chat dengan Seller** — Fitur pesan langsung antara seller dan buyer untuk negosiasi dan konfirmasi transaksi
+4. **Tutup Penjualan** — Seller menetapkan status sold out setelah mencapai kesepakatan pembelian dengan buyer
 
 
 ## Tech Stack
