@@ -100,7 +100,7 @@
         - When halaman dimuat sepenuhnya
         - Then sistem menampilkan informasi lengkap berupa nama produk, harga, deskripsi, kondisi barang, serta gambar produk secara jelas
 
-10. Edit & hapus barang
+10. Edit & hapus barang  
      As a seller, I want mengedit atau menghapus barang yang saya jual di marketplace, so that saya dapat memastikan informasi yang ditampilkan tetap akurat atau menarik barang yang sudah tidak ingin dijual.
      **Acceptance Criteria:**
      - AC-1:
@@ -116,7 +116,7 @@
          - When seller mengonfirmasi tindakan penghapusan
          - Then barang tersebut tidak lagi ditampilkan di marketplace
 
-11. Monitoring admin  
+11. Monitoring admin    
      As an admin, I want melihat dan memantau aktivitas yang terjadi di marketplace, so that saya dapat mengetahui performa sistem serta perkembangan jumlah pengguna, produk, dan transaksi.
      **Acceptance Criteria:**
      - AC-1:
@@ -124,7 +124,7 @@
          - When halaman selesai dimuat
          - Then sistem menampilkan ringkasan data berupa jumlah user, jumlah produk, dan jumlah transaksi
 
-12. Filter & sorting
+12. Filter & sorting  
      As a user, I want memfilter dan mengurutkan barang berdasarkan kategori dan harga, so that saya dapat menemukan barang yang sesuai dengan kebutuhan dan preferensi saya dengan lebih cepat.
      **Acceptance Criteria:**
      - AC-1:
@@ -140,7 +140,7 @@
          - When user ingin menghapus atau mereset filter
          - Then sistem kembali menampilkan seluruh daftar barang tanpa filter
 
-13. Wishlist
+13. Wishlist  
      As a user, I want menyimpan barang yang saya minati ke dalam wishlist, so that saya dapat dengan mudah menemukan kembali barang tersebut di kemudian hari.
      **Acceptance Criteria:**
      - AC-1:
@@ -152,7 +152,7 @@
          - When halaman dimuat
          - Then sistem menampilkan seluruh barang yang telah disimpan oleh user 
 
-14. Rating & ulasan
+14. Rating & ulasan  
      As a buyer, I want memberikan rating dan ulasan kepada seller setelah transaksi selesai, so that user lain dapat menilai tingkat kepercayaan dan kualitas layanan dari seller tersebut.
      **Acceptance Criteria:**
      - AC-1:
@@ -164,7 +164,7 @@
          - When halaman dimuat
          - Then sistem menampilkan rating dan ulasan dari user lain
 
-15. Laporan barang
+15. Laporan barang  
      As a user, I want melaporkan barang yang mencurigakan atau tidak sesuai, so that marketplace tetap aman dan terhindar dari penipuan atau konten yang tidak layak.
      **Acceptance Criteria:**
      - AC-1:
@@ -176,7 +176,7 @@
          - When user mengirim laporan tersebut
          - Then sistem menyimpan laporan ke dalam database
 
-16. Tindak laporan
+16. Tindak laporan  
      As an admin, I want melihat dan menindaklanjuti laporan dari user, so that saya dapat menjaga keamanan dan kenyamanan penggunaan marketplace.
      **Acceptance Criteria:**
      - AC-1:
@@ -192,7 +192,7 @@
          - When admin mengambil tindakan (misalnya menghapus produk, memberi peringatan kepada seller, atau menyatakan laporan tidak valid)
          - Then sistem memperbarui status laporan sistem memperbarui status laporan menjadi “ditindaklanjuti” atau “ditolak” sesuai hasil keputusan admin
 
-17. Login non-SSO
+17. Login non-SSO  
      As a user, I want melakukan login menggunakan akun selain SSO UNS (Google, email biasa), so that pengguna non-mahasiswa dapat menggunakan platform.
      **Acceptance Criteria:**
      - AC-1:
@@ -200,7 +200,7 @@
          - When user memilih login menggunakan Google/email
          - Then sistem mengizinkan autentikasi tanpa SSO UNS
 
-18. Promosi berbayar
+18. Promosi berbayar  
      As a seller, I want melakukan promosi berbayar untuk meningkatkan visibilitas barang saya, so that barang saya muncul di urutan teratas pencarian.
      **Acceptance Criteria:**
      - AC-1:
@@ -212,7 +212,7 @@
          - When sistem memproses pembayaran
          - Then barang ditampilkan di posisi prioritas dalam pencarian
 
-19. Rekomendasi barang
+19. Rekomendasi barang  
      As a user, I want mendapatkan rekomendasi barang berdasarkan preferensi dan riwayat pencarian, so that saya lebih mudah menemukan barang yang relevan.
      **Acceptance Criteria:**
      - AC-1:
