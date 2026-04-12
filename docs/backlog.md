@@ -18,3 +18,6 @@
 | US-14 | Rating & ulasan | As a buyer, I want memberikan rating dan ulasan, so that user lain bisa menilai seller | User (Buyer) | Could Have |
 | US-15 | Laporan barang | As a user, I want melaporkan barang mencurigakan, so that marketplace tetap aman | User | Could Have |
 | US-16 | Tindak laporan | As an admin, I want menindaklanjuti laporan, so that keamanan marketplace terjaga | Admin | Could Have |
+| US-17 | Login non-SSO | As a user, I want login menggunakan akun selain SSO UNS (Google/email), so that pengguna non-mahasiswa dapat mengakses platform | User | Won’t Have |
+| US-18 | Promosi berbayar | As a seller, I want mempromosikan barang secara berbayar, so that barang saya muncul di posisi teratas pencarian | User (Seller) | Won’t Have |
+| US-19 | Rekomendasi barang | As a user, I want mendapatkan rekomendasi barang berdasarkan preferensi, so that saya lebih mudah menemukan barang relevan | User | Won’t Have |
