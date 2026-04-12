@@ -91,3 +91,131 @@
         - Given buyer sudah membayar tetapi seller belum menekan "Tutup Penjualan"
         - When melewati batas waktu konfirmasi yang ditentukan sistem (2x24 jam)
         - Then sistem secara otomatis mengubah status barang menjadi "Sold Out" dan mengirim notifikasi ke seller
+
+9. Detail barang
+    As a buyer, I want melihat detail lengkap dari suatu barang yang ditampilkan di marketplace, so that saya bisa memastikan kondisi, spesifikasi, dan kelayakan barang sebelum memutuskan untuk membeli.
+    **Acceptance Criteria:**
+    - AC-1:
+        - Given buyermembuka halaman detail suatu produk
+        - When halaman dimuat sepenuhnya
+        - Then sistem menampilkan informasi lengkap berupa nama produk, harga, deskripsi, kondisi barang, serta gambar produk secara jelas
+
+10. Edit & hapus barang  
+     As a seller, I want mengedit atau menghapus barang yang saya jual di marketplace, so that saya dapat memastikan informasi yang ditampilkan tetap akurat atau menarik barang yang sudah tidak ingin dijual.
+     **Acceptance Criteria:**
+     - AC-1:
+         - Given seller membuka halaman daftar barang miliknya
+         - When seller memilih opsi untuk mengedit salah satu barang
+         - Then sistem menampilkan form edit yang berisi data barang sebelumnya
+     - AC-2:
+         - Given seller telah melakukan perubahan pada data barang
+         - When seller menyimpan perubahan tersebut
+         - Then sistem memperbarui informasi barang sesuai data terbaru
+     - AC-3:
+         - Given seller memilih opsi untuk menghapus barang
+         - When seller mengonfirmasi tindakan penghapusan
+         - Then barang tersebut tidak lagi ditampilkan di marketplace
+
+11. Monitoring admin    
+     As an admin, I want melihat dan memantau aktivitas yang terjadi di marketplace, so that saya dapat mengetahui performa sistem serta perkembangan jumlah pengguna, produk, dan transaksi.
+     **Acceptance Criteria:**
+     - AC-1:
+         - Given admin membuka halaman dashboard
+         - When halaman selesai dimuat
+         - Then sistem menampilkan ringkasan data berupa jumlah user, jumlah produk, dan jumlah transaksi
+
+12. Filter & sorting  
+     As a user, I want memfilter dan mengurutkan barang berdasarkan kategori dan harga, so that saya dapat menemukan barang yang sesuai dengan kebutuhan dan preferensi saya dengan lebih cepat.
+     **Acceptance Criteria:**
+     - AC-1:
+         - Given user berada di halaman pencarian atau daftar produk
+         - When user memilih kategori tertentu
+         - Then sistem hanya menampilkan barang yang termasuk dalam kategori tersebut 
+     - AC-2:
+         - Given user memilih opsi pengurutan harga (termurah atau termahal)
+         - When sistem menerapkan sorting
+         - Then daftar barang ditampilkan sesuai urutan harga yang dipilih
+     - AC-3:
+         - Given user telah menerapkan filter
+         - When user ingin menghapus atau mereset filter
+         - Then sistem kembali menampilkan seluruh daftar barang tanpa filter
+
+13. Wishlist  
+     As a user, I want menyimpan barang yang saya minati ke dalam wishlist, so that saya dapat dengan mudah menemukan kembali barang tersebut di kemudian hari.
+     **Acceptance Criteria:**
+     - AC-1:
+         - Given user melihat produk yang diminati
+         - When klik tombol “Suka”
+         - Then sistem menyimpan produk tersebut ke dalam wishlist user
+     - AC-2:
+         - Given user membuka halaman wishlist
+         - When halaman dimuat
+         - Then sistem menampilkan seluruh barang yang telah disimpan oleh user 
+
+14. Rating & ulasan  
+     As a buyer, I want memberikan rating dan ulasan kepada seller setelah transaksi selesai, so that user lain dapat menilai tingkat kepercayaan dan kualitas layanan dari seller tersebut.
+     **Acceptance Criteria:**
+     - AC-1:
+         - Given transaksi antara buyer dan seller telah selesai
+         - When buyer memberikan rating dan ulasan
+         - Then sistem menyimpan rating tersebut pada profil seller
+     - AC-2:
+         - Given user membuka halaman profil seller
+         - When halaman dimuat
+         - Then sistem menampilkan rating dan ulasan dari user lain
+
+15. Laporan barang  
+     As a user, I want melaporkan barang yang mencurigakan atau tidak sesuai, so that marketplace tetap aman dan terhindar dari penipuan atau konten yang tidak layak.
+     **Acceptance Criteria:**
+     - AC-1:
+         - Given user membuka halaman detail produk
+         - When user menekan tombol "Laporkan"
+         - Then sistem menampilkan form laporan yang dapat diisi oleh user
+     - AC-2:
+         - Given user telah mengisi form laporan
+         - When user mengirim laporan tersebut
+         - Then sistem menyimpan laporan ke dalam database
+
+16. Tindak laporan  
+     As an admin, I want melihat dan menindaklanjuti laporan dari user, so that saya dapat menjaga keamanan dan kenyamanan penggunaan marketplace.
+     **Acceptance Criteria:**
+     - AC-1:
+         - Given admin membuka halaman daftar laporan
+         - When halaman dimuat
+         - Then sistem menampilkan seluruh laporan yang dikirim oleh user
+     - AC-2:
+         - Given admin memilih salah satu laporan
+         - When admin meninjau isi laporan
+         - Then sistem menampilkan detail laporan dan informasi terkait produk atau seller yang dilaporkan
+     - AC-3:
+         - Given admin  telah meninjau laporan
+         - When admin mengambil tindakan (misalnya menghapus produk, memberi peringatan kepada seller, atau menyatakan laporan tidak valid)
+         - Then sistem memperbarui status laporan sistem memperbarui status laporan menjadi “ditindaklanjuti” atau “ditolak” sesuai hasil keputusan admin
+
+17. Login non-SSO  
+     As a user, I want melakukan login menggunakan akun selain SSO UNS (Google, email biasa), so that pengguna non-mahasiswa dapat menggunakan platform.
+     **Acceptance Criteria:**
+     - AC-1:
+         - Given user berada di halaman login
+         - When user memilih login menggunakan Google/email
+         - Then sistem mengizinkan autentikasi tanpa SSO UNS
+
+18. Promosi berbayar  
+     As a seller, I want melakukan promosi berbayar untuk meningkatkan visibilitas barang saya, so that barang saya muncul di urutan teratas pencarian.
+     **Acceptance Criteria:**
+     - AC-1:
+         - Given seller ingin mempromosikan barang
+         - When seller memilih fitur promosi berbayar
+         - Then sistem menampilkan opsi pembayaran untuk meningkatkan visibilitas produk
+     - AC-2:
+         - Given seller telah membayar promosi
+         - When sistem memproses pembayaran
+         - Then barang ditampilkan di posisi prioritas dalam pencarian
+
+19. Rekomendasi barang  
+     As a user, I want mendapatkan rekomendasi barang berdasarkan preferensi dan riwayat pencarian, so that saya lebih mudah menemukan barang yang relevan.
+     **Acceptance Criteria:**
+     - AC-1:
+         - Given user memiliki riwayat pencarian atau interaksi
+         - When user membuka halaman beranda
+         - Then sistem menampilkan rekomendasi barang yang dipersonalisasi
