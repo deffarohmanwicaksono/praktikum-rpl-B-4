@@ -1,6 +1,6 @@
 # User Stories
 
-1. Registrasi via SSO UNS
+1. Registrasi via SSO UNS  
     As a user, I want mendaftar dan login SeMart menggunakan akun SSO UNS, so that hanya mahasiswa yang valid yang dapat menggunakan fitur marketplace
     **Acceptance Criteria:**
     - AC-1:
@@ -12,7 +12,7 @@
         - When mencoba login tanpa akun SSO UNS
         - Then sistem menolak akses 
 
-2. Upload barang
+2. Upload barang  
     As a seller, I want mengunggah barang bekas, so that barang saya dapat ditemukan oleh buyer di platform
     **Acceptance Criteria:**
     - AC-1:
@@ -24,7 +24,7 @@
         - When seller menekan submit tanpa mengisi salah satu atau lebih field wajib (contoh: foto atau harga)
         - Then sistem menampilkan pesan validasi pada field yang kosong dan pengunggahan barang belum berhasil dijalankan
 
-3. Verifikasi barang
+3. Verifikasi barang  
     As a admin, I want meninjau dan memverifikasi barang yg diunggah seller, barang ilegal atau berbahaya tidak beredar di platform
     **Acceptance Criteria:**
     - AC-1:
@@ -36,7 +36,7 @@
         - When admin menolak barang dan mengisi alasan penolakan
     - Then status berubah menjadi “ditolak”, barang tidak dapat muncul di pencarian buyer, seller menerima notifikasi
 
-4. Pencarian barang
+4. Pencarian barang  
     As a buyer, I want mencari barang berdasarkan kata kunci, so that saya dapat menemukan barang yang saya butuhkan dengan cepat.
     **Acceptance Criteria:**
     - AC-1:
@@ -48,7 +48,7 @@
         - When pencarian diproses
         - Then sistem menampilkan pesan "Barang tidak ditemukan" tanpa crash atau halaman kosong
 
-5. Chat dengan seller
+5. Chat dengan seller  
     As a buyer, I want menghubungi seller melalui fitur chat sebelum melakukan pembelian, so that saya dapat bertanya, bernegosiasi harga, dan memastikan kondisi barang.
     **Acceptance Criteria:**
     - AC-1:
@@ -56,7 +56,7 @@
         - When buyer menekan tombol chat
         - Then sistem membuka fitur chat antara buyer dan seller
 
-6. Seller kirim link pembelian
+6. Seller kirim link pembelian  
     As a seller, I want mengirimkan link pembelian melalui chat, so that buyer dapat melanjutkan ke proses checkout secara aman dan terkontrol.
     **Acceptance Criteria:**
     - AC-1:
@@ -68,7 +68,7 @@
         - When buyer membuka link yang sudah digunakan sebelumnya atau sudah melewati batas waktu
         - Then sistem menampilkan pesan "Link tidak valid atau sudah kedaluwarsa" dan buyer diarahkan untuk meminta link baru dari seller
 
-7. Checkout & pembayaran
+7. Checkout & pembayaran  
     As a buyer, I want melakukan checkout melalui link pembelian, so that saya dapat menyelesaikan transaksi
     **Acceptance Criteria:**
     - AC-1:
@@ -80,7 +80,7 @@
         - When proses pembayaran gagal (timeout, saldo tidak cukup, dll)
         - Then sistem menampilkan pesan error spesifik, transaksi tidak diproses, dan buyer dapat mencoba ulang tanpa kehilangan data pesanan
 
-8. Tutup penjualan
+8. Tutup penjualan  
     As a seller, I want mengubah status barang menjadi "Sold Out" setelah transaksi selesai, so that buyer lain tidak lagi dapat memesan barang yang sudah terjual
     **Acceptance Criteria:**
     - AC-1:
