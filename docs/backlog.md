@@ -10,7 +10,7 @@
 | US-06 | Seller kirim link pembelian | As a seller, I want mengirimkan link pembelian melalui chat, so that buyer dapat melanjutkan ke proses checkout | User (Seller) | Must Have |
 | US-07 | Checkout & pembayaran | As a buyer, I want melakukan checkout melalui link pembelian, so that saya dapat menyelesaikan transaksi | User (Buyer) | Must Have |
 | US-08 | Tutup penjualan (sold out) | As a seller, I want mengubah status barang menjadi "Sold Out", so that barang yang sudah terjual tidak bisa dibeli lagi | User (Seller) | Must Have |
-| US-09 | Detail barang | As a buyer, I want melihat detail lengkap barang, so that saya bisa memastikan kondisi dan spesifikasi | User (Buyer) | Should Have |
+| US-09 | Detail barang | As a buyer, I want melihat detail lengkap barang, so that saya bisa memastikan kondisi dan spesifikasi | User (Buyer) | Must Have |
 | US-10 | Edit & hapus barang | As a seller, I want mengedit atau menghapus barang, so that informasi tetap akurat | User (Seller) | Should Have |
 | US-11 | Monitoring admin | As an admin, I want memantau aktivitas marketplace, so that saya dapat melihat performa sistem | Admin | Should Have |
 | US-12 | Filter & sorting | As a user, I want memfilter dan mengurutkan barang, so that pencarian lebih cepat | User (Buyer) | Could Have |
