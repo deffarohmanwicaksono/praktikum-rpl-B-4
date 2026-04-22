@@ -1,9 +1,13 @@
-# Pendahuluan
+# Software Requirements Specification (SRS)
+## SeMart – Marketplace Mahasiswa UNS
 
-## Tujuan Dokumen  
+
+# 1. Pendahuluan
+
+## 1.1 Tujuan Dokumen  
 Dokumen Software Requirements Specification (SRS) ini disusun untuk mendefinisikan kebutuhan fungsional dan non-fungsional dari aplikasi SeMart, yaitu marketplace khusus mahasiswa Universitas Sebelas Maret. Dokumen ini menjadi acuan utama bagi tim pengembang dalam merancang, membangun, dan menguji sistem agar sesuai dengan kebutuhan pengguna.
 
-## Ruang Lingkup Sistem  
+## 1.2 Ruang Lingkup Sistem  
 SeMart merupakan aplikasi marketplace berbasis digital yang memfasilitasi mahasiswa Universitas Sebelas Maret dalam melakukan jual beli barang bekas secara aman dan terjangkau di lingkungan kampus.  
 Fitur utama yang dicakup dalam sistem ini meliputi:
 - Autentikasi pengguna menggunakan SSO UNS
@@ -16,7 +20,7 @@ Fitur utama yang dicakup dalam sistem ini meliputi:
 - Penutupan penjualan oleh seller  
 Sistem ini tidak mencakup pengelolaan logistik pengiriman secara langsung (misalnya integrasi dengan jasa ekspedisi) dan hanya berfokus pada proses transaksi dalam aplikasi.
 
-## Glosarium  
+## 1.3 Glosarium  
 | Istilah   | Definisi         |
 |-----------|------------------|
 | User      | Pengguna aplikasi yang dapat berperan sebagai buyer maupun seller |
@@ -29,14 +33,14 @@ Sistem ini tidak mencakup pengelolaan logistik pengiriman secara langsung (misal
 | Sold Out  | Status barang yang menandakan bahwa barang telah terjual dan tidak tersedia lagi |
 
 
-# Deskripsi Umum  
+# 2. Deskripsi Umum  
 
-## Perspektif Produk  
+## 2.1 Perspektif Produk  
 SeMart merupakan aplikasi marketplace berbasis digital yang dirancang khusus untuk mahasiswa Universitas Sebelas Maret. Sistem ini bersifat mandiri, namun terintegrasi dengan sistem eksternal berupa SSO UNS untuk keperluan autentikasi pengguna.  
 
 Aplikasi ini berfungsi sebagai platform perantara antara buyer dan seller dalam melakukan transaksi jual beli barang bekas di lingkungan kampus. Seluruh proses, mulai dari pengunggahan barang hingga penyelesaian transaksi, dilakukan di dalam sistem SeMart tanpa melibatkan integrasi langsung dengan layanan pihak ketiga seperti jasa pengiriman atau payment gateway eksternal yang kompleks.
 
-## Fungsi Utama  
+## 2.2 Fungsi Utama  
 SeMart menyediakan beberapa fungsi utama yang mendukung proses jual beli barang bekas, yaitu:  
 - Sistem melakukan autentikasi pengguna menggunakan SSO UNS
 - Sistem memungkinkan seller mengunggah barang untuk dijual
@@ -47,7 +51,7 @@ SeMart menyediakan beberapa fungsi utama yang mendukung proses jual beli barang 
 - Sistem memfasilitasi proses checkout oleh buyer
 - Sistem memungkinkan seller menutup penjualan dan mengubah status barang menjadi “Sold Out”
 
-## Karakteristik Pengguna  
+## 2.3 Karakteristik Pengguna  
 Sistem SeMart memiliki dua jenis pengguna utama:  
 1. User (Buyer & Seller)  
    - Merupakan mahasiswa Universitas Sebelas Maret
@@ -59,7 +63,7 @@ Sistem SeMart memiliki dua jenis pengguna utama:
    - Memiliki pemahaman yang lebih tinggi terhadap aturan dan kebijakan platform
    - Bertanggung jawab dalam memverifikasi barang serta menangani laporan atau pelanggaran
 
-## Batasan  
+## 2.4 Batasan  
 Sistem SeMart memiliki beberapa batasan sebagai berikut:  
 - Hanya pengguna dengan akun SSO UNS yang valid yang dapat mengakses sistem
 - Barang yang diunggah harus melalui proses verifikasi oleh admin sebelum dapat ditampilkan
@@ -68,7 +72,7 @@ Sistem SeMart memiliki beberapa batasan sebagai berikut:
 - Sistem tidak mencakup integrasi dengan layanan logistik atau pengiriman barang secara otomatis
 - Status barang hanya dapat diubah menjadi “Sold Out” setelah transaksi selesai
 
-# Fitur Requirements (FR)
+# 3. Fitur Requirements (FR)
 | Kode FR | Deskripsi                                                                   | Prioritas | Ref US |
 | ------- | --------------------------------------------------------------------------- | --------- | ------ |
 | FR-01   | Sistem memungkinkan user login menggunakan SSO UNS                          | High      | US-01  |
@@ -99,7 +103,7 @@ Sistem SeMart memiliki beberapa batasan sebagai berikut:
 | FR-26   | Sistem menampilkan rekomendasi barang berdasarkan preferensi user           | Low       | US-19  |
 
  
-# Non-Functional Requirements (NFR)
+# 4. Non-Functional Requirements (NFR)
 | Kode NFR | Kategori    | Deskripsi                                                                                                                     |
 | -------- | ----------- | ----------------------------------------------------------------------------------------------------------------------------- |
 | NFR-01   | Performance | Halaman pencarian dan detail produk harus dimuat dalam waktu ≤ 3 detik pada koneksi minimal 10 Mbps                           |
@@ -111,4 +115,12 @@ Sistem SeMart memiliki beberapa batasan sebagai berikut:
 
 
 
-# Catatan
+# 5. Catatan
+## Catatan
+- Sistem menggunakan pendekatan transaksi berbasis komunikasi (chat-driven)
+- Link pembelian digunakan sebagai mekanisme kontrol transaksi
+
+## Asumsi
+- Semua user memiliki akun SSO aktif
+- User memiliki koneksi internet stabil
+- Tidak ada integrasi pembayaran eksternal pada tahap awal
