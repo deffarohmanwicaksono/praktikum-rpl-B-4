@@ -1,6 +1,6 @@
 # ERD Data Dictionary
 
-1. Tabel Users
+## 1. Tabel Users
 
 | Table | Kolom | Tipe Data | Constraint | Keterangan |
 |----------|------------------|-----------|-----------------------------|--------------------|
@@ -10,7 +10,7 @@
 | users | role | NVARCHAR(20) | NOT NULL | Peran pengguna (buyer/seller/admin) |
 | users | created_at | DATETIME | DEFAULT GETDATE() | Waktu akun dibuat |
 
-2. Tabel Products
+## 2. Tabel Products
 
 | Table | Kolom | Tipe Data | Constraint | Keterangan |
 |----------|------------------|-----------|-----------------------------|--------------------|
@@ -22,7 +22,7 @@
 | products | price | DECIMAL(18,2) | NOT NULL | Harga produk |
 | products | status | NVARCHAR(30) | NOT NULL | Status produk ('menunggu_verifikasi','dijual','sold_out','ditolak') |
 
-3. Tabel Product Images
+## 3. Tabel Product Images
 
 | Table | Kolom | Tipe Data | Constraint | Keterangan |
 |----------|------------------|-----------|-----------------------------|--------------------|
@@ -32,7 +32,7 @@
 | product_images | image_url | NVARCHAR(500) | NOT NULL | URL image produk |
 | product_images | [order] | INT | DEFAULT 0 | Urutan gambar |
 
-4. Tabel Categories
+## 4. Tabel Categories
 
 | Table | Kolom | Tipe Data | Constraint | Keterangan |
 |----------|------------------|-----------|-----------------------------|--------------------|
@@ -41,7 +41,7 @@
 | categories | description | NVARCHAR(255) | NOT NULL | Deskripsi kategori |
 | categories | created_at | DATETIME | DEFAULT GETDATE() | Waktu kategori dibuat |
 
-5. Tabel Wishlist
+## 5. Tabel Wishlist
 
 | Table | Kolom | Tipe Data | Constraint | Keterangan |
 |----------|------------------|-----------|-----------------------------|--------------------|
@@ -50,7 +50,7 @@
 | whistlist | product_id | INT | FK → products.id_product, NOT NULL | ID produk |
 | whistlist | (user_id, product_id) | - | UNIQUE | Tidak boleh duplikat |
 
-6. Tabel Chat
+## 6. Tabel Chat
 
 | Table | Kolom | Tipe Data | Constraint | Keterangan |
 |----------|------------------|-----------|-----------------------------|--------------------|
@@ -60,7 +60,7 @@
 | chat | product_id | INT | FK → products.id_product, NOT NULL | ID produk |
 | chat | created_at | DATETIME | DEFAULT GETDATE() | Waktu chat dibuat |
 
-7. Tabel Messages
+## 7. Tabel Messages
 
 | Table | Kolom | Tipe Data | Constraint | Keterangan |
 |----------|------------------|-----------|-----------------------------|--------------------|
@@ -70,7 +70,7 @@
 | messages | message | NTEXT | NOT NULL | Isi pesan |
 | messages | created_at | DATETIME | DEFAULT GETDATE() | Waktu kirim pesan |
 
-8. Tabel Purchase Links
+## 8. Tabel Purchase Links
 
 | Table | Kolom | Tipe Data | Constraint | Keterangan |
 |----------|------------------|-----------|-----------------------------|--------------------|
@@ -80,7 +80,7 @@
 | purchase_links | expired_at | DATETIME | NOT NULL | Waktu kadaluarsa link |
 | purchase_links | is_used | BIT | DEFAULT 0 | Status penggunaan link |
 
-9. Tabel Transactions
+## 9. Tabel Transactions
 
 | Table | Kolom | Tipe Data | Constraint | Keterangan |
 |----------|------------------|-----------|-----------------------------|--------------------|
@@ -92,7 +92,7 @@
 | transactions | status | NVARCHAR(30) | NOT NULL | Status transaksi ('menunggu_pembayaran','dibayar','selesai','gagal') |
 | transactions | created_at | DATETIME | DEFAULT GETDATE() | Waktu transaksi dibuat |
 
-10. Tabel Reviews
+## 10. Tabel Reviews
 
 | Table | Kolom | Tipe Data | Constraint | Keterangan |
 |----------|------------------|-----------|-----------------------------|--------------------|
@@ -102,7 +102,7 @@
 | reviews | comment | NTEXT | NULL | Ulasan |
 | reviews | created_at | DATETIME | DEFAULT GETDATE() | Waktu review dibuat |
 
-11. Tabel Reports
+## 11. Tabel Reports
 
 | Table | Kolom | Tipe Data | Constraint | Keterangan |
 |----------|------------------|-----------|-----------------------------|--------------------|
@@ -113,7 +113,7 @@
 | reports | status | NVARCHAR(30) | DEFAULT 'menunggu' | Status laporan ('menunggu','ditindaklanjuti','ditolak') |
 | reports | created_at | DATETIME | DEFAULT GETDATE() | Waktu laporan dibuat |
 
-12. Tabel Notifications
+## 12. Tabel Notifications
 
 | Table | Kolom | Tipe Data | Constraint | Keterangan |
 |----------|------------------|-----------|-----------------------------|--------------------|
