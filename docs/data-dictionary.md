@@ -1,6 +1,7 @@
 # ERD Data Dictionary
 
 1. Tabel Users
+
 | Table | Kolom | Tipe Data | Constraint | Keterangan |
 |----------|------------------|-----------|-----------------------------|--------------------|
 | users | id_user | INT | PK, IDENTITY(1,1) | ID unik pengguna |
@@ -10,6 +11,7 @@
 | users | created_at | DATETIME | DEFAULT GETDATE() | Waktu akun dibuat |
 
 2. Tabel Products
+
 | Table | Kolom | Tipe Data | Constraint | Keterangan |
 |----------|------------------|-----------|-----------------------------|--------------------|
 | products | id_product | INT | PK, IDENTITY(1,1) | ID unik produk |
@@ -21,6 +23,7 @@
 | products | status | NVARCHAR(30) | NOT NULL | Status produk ('menunggu_verifikasi','dijual','sold_out','ditolak') |
 
 3. Tabel Product Images
+
 | Table | Kolom | Tipe Data | Constraint | Keterangan |
 |----------|------------------|-----------|-----------------------------|--------------------|
 | products | created_at | DATETIME | DEFAULT GETDATE() | Waktu upload produk |
@@ -29,7 +32,8 @@
 | product_images | image_url | NVARCHAR(500) | NOT NULL | URL image produk |
 | product_images | [order] | INT | DEFAULT 0 | Urutan gambar |
 
-5. Tabel Categories
+4. Tabel Categories
+
 | Table | Kolom | Tipe Data | Constraint | Keterangan |
 |----------|------------------|-----------|-----------------------------|--------------------|
 | categories | id_category | INT | PK, IDENTITY(1,1) | ID kategori |
@@ -37,7 +41,8 @@
 | categories | description | NVARCHAR(255) | NOT NULL | Deskripsi kategori |
 | categories | created_at | DATETIME | DEFAULT GETDATE() | Waktu kategori dibuat |
 
-6. Tabel Wishlist
+5. Tabel Wishlist
+
 | Table | Kolom | Tipe Data | Constraint | Keterangan |
 |----------|------------------|-----------|-----------------------------|--------------------|
 | whistlist | id_wishlist | INT | PK, IDENTITY(1,1) | ID wishlist |
@@ -45,7 +50,8 @@
 | whistlist | product_id | INT | FK → products.id_product, NOT NULL | ID produk |
 | whistlist | (user_id, product_id) | - | UNIQUE | Tidak boleh duplikat |
 
-7. Tabel Chat
+6. Tabel Chat
+
 | Table | Kolom | Tipe Data | Constraint | Keterangan |
 |----------|------------------|-----------|-----------------------------|--------------------|
 | chat | id_chat | INT | PK, IDENTITY(1,1) | ID chat |
@@ -54,7 +60,8 @@
 | chat | product_id | INT | FK → products.id_product, NOT NULL | ID produk |
 | chat | created_at | DATETIME | DEFAULT GETDATE() | Waktu chat dibuat |
 
-8. Tabel Messages
+7. Tabel Messages
+
 | Table | Kolom | Tipe Data | Constraint | Keterangan |
 |----------|------------------|-----------|-----------------------------|--------------------|
 | messages | id_message | INT | PK, IDENTITY(1,1) | ID pesan |
@@ -63,7 +70,8 @@
 | messages | message | NTEXT | NOT NULL | Isi pesan |
 | messages | created_at | DATETIME | DEFAULT GETDATE() | Waktu kirim pesan |
 
-9. Tabel Purchase Links
+8. Tabel Purchase Links
+
 | Table | Kolom | Tipe Data | Constraint | Keterangan |
 |----------|------------------|-----------|-----------------------------|--------------------|
 | purchase_links | id_link | INT | PK, IDENTITY(1,1) | ID link pembelian |
@@ -72,7 +80,8 @@
 | purchase_links | expired_at | DATETIME | NOT NULL | Waktu kadaluarsa link |
 | purchase_links | is_used | BIT | DEFAULT 0 | Status penggunaan link |
 
-10. Tabel Transactions
+9. Tabel Transactions
+
 | Table | Kolom | Tipe Data | Constraint | Keterangan |
 |----------|------------------|-----------|-----------------------------|--------------------|
 | transactions | id_transaction | INT | PK, IDENTITY(1,1) | ID transaksi |
@@ -83,7 +92,8 @@
 | transactions | status | NVARCHAR(30) | NOT NULL | Status transaksi ('menunggu_pembayaran','dibayar','selesai','gagal') |
 | transactions | created_at | DATETIME | DEFAULT GETDATE() | Waktu transaksi dibuat |
 
-11. Tabel Reviews
+10. Tabel Reviews
+
 | Table | Kolom | Tipe Data | Constraint | Keterangan |
 |----------|------------------|-----------|-----------------------------|--------------------|
 | reviews | id_review | INT | PK, IDENTITY(1,1) | ID review |
@@ -92,7 +102,8 @@
 | reviews | comment | NTEXT | NULL | Ulasan |
 | reviews | created_at | DATETIME | DEFAULT GETDATE() | Waktu review dibuat |
 
-12. Tabel Reports
+11. Tabel Reports
+
 | Table | Kolom | Tipe Data | Constraint | Keterangan |
 |----------|------------------|-----------|-----------------------------|--------------------|
 | reports | id_report | INT | PK, IDENTITY(1,1) | ID laporan |
@@ -102,7 +113,8 @@
 | reports | status | NVARCHAR(30) | DEFAULT 'menunggu' | Status laporan ('menunggu','ditindaklanjuti','ditolak') |
 | reports | created_at | DATETIME | DEFAULT GETDATE() | Waktu laporan dibuat |
 
-13. Tabel Notifications
+12. Tabel Notifications
+
 | Table | Kolom | Tipe Data | Constraint | Keterangan |
 |----------|------------------|-----------|-----------------------------|--------------------|
 | notifications | id_notification | INT | PK, IDENTITY(1,1) | ID notifikasi |
