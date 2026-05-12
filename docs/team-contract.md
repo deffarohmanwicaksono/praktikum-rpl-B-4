@@ -39,7 +39,7 @@
 
 ## Standar commit message ##
 1. Format:
-   <type>: <deskripsi perubahan>
+   '<type>: <deskripsi perubahan>'
 2. Macam-macam type yang bisa digunakan:
     - feat : penambahan fitur
     - fix: perbaikan bug/error
