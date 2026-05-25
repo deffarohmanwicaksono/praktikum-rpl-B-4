@@ -17,9 +17,41 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
+        // Admin
         User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+            'name' => 'Admin SeMart',
+            'email' => 'admin@student.uns.ac.id',
+            'role' => 'admin',
+            'password' => 'password_admin',
+        ]);
+
+        // User
+        User::factory()->create([
+            'name' => 'Nurul Janati',
+            'email' => 'nurul@student.uns.ac.id',
+            'role' => 'buyer',
+            'password' => 'password123',
+        ]);
+
+        User::factory()->create([
+            'name' => 'Syifa Qurrota',
+            'email' => 'syifa@student.uns.ac.id',
+            'role' => 'buyer',
+            'password' => 'password123',
+        ]);
+
+        User::factory()->create([
+            'name' => 'Deffa Rohman',
+            'email' => 'deffa@student.uns.ac.id',
+            'role' => 'seller',
+            'password' => 'password123',
+        ]);
+
+        User::factory()->create([
+            'name' => 'Kemal Amangylyjow',
+            'email' => 'kemal@student.uns.ac.id',
+            'role' => 'seller',
+            'password' => 'password123',
         ]);
     }
 }
