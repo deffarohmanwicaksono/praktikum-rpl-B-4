@@ -3,13 +3,11 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
-    use WithoutModelEvents;
-
     /**
      * Seed the application's database.
      */
@@ -22,7 +20,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'Admin SeMart',
             'email' => 'admin@student.uns.ac.id',
             'role' => 'admin',
-            'password' => 'password_admin',
+            'password' => Hash::make('password_admin'),
         ]);
 
         // User
@@ -30,28 +28,28 @@ class DatabaseSeeder extends Seeder
             'name' => 'Nurul Janati',
             'email' => 'nurul@student.uns.ac.id',
             'role' => 'buyer',
-            'password' => 'password123',
+            'password' => Hash::make('password123'),
         ]);
 
         User::factory()->create([
             'name' => 'Syifa Qurrota',
             'email' => 'syifa@student.uns.ac.id',
             'role' => 'buyer',
-            'password' => 'password123',
+            'password' => Hash::make('password123'),
         ]);
 
         User::factory()->create([
             'name' => 'Deffa Rohman',
             'email' => 'deffa@student.uns.ac.id',
             'role' => 'seller',
-            'password' => 'password123',
+            'password' => Hash::make('password123'),
         ]);
 
         User::factory()->create([
             'name' => 'Kemal Amangylyjow',
             'email' => 'kemal@student.uns.ac.id',
             'role' => 'seller',
-            'password' => 'password123',
+            'password' => Hash::make('password123'),
         ]);
     }
 }

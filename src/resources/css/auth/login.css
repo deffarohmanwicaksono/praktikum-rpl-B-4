@@ -1,0 +1,557 @@
+/* =========================================================
+   ROOT VARIABLES
+   ========================================================= */
+:root {
+    /* Primary Colors */
+    --color-primary: #3B9DF8;
+    --color-primary-light: #62B5FF;
+    --color-primary-hover: #2A89E5;
+
+    /* Neutral Colors */
+    --color-white: #FFFFFF;
+    --color-text-dark: #1E293B;
+    --color-text-gray: #64748B;
+    --color-border: #CBD5E1;
+
+    /* Background Colors */
+    --background-input: #F8FAFC;
+    --background-input-hover: #F1F5F9;
+
+    /* Typography */
+    --font-primary: 'Poppins', sans-serif;
+
+    /* Layout */
+    --input-height: 52px;
+    --border-radius-input: 12px;
+    --border-radius-card: 24px;
+
+    /* Spacing */
+    --card-padding: 42px 40px;
+
+    /* Effects */
+    --transition-default: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+
+    --shadow-card:
+        0 10px 40px rgba(59, 157, 248, 0.08),
+        0 2px 4px rgba(0, 0, 0, 0.02);
+
+    --shadow-input-focus:
+        0 0 0 3.5px rgba(59, 157, 248, 0.15);
+
+    --shadow-button:
+        0 4px 14px rgba(59, 157, 248, 0.3);
+
+    --shadow-button-hover:
+        0 6px 20px rgba(37, 99, 235, 0.4);
+}
+
+/* =========================================================
+   RESET
+   ========================================================= */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* =========================================================
+   BASE STYLES
+   ========================================================= */
+html,
+body {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    overflow: hidden;
+    font-family: var(--font-primary);
+    color: var(--color-text-dark);
+    -webkit-font-smoothing: antialiased;
+}
+
+/* =========================================================
+   MAIN LAYOUT
+   ========================================================= */
+.login-wrapper {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    background:
+        linear-gradient(
+            90deg,
+            #EBF3FF 0%,
+            #F5F9FF 45%,
+            #FFFFFF 100%
+        );
+}
+
+/* =========================================================
+   LEFT PANEL
+   ========================================================= */
+.left-panel {
+    display: flex;
+    flex: 0 0 50%;
+    flex-direction: column;
+    width: 50%;
+    height: 100%;
+    padding: 60px 80px;
+    background: transparent;
+}
+
+/* =========================================================
+   BRAND LOGO
+   ========================================================= */
+.main-logo-img {
+    width: auto;
+    height: 70px;
+    object-fit: contain;
+    transition: var(--transition-default);
+}
+
+.main-logo-img:hover {
+    transform: scale(1.03);
+}
+
+/* =========================================================
+   BRAND HEADLINE
+   ========================================================= */
+.brand-headline {
+    margin-top: 15px;
+}
+
+.headline-main {
+    color: var(--color-text-dark);
+    font-size: 34px;
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: -0.5px;
+}
+
+.headline-uns {
+    color: var(--color-primary);
+}
+
+.headline-sub {
+    margin-top: 12px;
+    color: var(--color-text-gray);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.65;
+}
+
+/* =========================================================
+   ILLUSTRATION
+   ========================================================= */
+.illustration-wrap {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    max-height: 48%;
+}
+
+.brand-illustration {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+/* =========================================================
+   FEATURE BADGES
+   ========================================================= */
+.feature-badges {
+    margin-top: auto;
+}
+
+.badge-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--color-text-gray);
+    font-size: 13.5px;
+    font-weight: 500;
+    transition: var(--transition-default);
+}
+
+.badge-item:hover {
+    color: var(--color-text-dark);
+    transform: translateY(-2px);
+}
+
+.badge-item i {
+    color: var(--color-primary);
+    font-size: 16px;
+}
+
+/* =========================================================
+   RIGHT PANEL
+   ========================================================= */
+.right-panel {
+    display: flex;
+    flex: 0 0 50%;
+    align-items: center;
+    justify-content: center;
+    width: 50%;
+    height: 100%;
+    background: transparent;
+}
+
+/* =========================================================
+   LOGIN CARD
+   ========================================================= */
+.login-card {
+    width: 100%;
+    max-width: 440px;
+    padding: var(--card-padding);
+    background: var(--color-white);
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    border-radius: var(--border-radius-card);
+    box-shadow: var(--shadow-card);
+    animation: slide-in-card 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes slide-in-card {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* =========================================================
+   CARD HEADER
+   ========================================================= */
+.card-header-section {
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.card-title {
+    margin-bottom: 6px;
+    color: var(--color-text-dark);
+    font-size: 26px;
+    font-weight: 700;
+}
+
+.title-accent {
+    color: var(--color-primary);
+}
+
+.card-subtitle {
+    color: var(--color-text-gray);
+    font-size: 14px;
+}
+
+/* =========================================================
+   FORM
+   ========================================================= */
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group-custom {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-label-custom {
+    color: #475569;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* =========================================================
+   INPUT FIELD
+   ========================================================= */
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.form-control-custom {
+    width: 100%;
+    height: var(--input-height);
+    padding: 0 46px;
+    color: var(--color-text-dark);
+    font-size: 14px;
+    font-family: var(--font-primary);
+    background: var(--background-input);
+    border: 1.5px solid #E2E8F0;
+    border-radius: var(--border-radius-input);
+    outline: none;
+    transition: var(--transition-default);
+}
+
+.form-control-custom:hover {
+    background: var(--background-input-hover);
+    border-color: var(--color-border);
+}
+
+.form-control-custom:focus {
+    background: var(--color-white);
+    border-color: var(--color-primary);
+    box-shadow: var(--shadow-input-focus);
+}
+
+/* =========================================================
+   INPUT ICONS
+   ========================================================= */
+.input-icon {
+    position: absolute;
+    left: 16px;
+    color: #94A3B8;
+    font-size: 16px;
+    pointer-events: none;
+    transition: var(--transition-default);
+}
+
+.input-wrapper:focus-within .input-icon {
+    color: var(--color-primary);
+}
+
+.input-icon-right {
+    position: absolute;
+    right: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px;
+    background: none;
+    border: none;
+    border-radius: 50%;
+    color: #94A3B8;
+    cursor: pointer;
+    transition: var(--transition-default);
+}
+
+.input-icon-right:hover {
+    background: #F1F5F9;
+    color: var(--color-primary);
+}
+
+/* =========================================================
+   VALIDATION STATES
+   ========================================================= */
+.form-control-custom.is-invalid {
+    border-color: #EF4444;
+}
+
+.form-control-custom.is-invalid:focus {
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
+}
+
+.error-text {
+    margin-top: 2px;
+    color: #EF4444;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+/* =========================================================
+   FORGOT PASSWORD
+   ========================================================= */
+.forgot-password-row {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: -4px;
+}
+
+.forgot-link {
+    color: var(--color-primary);
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: var(--transition-default);
+}
+
+.forgot-link:hover {
+    color: var(--color-primary-hover);
+    text-decoration: underline;
+}
+
+/* =========================================================
+   LOGIN BUTTON
+   ========================================================= */
+.btn-login {
+    position: relative;
+    width: 100%;
+    height: 52px;
+    overflow: hidden;
+    color: var(--color-white);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+
+    background:
+        linear-gradient(
+            135deg,
+            #3B82F6 0%,
+            #2563EB 100%
+        );
+
+    border: none;
+    border-radius: var(--border-radius-input);
+    box-shadow: var(--shadow-button);
+    transition: var(--transition-default);
+}
+
+.btn-login::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    background:
+        linear-gradient(
+            135deg,
+            #2563EB 0%,
+            #1D4ED8 100%
+        );
+
+    transition: opacity 0.3s ease;
+}
+
+.btn-login:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-button-hover);
+}
+
+.btn-login:hover::before {
+    opacity: 1;
+}
+
+.btn-login:active {
+    transform: translateY(1px);
+    box-shadow: var(--shadow-button);
+}
+
+.btn-login span {
+    position: relative;
+    z-index: 1;
+}
+
+/* =========================================================
+   CARD FOOTER
+   ========================================================= */
+.card-footer-section {
+    margin-top: 26px;
+    padding-top: 20px;
+    text-align: center;
+    border-top: 1px solid #F1F5F9;
+}
+
+.footer-text {
+    color: var(--color-text-gray);
+    font-size: 13.5px;
+}
+
+.footer-link {
+    color: var(--color-primary);
+    font-weight: 600;
+    text-decoration: none;
+    transition: var(--transition-default);
+}
+
+.footer-link:hover {
+    color: var(--color-primary-hover);
+    text-decoration: underline;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+@media (max-width: 991px) {
+
+    body {
+        overflow: auto;
+    }
+
+    .login-wrapper {
+        flex-direction: column;
+
+        height: auto;
+
+        background:
+            linear-gradient(
+                180deg,
+                #EBF3FF 0%,
+                #FFFFFF 100%
+            );
+    }
+
+    .left-panel,
+    .right-panel {
+        width: 100%;
+        padding: 40px 30px;
+    }
+
+    .illustration-wrap {
+        max-height: 260px;
+        margin: 30px 0;
+    }
+
+    .feature-badges {
+        margin-top: 20px;
+    }
+
+    .headline-main {
+        font-size: 28px;
+    }
+
+    .login-card {
+        max-width: 100%;
+    }
+}
+
+/* =========================================================
+   LOGIN ERROR ALERT
+   ========================================================= */
+.alert-login-error {
+    padding: 12px 16px;
+    color: #DC2626;
+    font-size: 13px;
+    font-weight: 500;
+    background: #FEF2F2;
+    border: 1px solid #FECACA;
+    border-radius: 12px;
+}
+
+/* =========================================================
+   BUTTON DISABLED STATE
+   ========================================================= */
+.btn-login:disabled {
+    opacity: 0.75;
+    cursor: not-allowed;
+}
+
+/* =========================================================
+   EXTRA MOBILE POLISH
+   ========================================================= */
+@media (max-width: 576px) {
+
+    .left-panel {
+        padding: 30px 24px;
+    }
+
+    .right-panel {
+        padding: 24px;
+    }
+
+    .login-card {
+        padding: 32px 24px;
+    }
+
+    .headline-main {
+        font-size: 24px;
+    }
+}
