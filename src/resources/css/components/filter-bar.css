@@ -1,0 +1,284 @@
+/* ==============================================
+   FILTER BAR (Category + Sort)
+   ============================================== */
+
+.filter-bar {
+    position: relative;
+    z-index: 30;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+
+    margin-bottom: 24px;
+    padding: 12px 16px;
+
+    background: var(--white);
+    border: 1px solid var(--border-gray);
+    border-radius: 14px;
+    box-shadow: 0 1px 6px rgba(36, 52, 71, 0.04);
+
+    overflow: visible !important;
+
+    animation: fadeInUp 0.4s ease both;
+    animation-delay: 0.05s;
+}
+
+/* ==============================================
+   CATEGORY SECTION
+   ============================================== */
+
+.category-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    flex: 1;
+    min-width: 0;
+
+    overflow: hidden;
+}
+
+.filter-label {
+    flex-shrink: 0;
+
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--dark-text);
+
+    white-space: nowrap;
+}
+
+.category-pills {
+    display: flex;
+    gap: 7px;
+
+    width: 100%;
+    padding-bottom: 2px;
+
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.category-pills::-webkit-scrollbar {
+    display: none;
+}
+
+/* ==============================================
+   CATEGORY PILLS
+   ============================================== */
+
+.pill {
+    flex-shrink: 0;
+
+    padding: 6px 14px;
+
+    font-family: var(--font-main);
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--gray-text);
+
+    white-space: nowrap;
+
+    background: var(--white);
+    border: 1.5px solid var(--border-gray);
+    border-radius: 30px;
+
+    transition:
+        border-color 0.18s,
+        background 0.18s,
+        color 0.18s;
+}
+
+.pill:hover {
+    color: var(--primary-blue);
+    background: var(--soft-bg);
+    border-color: var(--secondary-blue);
+}
+
+.pill.active {
+    font-weight: 600;
+    color: white;
+
+    background: var(--primary-blue);
+    border-color: var(--primary-blue);
+
+    box-shadow: 0 2px 8px rgba(59, 157, 248, 0.28);
+}
+
+/* ==============================================
+   FILTER & SORT LAYOUT
+   ============================================== */
+
+.filter-right {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    flex-shrink: 0;
+}
+
+.sort-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    flex-shrink: 0;
+}
+
+.sort-dropdown-wrap {
+    position: relative;
+}
+
+/* ==============================================
+   SORT TRIGGER BUTTON
+   ============================================== */
+
+.sort-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+
+    min-width: 138px;
+    padding: 7px 14px;
+
+    font-family: var(--font-main);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gray-text);
+
+    background: var(--white);
+    border: 1.5px solid var(--border-gray);
+    border-radius: 10px;
+
+    transition:
+        border-color 0.18s,
+        box-shadow 0.18s;
+}
+
+.sort-trigger:hover,
+.sort-trigger[aria-expanded="true"] {
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 3px rgba(59, 157, 248, 0.12);
+}
+
+.sort-chevron {
+    font-size: 12px;
+    color: var(--gray-text);
+
+    transition: transform 0.22s;
+}
+
+/* ==============================================
+   SORT DROPDOWN MENU
+   ============================================== */
+
+.sort-menu {
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    z-index: 200;
+
+    display: none;
+
+    width: 175px;
+    padding: 6px;
+
+    background: var(--white);
+    border: 1px solid var(--border-gray);
+    border-radius: 12px;
+    box-shadow: 0 8px 26px rgba(36, 52, 71, 0.11);
+
+    animation: dropdownIn 0.18s ease both;
+}
+
+.sort-menu.open {
+    display: block;
+}
+
+/* ==============================================
+   SORT OPTIONS
+   ============================================== */
+
+.sort-option {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+
+    width: 100%;
+    padding: 9px 12px;
+
+    font-family: var(--font-main);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--gray-text);
+    text-align: left;
+
+    background: none;
+    border: none;
+    border-radius: 8px;
+
+    transition:
+        background 0.15s,
+        color 0.15s;
+}
+
+.sort-option i {
+    font-size: 14px;
+}
+
+.sort-option:hover {
+    color: var(--primary-blue);
+    background: var(--soft-bg);
+}
+
+.sort-option.active {
+    font-weight: 600;
+    color: var(--primary-blue);
+
+    background: var(--light-blue);
+}
+
+/* ==============================================
+   RESET FILTER BUTTON
+   ============================================== */
+
+.reset-filter-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    padding: 7px 14px;
+
+    font-family: var(--font-main);
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--gray-text);
+
+    white-space: nowrap;
+
+    background: var(--white);
+    border: 1.5px solid var(--border-gray);
+    border-radius: 10px;
+
+    transition:
+        border-color 0.18s,
+        color 0.18s,
+        background 0.18s;
+}
+
+.reset-filter-btn i {
+    font-size: 13px;
+}
+
+.reset-filter-btn:hover {
+    color: var(--primary-blue);
+
+    background: var(--soft-bg);
+    border-color: var(--primary-blue);
+}

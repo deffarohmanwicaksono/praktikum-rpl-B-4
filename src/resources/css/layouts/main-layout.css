@@ -1,0 +1,30 @@
+/* ==============================================
+   MAIN LAYOUT
+   ============================================== */
+
+.main-layout {
+    display: flex;
+
+    min-height: 100vh;
+    padding-top: var(--topbar-height);
+
+    transition: padding-left var(--transition-sidebar);
+}
+
+/* ==============================================
+   MAIN CONTENT
+   ============================================== */
+
+.main-content {
+    flex: 1;
+    min-width: 0;
+
+    margin-left: var(--sidebar-width);
+    padding: 8px 28px 48px;
+
+    transition: margin-left var(--transition-sidebar);
+}
+
+.main-layout.sidebar-collapsed .main-content {
+    margin-left: 0;
+}
