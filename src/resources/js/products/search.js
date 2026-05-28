@@ -953,65 +953,6 @@ document
         );
     });
 
-// =============================================
-// SIDEBAR TOGGLE
-// =============================================
-const sidebar =
-    document.getElementById('sidebar');
-
-const mainLayout =
-    document.getElementById('mainLayout');
-
-const sidebarToggle =
-    document.getElementById('sidebarToggle');
-
-const overlay =
-    document.getElementById('sidebarOverlay');
-
-if (
-    sidebarToggle &&
-    sidebar &&
-    mainLayout
-) {
-    sidebarToggle.addEventListener('click', () => {
-
-        const isCollapsed =
-            sidebar.classList.toggle(
-                'collapsed'
-            );
-
-        mainLayout.classList.toggle(
-            'sidebar-collapsed',
-            isCollapsed
-        );
-
-        sidebarToggle.setAttribute(
-            'aria-expanded',
-            String(!isCollapsed)
-        );
-    });
-}
-
-if (
-    overlay &&
-    sidebar &&
-    mainLayout &&
-    sidebarToggle
-) {
-    overlay.addEventListener('click', () => {
-
-        sidebar.classList.add('collapsed');
-
-        mainLayout.classList.add(
-            'sidebar-collapsed'
-        );
-
-        sidebarToggle.setAttribute(
-            'aria-expanded',
-            'false'
-        );
-    });
-}
 
 // =============================================
 // INITIAL CALLS
