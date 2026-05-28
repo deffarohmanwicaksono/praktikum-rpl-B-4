@@ -3,13 +3,18 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::view('/login', 'auth.login');
+/*
+|--------------------------------------------------------------------------
+| Authentication Views
+|--------------------------------------------------------------------------
+*/
 
-Route::view('/index', 'home.index');
+Route::view('/login', 'auth.login')
+    ->name('login');
 
 Route::post('/login', function () {
 
-    $credentials = request()->validate([
+    $validatedCredentials = request()->validate([
 
         'email' => [
             'required',
@@ -31,11 +36,11 @@ Route::post('/login', function () {
 
     ]);
 
-    if (Auth::attempt($credentials)) {
+    if (Auth::attempt($validatedCredentials)) {
 
         request()->session()->regenerate();
 
-        return redirect('/index');
+        return redirect()->route('home');
     }
 
     return back()->withErrors([
@@ -43,3 +48,155 @@ Route::post('/login', function () {
     ]);
 
 })->name('login.process');
+
+/*
+|--------------------------------------------------------------------------
+| Logout
+|--------------------------------------------------------------------------
+*/
+
+Route::post('/logout', function () {
+
+    Auth::logout();
+
+    request()->session()->invalidate();
+
+    request()->session()->regenerateToken();
+
+    return redirect()->route('login');
+
+})->name('logout');
+
+/*
+|--------------------------------------------------------------------------
+| DUMMY PRODUCTS DATA
+|--------------------------------------------------------------------------
+*/
+
+$dummyProducts = [
+
+    1 => [
+        'id' => 1,
+        'name' => 'Laptop MacBook Air M1 2020',
+        'price' => 'Rp 7.500.000',
+        'category' => 'Elektronik',
+        'condition' => 'Bekas Seperti Baru',
+        'description' => 'Laptop andalan dengan performa chip M1 yang masih sangat kencang untuk kebutuhan kuliah, browsing, desain grafis ringan, hingga editing video/foto. Sangat cocok bagi mahasiswa atau pekerja kreatif yang membutuhkan mobilitas tinggi.',
+        'image' => asset('images/Elemen-1.png'),
+        'gallery' => [
+            asset('images/Elemen-1.png'),
+            asset('images/Elemen-1.png'),
+            asset('images/Elemen-1.png'),
+            asset('images/Elemen-1.png'),
+        ]
+    ]
+
+];
+
+/*
+|--------------------------------------------------------------------------
+| Home Page
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/home', function () use ($dummyProducts) {
+
+    return view('home.home', [
+        'products' => $dummyProducts
+    ]);
+
+})->name('home');
+
+/*
+|--------------------------------------------------------------------------
+| Search Page
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/search', function () use ($dummyProducts) {
+
+    $keyword = request('q');
+
+    return view('products.search', [
+        'keyword' => $keyword,
+        'products' => $dummyProducts
+    ]);
+
+})->name('products.search');
+
+/*
+|--------------------------------------------------------------------------
+| Detail Product Page
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/products/{id}', function ($id) use ($dummyProducts) {
+
+    return view('products.detail-product', [
+        'product' => $dummyProducts[1]
+    ]);
+
+})->name('products.detail-product');
+
+/*
+|--------------------------------------------------------------------------
+| Wishlist Page
+|--------------------------------------------------------------------------
+*/
+
+Route::view('/wishlist', 'wishlist.wishlist')
+    ->name('wishlist');
+
+/*
+|--------------------------------------------------------------------------
+| Chat Page
+|--------------------------------------------------------------------------
+*/
+
+Route::view('/chat', 'chat.chat')
+    ->name('chat');
+
+/*
+|--------------------------------------------------------------------------
+| Notification Page
+|--------------------------------------------------------------------------
+*/
+
+Route::view('/notification', 'notification.notification')
+    ->name('notification');
+
+/*
+|--------------------------------------------------------------------------
+| Purchase History Page
+|--------------------------------------------------------------------------
+*/
+
+Route::view('/purchase-history', 'purchase.purchase-history')
+    ->name('purchase.history');
+
+/*
+|--------------------------------------------------------------------------
+| Sales History Page
+|--------------------------------------------------------------------------
+*/
+
+Route::view('/sales-history', 'sales.sales-history')
+    ->name('sales.history');
+
+/*
+|--------------------------------------------------------------------------
+| Seller Dashboard Page
+|--------------------------------------------------------------------------
+*/
+
+Route::view('/seller-dashboard', 'seller.dashboard')
+    ->name('seller.dashboard');
+
+/*
+|--------------------------------------------------------------------------
+| Profile Page
+|--------------------------------------------------------------------------
+*/
+
+Route::view('/profile', 'profile.profileuser')
+    ->name('profile.profileuser');

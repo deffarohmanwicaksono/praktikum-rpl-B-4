@@ -1,0 +1,322 @@
+/* ==============================================
+   TOPBAR
+   ============================================== */
+
+.topbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+
+    height: var(--topbar-height);
+
+    background: var(--white);
+    border-bottom: 1px solid var(--border-gray);
+    box-shadow: 0 1px 8px rgba(36, 52, 71, 0.06);
+}
+
+.topbar-inner {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    height: 100%;
+    padding: 0 20px 0 16px;
+}
+
+/* ==============================================
+   TOPBAR LEFT
+   ============================================== */
+
+.topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    width: var(--sidebar-width);
+    min-width: var(--sidebar-width);
+
+    flex-shrink: 0;
+}
+
+/* ==============================================
+   HAMBURGER BUTTON
+   ============================================== */
+
+.hamburger-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+
+    width: 36px;
+    height: 36px;
+    padding: 6px;
+
+    flex-shrink: 0;
+
+    background: none;
+    border: none;
+    border-radius: 8px;
+
+    transition: background 0.18s ease;
+}
+
+.hamburger-btn:hover {
+    background: var(--light-blue);
+}
+
+.ham-line {
+    display: block;
+
+    width: 20px;
+    height: 2px;
+
+    background: var(--dark-text);
+    border-radius: 2px;
+
+    transform-origin: center;
+
+    transition:
+        transform 0.28s cubic-bezier(0.4, 0, 0.2, 1),
+        opacity 0.2s ease,
+        width 0.25s ease;
+}
+
+.hamburger-btn.active .ham-line:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+
+.hamburger-btn.active .ham-line:nth-child(2) {
+    width: 0;
+    opacity: 0;
+}
+
+.hamburger-btn.active .ham-line:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+}
+
+/* ==============================================
+   BRAND LOGO
+   ============================================== */
+
+.main-logo-img {
+    width: auto;
+    height: 47px;
+
+    object-fit: contain;
+
+    transition: var(--transition-smooth);
+}
+
+.main-logo-img:hover {
+    transform: scale(1.03);
+}
+
+/* ==============================================
+   TOPBAR SEARCH
+   ============================================== */
+
+.topbar-search {
+    flex: 1;
+    max-width: 520px;
+}
+
+.search-wrapper {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+}
+
+.search-icon {
+    position: absolute;
+    left: 14px;
+
+    font-size: 15px;
+    color: var(--gray-text);
+
+    pointer-events: none;
+}
+
+.search-input {
+    width: 100%;
+    height: 40px;
+    padding: 0 52px 0 40px;
+
+    font-family: var(--font-main);
+    font-size: 13px;
+    color: var(--dark-text);
+
+    background: var(--soft-bg);
+    border: 1.5px solid var(--border-gray);
+    border-radius: 22px;
+    outline: none;
+
+    transition:
+        border-color 0.2s,
+        box-shadow 0.2s,
+        background 0.2s;
+}
+
+.search-input::placeholder {
+    color: #B0B8C4;
+}
+
+.search-input:focus {
+    background: var(--white);
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 3px rgba(59, 157, 248, 0.14);
+}
+
+.search-btn {
+    position: absolute;
+    right: 4px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 32px;
+    height: 32px;
+
+    font-size: 14px;
+    color: white;
+
+    background: var(--primary-blue);
+    border: none;
+    border-radius: 18px;
+
+    transition: background 0.18s;
+}
+
+.search-btn:hover {
+    background: var(--hover-blue);
+}
+
+/* ==============================================
+   TOPBAR ACTIONS
+   ============================================== */
+
+.topbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    margin-left: auto;
+
+    flex-shrink: 0;
+}
+
+.action-btn {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    padding: 6px 12px;
+
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--gray-text);
+
+    white-space: nowrap;
+
+    background: none;
+    border: none;
+    border-radius: 10px;
+
+    transition:
+        background 0.18s,
+        color 0.18s;
+}
+
+.action-btn i {
+    font-size: 17px;
+}
+
+.action-btn:hover {
+    color: var(--primary-blue);
+    background: var(--soft-bg);
+}
+
+/* ==============================================
+   NOTIFICATION
+   ============================================== */
+
+.notif-icon-wrapper {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.notif-badge {
+    position: absolute;
+    top: -6px;
+    right: -8px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 17px;
+    height: 17px;
+    padding: 0 4px;
+
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 1;
+    color: white;
+
+    background: #EF4444;
+    border: 2px solid white;
+    border-radius: 50%;
+}
+
+/* ==============================================
+   USER PROFILE
+   ============================================== */
+
+.user-profile-direct {
+    position: relative;
+}
+
+.user-btn-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 5px 12px 5px 6px;
+
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--dark-text);
+
+    background: none;
+    border: 1.5px solid var(--border-gray);
+    border-radius: 24px;
+
+    transition:
+        border-color 0.18s,
+        background 0.18s;
+}
+
+.user-btn-link:hover {
+    background: var(--soft-bg);
+    border-color: var(--primary-blue);
+}
+
+.user-profile-icon {
+    font-size: 22px;
+    color: var(--primary-blue) !important;
+}
+
+.user-name {
+    font-size: 13px;
+    font-weight: 500;
+}

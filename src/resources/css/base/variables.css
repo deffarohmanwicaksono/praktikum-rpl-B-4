@@ -1,0 +1,34 @@
+/* ==============================================
+   CSS VARIABLES
+   ============================================== */
+
+:root {
+    --primary-blue: #3B9DF8;
+    --secondary-blue: #62B5FF;
+    --hover-blue: #2A89E5;
+    --light-blue: #DCEEFF;
+
+    --soft-bg: #F3F9FF;
+    --white: #FFFFFF;
+    --light-gray: #F5F5F5;
+
+    --dark-text: #243447;
+    --gray-text: #6B7280;
+    --border-gray: #E5E7EB;
+
+    --font-main: 'Poppins', sans-serif;
+
+    --topbar-height: 64px;
+    --sidebar-width: 225px;
+    --sidebar-collapsed-width: 0px;
+
+    --transition-sidebar: 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+
+    --shadow-card:
+        0 2px 14px rgba(36, 52, 71, 0.07),
+        0 1px 4px rgba(59, 157, 248, 0.05);
+
+    --shadow-card-hover:
+        0 8px 28px rgba(59, 157, 248, 0.14),
+        0 2px 8px rgba(36, 52, 71, 0.08);
+}
