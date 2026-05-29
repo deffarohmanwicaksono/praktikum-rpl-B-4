@@ -36,6 +36,10 @@ export default defineConfig({
                 // 8. Asset Halaman Edit Barang (Edit Product)
                 'resources/css/pages/edit-product.css',
                 'resources/js/seller/edit-product.js',
+
+                // 9. Asset Halaman Sesi Chat (Chat Session)
+                'resources/css/pages/chat-session.css',
+                'resources/js/chat/chat-session.js',
             ],
             refresh: true,
         }),

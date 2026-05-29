@@ -13,7 +13,19 @@
             </li>
 
             {{-- PENCARIAN --}}
-            <li class="nav-item {{ (request()->routeIs('products.search') || request('from') == 'search' || (request()->routeIs('products.detail-product') && request('from') != 'home')) ? 'active' : '' }}">
+            <li class="nav-item {{
+                request()->routeIs('products.search')
+                || (
+                    request()->routeIs('products.detail-product')
+                    && request('from') != 'home'
+                )
+                || (
+                    request()->routeIs('chat.session')
+                    && request('from') == 'search'
+                )
+                    ? 'active'
+                    : ''
+            }}">
                 <a href="{{ route('products.search') }}" class="nav-link-custom">
                     <i class="bi bi-search"></i>
                     <span>Pencarian</span>
@@ -29,8 +41,8 @@
             </li>
 
             {{-- CHAT --}}
-            <li class="nav-item {{ request()->routeIs('chat') ? 'active' : '' }}">
-                <a href="{{ route('chat') }}" class="nav-link-custom">
+            <li class="nav-item {{ request()->routeIs('chat.*') && request('from') != 'search' ? 'active' : '' }}">
+                <a href="{{ route('chat.list') }}" class="nav-link-custom">
                     <i class="bi bi-chat-dots"></i>
                     <span>Chat</span>
                 </a>

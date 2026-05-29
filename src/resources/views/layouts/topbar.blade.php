@@ -68,17 +68,34 @@
         {{-- RIGHT --}}
         <div class="topbar-actions">
 
-            <a href="#" class="action-btn">
+            {{-- WISHLIST --}}
+            <a
+                href="{{ route('wishlist') }}"
+                class="action-btn {{ request()->routeIs('wishlist') ? 'active' : '' }}"
+            >
                 <i class="bi bi-heart"></i>
                 <span>Wishlist</span>
             </a>
 
-            <a href="#" class="action-btn">
+            {{-- CHAT --}}
+            <a
+                href="{{ route('chat.list') }}"
+                class="action-btn {{
+                    request()->routeIs('chat.*')
+                    && request('from') != 'search'
+                        ? 'active'
+                        : ''
+                }}"
+            >
                 <i class="bi bi-chat-dots"></i>
                 <span>Chat</span>
             </a>
 
-            <a href="#" class="action-btn">
+            {{-- NOTIFICATION --}}
+            <a
+                href="{{ route('notification') }}"
+                class="action-btn {{ request()->routeIs('notification') ? 'active' : '' }}"
+            >
 
                 <div class="notif-icon-wrapper">
                     <i class="bi bi-bell"></i>
@@ -107,7 +124,5 @@
             </div>
 
         </div>
-
-    </div>
 
 </header>

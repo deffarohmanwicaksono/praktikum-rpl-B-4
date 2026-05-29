@@ -278,7 +278,14 @@
 
             </div>
 
-            <a href="#" class="chat-cta-btn">
+            <a
+                href="{{ route('chat.session', [
+                    'from' => 'search',
+                    'pov' => 'buyer',
+                    'partner' => 'Andi Pratama'
+                ]) }}"
+                class="chat-cta-btn"
+            >
                 Mulai Chat
             </a>
 

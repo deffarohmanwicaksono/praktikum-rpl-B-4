@@ -153,8 +153,11 @@ Route::view('/wishlist', 'wishlist.wishlist')
 |--------------------------------------------------------------------------
 */
 
-Route::view('/chat', 'chat.chat')
-    ->name('chat');
+Route::view('/chat', 'chat.chat-list')
+    ->name('chat.list');
+
+Route::view('/chat/session', 'chat.chat-session')
+    ->name('chat.session');
 
 /*
 |--------------------------------------------------------------------------
