@@ -6,6 +6,8 @@
 
     <title>@yield('title', 'SeMart')</title>
 
+    <link rel="icon" type="image/png" href="{{ asset('images/SeMart Icon.png') }}">
+
     {{-- Google Font --}}
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
@@ -48,6 +50,11 @@
 
     {{-- Bootstrap JS --}}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    {{-- GLOBAL JS --}}
+    @vite([
+        'resources/js/app.js'
+    ])
 
     {{-- PAGE SPECIFIC JS --}}
     @stack('scripts')

@@ -189,9 +189,17 @@ Route::view('/sales-history', 'sales.sales-history')
 |--------------------------------------------------------------------------
 */
 
-Route::view('/seller-dashboard', 'seller.dashboard')
-    ->name('seller.dashboard');
+Route::view('/dashboard-seller', 'seller.dashboard-seller')
+    ->name('seller.dashboard-seller');
 
+/*
+|--------------------------------------------------------------------------
+| Upload Product Page
+|--------------------------------------------------------------------------
+*/
+
+Route::view('/seller/upload-product', 'seller.upload-product')
+    ->name('seller.product.upload');
 /*
 |--------------------------------------------------------------------------
 | Profile Page

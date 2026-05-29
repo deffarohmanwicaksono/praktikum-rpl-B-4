@@ -62,8 +62,8 @@
             </li>
 
             {{-- DASHBOARD SELLER --}}
-            <li class="nav-item {{ request()->routeIs('seller.dashboard') ? 'active' : '' }}">
-                <a href="{{ route('seller.dashboard') }}" class="nav-link-custom">
+            <li class="nav-item {{ request()->routeIs('seller.*') ? 'active' : '' }}">
+                <a href="{{ route('seller.dashboard-seller') }}" class="nav-link-custom">
                     <i class="bi bi-speedometer2"></i>
                     <span>Dashboard Seller</span>
                 </a>

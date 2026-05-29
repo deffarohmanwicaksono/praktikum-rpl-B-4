@@ -16,6 +16,19 @@
     --gray-text: #6B7280;
     --border-gray: #E5E7EB;
 
+    --status-menunggu-bg:   rgba(245, 158, 11, 0.12);
+    --status-menunggu-text: #D97706;
+    --status-menunggu-border: rgba(245, 158, 11, 0.28);
+    --status-dijual-bg:     rgba(16, 185, 129, 0.11);
+    --status-dijual-text:   #059669;
+    --status-dijual-border: rgba(16, 185, 129, 0.26);
+    --status-soldout-bg:    rgba(107, 114, 128, 0.11);
+    --status-soldout-text:  #6B7280;
+    --status-soldout-border: rgba(107, 114, 128, 0.26);
+    --status-ditolak-bg:    rgba(239, 68, 68, 0.11);
+    --status-ditolak-text:  #DC2626;
+    --status-ditolak-border: rgba(239, 68, 68, 0.26);
+
     --font-main: 'Poppins', sans-serif;
 
     --topbar-height: 64px;
