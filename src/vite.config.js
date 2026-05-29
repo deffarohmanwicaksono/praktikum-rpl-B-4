@@ -32,6 +32,10 @@ export default defineConfig({
                 // 7. Asset Halaman Unggah Barang (Upload Product)
                 'resources/css/pages/upload-product.css',
                 'resources/js/seller/upload-product.js',
+
+                // 8. Asset Halaman Edit Barang (Edit Product)
+                'resources/css/pages/edit-product.css',
+                'resources/js/seller/edit-product.js',
             ],
             refresh: true,
         }),

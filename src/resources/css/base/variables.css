@@ -29,6 +29,14 @@
     --status-ditolak-text:  #DC2626;
     --status-ditolak-border: rgba(239, 68, 68, 0.26);
 
+    --danger:         #EF4444;
+    --danger-hover:   #DC2626;
+    --danger-soft:    #FEF2F2;
+    --danger-border:  rgba(239,68,68,0.2);
+
+    --success:        #10B981;
+    --success-soft:   rgba(16,185,129,0.10);
+
     --font-main: 'Poppins', sans-serif;
 
     --topbar-height: 64px;

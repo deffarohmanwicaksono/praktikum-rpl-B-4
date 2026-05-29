@@ -200,6 +200,17 @@ Route::view('/dashboard-seller', 'seller.dashboard-seller')
 
 Route::view('/seller/upload-product', 'seller.upload-product')
     ->name('seller.product.upload');
+
+    
+/*
+|--------------------------------------------------------------------------
+| Edit Product Page
+|--------------------------------------------------------------------------
+*/
+
+Route::view('/seller/edit-product', 'seller.edit-product')
+    ->name('seller.product.edit');
+
 /*
 |--------------------------------------------------------------------------
 | Profile Page
