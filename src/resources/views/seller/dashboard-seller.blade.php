@@ -141,9 +141,9 @@ $sellerProducts = [
                         </td>
                         <td class="col-aksi">
                             <div class="aksi-group">
-                                <button class="btn-aksi btn-edit">
+                                <a href="{{ route('seller.product.edit') }}" class="btn-aksi btn-edit">
                                     <i class="bi bi-pencil"></i> Edit
-                                </button>
+                                </a>
                                 <button class="btn-aksi btn-hapus">
                                     <i class="bi bi-trash"></i> Hapus
                                 </button>

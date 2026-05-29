@@ -47,7 +47,7 @@
                                 autocomplete="off"
                             >
                             @error('nama_barang')
-                                <span class="text-danger style-error mt-1 d-block" style="font-size: 0.8rem;">{{ $message }}</span>
+                                <span class="input-error">{{ $message }}</span>
                             @enderror
                         </div>
                     </div>
@@ -70,10 +70,10 @@
                             <div class="d-flex justify-content-between align-items-center mt-1">
                                 <div>
                                     @error('deskripsi')
-                                        <span class="text-danger style-error" style="font-size: 0.8rem;">{{ $message }}</span>
+                                        <span class="input-error">{{ $message }}</span>
                                     @enderror
                                 </div>
-                                <div class="char-counter" style="font-size: 0.8rem; color: #64748b;">
+                                <div class="char-counter">
                                     <span id="charCount">0</span> / 1000
                                 </div>
                             </div>
@@ -101,7 +101,7 @@
                                 >
                             </div>
                             @error('harga')
-                                <span class="text-danger style-error mt-1 d-block" style="font-size: 0.8rem;">{{ $message }}</span>
+                                <span class="input-error">{{ $message }}</span>
                             @enderror
                         </div>
                     </div>
@@ -117,7 +117,7 @@
                                     </label>
                                     <div class="select-wrapper">
                                         <select class="form-input-custom form-select-custom @error('kondisi') is-invalid @enderror" id="kondisi" name="kondisi">
-                                            <option value="" disabled {{ old('kondisi') ? '' : 'selected' }}>Pilih kondisi barang</option>
+                                            <option value="" disabled {{ old('kondisi') ? '' : 'selected' }}>Pilih kondisi</option>
                                             <option value="like_new" {{ old('kondisi') == 'like_new' ? 'selected' : '' }}>Bekas Seperti Baru</option>
                                             <option value="baik" {{ old('kondisi') == 'baik' ? 'selected' : '' }}>Bekas Baik</option>
                                             <option value="layak" {{ old('kondisi') == 'layak' ? 'selected' : '' }}>Bekas Layak Pakai</option>
@@ -125,9 +125,9 @@
                                         <i class="bi bi-chevron-down select-chevron"></i>
                                     </div>
                                     @error('kondisi')
-                                        <span class="text-danger style-error mt-1 d-block" style="font-size: 0.8rem;">{{ $message }}</span>
+                                        <span class="input-error">{{ $message }}</span>
                                     @enderror
-                                    <p class="form-hint" style="font-size: 0.75rem; color: #94a3b8; margin-top: 4px;">Pilih kondisi yang paling sesuai</p>
+                                    <p class="form-hint">Pilih kondisi yang paling sesuai</p>
                                 </div>
                             </div>
 
@@ -145,16 +145,16 @@
                                             <option value="4" {{ old('kategori_id') == '4' ? 'selected' : '' }}>Peralatan Kost</option>
                                             <option value="5" {{ old('kategori_id') == '5' ? 'selected' : '' }}>Alat Tulis</option>
                                             <option value="6" {{ old('kategori_id') == '6' ? 'selected' : '' }}>Sepatu & Tas</option>
-                                            <option value="6" {{ old('kategori_id') == '7' ? 'selected' : '' }}>Olahraga</option>
-                                            <option value="6" {{ old('kategori_id') == '8' ? 'selected' : '' }}>Kecantikan</option>
-                                            <option value="6" {{ old('kategori_id') == '9' ? 'selected' : '' }}>Lainnya</option>
+                                            <option value="7" {{ old('kategori_id') == '7' ? 'selected' : '' }}>Olahraga</option>
+                                            <option value="8" {{ old('kategori_id') == '8' ? 'selected' : '' }}>Kecantikan</option>
+                                            <option value="9" {{ old('kategori_id') == '9' ? 'selected' : '' }}>Lainnya</option>
                                         </select>
                                         <i class="bi bi-chevron-down select-chevron"></i>
                                     </div>
                                     @error('kategori_id')
-                                        <span class="text-danger style-error mt-1 d-block" style="font-size: 0.8rem;">{{ $message }}</span>
+                                        <span class="input-error">{{ $message }}</span>
                                     @enderror
-                                    <p class="form-hint" style="font-size: 0.75rem; color: #94a3b8; margin-top: 4px;">Pilih kategori yang tersedia</p>
+                                    <p class="form-hint">Pilih kategori yang tersedia</p>
                                 </div>
                             </div>
                         </div>
@@ -172,7 +172,7 @@
                             </label>
 
                             <div class="upload-dropzone @error('foto_barang') is-invalid-zone @enderror" id="uploadDropzone">
-                                <div class="upload-preview-grid" id="uploadPreviewGrid" style="display:none;"></div>
+                                <div class="upload-preview-grid d-none" id="uploadPreviewGrid"></div>
 
                                 <div class="upload-placeholder" id="uploadPlaceholder">
                                     <div class="upload-icon-wrap">
@@ -196,10 +196,10 @@
                             </div>
 
                             @error('foto_barang')
-                                <span class="text-danger style-error mt-1 d-block" style="font-size: 0.8rem;">{{ $message }}</span>
+                                <span class="input-error">{{ $message }}</span>
                             @enderror
                             
-                            <p class="upload-hint-text" style="font-size: 0.8rem; color: #64748b; margin-top: 8px;">
+                            <p class="upload-hint-text">
                                 <i class="bi bi-info-circle"></i>
                                 Upload foto yang jelas dan menarik untuk menarik pembeli
                             </p>
@@ -214,14 +214,14 @@
                             <i class="bi bi-send-fill"></i>
                             Menunggu Verifikasi
                         </button>
-                        <p class="submit-hint" style="font-size: 0.75rem; color: #64748b; text-align: center; margin-top: 10px;">
+                        <p class="submit-hint">
                             Barang akan ditinjau oleh tim admin sebelum ditampilkan.
                         </p>
                     </div>
                 </div>
 
             </div>
-            </div>
+        </div>
     </form>
 </section>
 
