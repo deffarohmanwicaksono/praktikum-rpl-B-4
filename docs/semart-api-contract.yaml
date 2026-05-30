@@ -1,0 +1,798 @@
+openapi: "3.0.3"
+
+info:
+  title: SeMart Platform API
+  version: "1.0.0"
+  description: |
+    API Contract untuk platform marketplace SeMart — jual beli barang bekas mahasiswa UNS.
+    
+    **Base URL:** `http://localhost:8000/api/v1`
+    
+    **Autentikasi:** Bearer Token via Laravel Sanctum.
+    Sertakan header `Authorization: Bearer {token}` pada setiap endpoint yang memerlukan autentikasi.
+    
+    **Catatan development:** Autentikasi SSO UNS asli digantikan dengan dummy login selama masa pengembangan.
+  contact:
+    name: Tim RPL SeMart
+  license:
+    name: Internal Use Only
+
+servers:
+  - url: http://localhost:8000/api/v1
+    description: Development server (Laragon)
+
+tags:
+  - name: Autentikasi
+    description: Login dummy pengganti SSO UNS selama development
+  - name: Produk
+    description: Katalog, pencarian, upload, dan hapus barang
+  - name: Transaksi
+    description: Chat, link pembelian, validasi, dan checkout
+  - name: Moderasi
+    description: Laporan barang dan verifikasi admin
+
+# ─── SECURITY SCHEME ────────────────────────────────────────────
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: Sanctum
+      description: Token Laravel Sanctum. Didapat dari response POST /auth/login-dummy.
+
+  # ─── REUSABLE SCHEMAS ──────────────────────────────────────────
+  schemas:
+
+    # --- Common ---
+    SuccessBoolean:
+      type: boolean
+      example: true
+
+    ErrorBoolean:
+      type: boolean
+      example: false
+
+    # --- User ---
+    UserObject:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 102
+        name:
+          type: string
+          example: Budi Santoso
+        email:
+          type: string
+          format: email
+          example: budi@student.uns.ac.id
+        role:
+          type: string
+          enum: [buyer, seller, admin]
+          example: buyer
+
+    # --- Category ---
+    CategoryObject:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Buku
+
+    # --- Product Image ---
+    ProductImageObject:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 12
+        image_url:
+          type: string
+          format: uri
+          example: http://localhost:8000/storage/images/kalkulus.jpg
+        order:
+          type: integer
+          example: 0
+
+    # --- Product ---
+    ProductObject:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 45
+        name:
+          type: string
+          example: Buku Kalkulus Purcell Ed. 9
+        description:
+          type: string
+          nullable: true
+          example: Kondisi 85% mulus, tidak ada coretan.
+        price:
+          type: string
+          format: decimal
+          example: "750000.00"
+        status:
+          type: string
+          enum: [menunggu_verifikasi, dijual, sold_out, ditolak]
+          example: dijual
+        category:
+          $ref: "#/components/schemas/CategoryObject"
+        images:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProductImageObject"
+
+    # --- Purchase Link ---
+    PurchaseLinkObject:
+      type: object
+      properties:
+        id_link:
+          type: integer
+          example: 501
+        token:
+          type: string
+          example: secure_transaction_token_xyz123
+        deal_price:
+          type: string
+          format: decimal
+          example: "750000.00"
+        expired_at:
+          type: string
+          format: date-time
+          example: "2026-05-31T15:20:00Z"
+        is_used:
+          type: integer
+          enum: [0, 1]
+          example: 0
+
+    # --- Transaction ---
+    TransactionObject:
+      type: object
+      properties:
+        id_transaction:
+          type: integer
+          example: 1201
+        total_price:
+          type: string
+          format: decimal
+          example: "750000.00"
+        status:
+          type: string
+          enum: [menunggu_pembayaran, dibayar, selesai, gagal]
+          example: menunggu_pembayaran
+
+  # ─── REUSABLE RESPONSES ────────────────────────────────────────
+  responses:
+    Unauthorized:
+      description: Token tidak disertakan atau tidak valid
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                $ref: "#/components/schemas/ErrorBoolean"
+              message:
+                type: string
+                example: Unauthenticated. Token tidak ditemukan atau sudah kedaluwarsa.
+
+    Forbidden:
+      description: Akses ditolak — role tidak memiliki izin
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                $ref: "#/components/schemas/ErrorBoolean"
+              message:
+                type: string
+                example: "Akses Ditolak: Anda tidak memiliki otoritas sebagai Admin."
+
+    NotFound:
+      description: Resource tidak ditemukan
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                $ref: "#/components/schemas/ErrorBoolean"
+              message:
+                type: string
+                example: Data tidak ditemukan.
+
+    ValidationError:
+      description: Validasi gagal — field wajib kosong atau tipe data tidak sesuai
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                $ref: "#/components/schemas/ErrorBoolean"
+              message:
+                type: string
+                example: "Penolakan INSERT: Field kritikal tidak boleh kosong."
+              errors:
+                type: object
+                additionalProperties:
+                  type: array
+                  items:
+                    type: string
+                example:
+                  name: ["Kolom nama produk wajib diisi."]
+                  price: ["Kolom harga wajib diisi dan harus berupa angka."]
+
+# ─── PATHS ──────────────────────────────────────────────────────
+paths:
+
+  # ══════════════════════════════════════════════════════════════
+  # MODUL 1 — AUTENTIKASI
+  # ══════════════════════════════════════════════════════════════
+
+  /auth/login-dummy:
+    post:
+      tags: [Autentikasi]
+      summary: Login dummy (pengganti SSO UNS)
+      description: |
+        Menggantikan alur OAuth SSO UNS asli selama masa pengembangan.
+        Email **wajib** berformat domain UNS (`@student.uns.ac.id` atau `@uns.ac.id`).
+        Token yang dikembalikan digunakan sebagai Bearer Token untuk semua endpoint terproteksi.
+      operationId: loginDummy
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email:
+                  type: string
+                  format: email
+                  description: Harus berformat email UNS
+                  example: budi@student.uns.ac.id
+                password:
+                  type: string
+                  format: password
+                  description: Password akun dummy
+                  example: password123
+      responses:
+        "200":
+          description: Login berhasil — token Sanctum dikembalikan
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    $ref: "#/components/schemas/SuccessBoolean"
+                  message:
+                    type: string
+                    example: Autentikasi dummy berhasil.
+                  data:
+                    type: object
+                    properties:
+                      token:
+                        type: string
+                        example: "1|sanctum_token_data_xyz..."
+                      user:
+                        $ref: "#/components/schemas/UserObject"
+        "401":
+          description: Kredensial salah atau email bukan domain UNS
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    $ref: "#/components/schemas/ErrorBoolean"
+                  message:
+                    type: string
+                    example: Email atau password akun dummy salah.
+
+  # ══════════════════════════════════════════════════════════════
+  # MODUL 2 — PRODUK
+  # ══════════════════════════════════════════════════════════════
+
+  /products:
+    get:
+      tags: [Produk]
+      summary: Ambil daftar produk aktif
+      description: |
+        Mengembalikan semua produk berstatus `dijual`.
+        Mendukung pencarian berdasarkan kata kunci dan filter berdasarkan kategori.
+        Tidak memerlukan autentikasi — dapat diakses publik.
+      operationId: getProducts
+      parameters:
+        - name: search
+          in: query
+          required: false
+          description: Kata kunci pencarian (nama atau deskripsi produk)
+          schema:
+            type: string
+            example: kalkulus
+        - name: category_id
+          in: query
+          required: false
+          description: Filter berdasarkan ID kategori
+          schema:
+            type: integer
+            example: 1
+      responses:
+        "200":
+          description: Daftar produk berhasil diambil
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    $ref: "#/components/schemas/SuccessBoolean"
+                  message:
+                    type: string
+                    example: Daftar katalog produk berhasil diambil.
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/ProductObject"
+
+    post:
+      tags: [Produk]
+      summary: Upload produk baru (seller)
+      description: |
+        Seller mengajukan produk baru ke marketplace.
+        Produk tersimpan dengan status `menunggu_verifikasi` dan belum tampil di katalog
+        sampai disetujui oleh admin.
+        
+        **Role yang diizinkan:** seller
+      operationId: createProduct
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, price, category_id, image_url]
+              properties:
+                name:
+                  type: string
+                  maxLength: 200
+                  description: Nama produk, maksimal 200 karakter
+                  example: Buku Kalkulus Purcell Ed. 9
+                price:
+                  type: number
+                  format: decimal
+                  minimum: 0.01
+                  description: Harga dalam rupiah, harus positif
+                  example: 750000.00
+                category_id:
+                  type: integer
+                  description: ID kategori yang valid dari tabel categories
+                  example: 1
+                description:
+                  type: string
+                  nullable: true
+                  description: Deskripsi kondisi dan detail produk (opsional)
+                  example: Kondisi 85% mulus, tidak ada coretan.
+                image_url:
+                  type: string
+                  format: uri
+                  description: URL gambar utama produk
+                  example: http://localhost:8000/storage/images/kalkulus.jpg
+      responses:
+        "201":
+          description: Produk berhasil diajukan, menunggu verifikasi admin
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    $ref: "#/components/schemas/SuccessBoolean"
+                  message:
+                    type: string
+                    example: Produk berhasil diajukan. Menunggu verifikasi admin.
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 46
+                      status:
+                        type: string
+                        example: menunggu_verifikasi
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "422":
+          $ref: "#/components/responses/ValidationError"
+
+  /products/{id}:
+    delete:
+      tags: [Produk]
+      summary: Hapus produk
+      description: |
+        Menghapus produk dari marketplace secara permanen.
+        
+        **Role yang diizinkan:** seller (pemilik produk) atau admin
+      operationId: deleteProduct
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID produk yang akan dihapus
+          schema:
+            type: integer
+            example: 45
+      responses:
+        "200":
+          description: Produk berhasil dihapus
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    $ref: "#/components/schemas/SuccessBoolean"
+                  message:
+                    type: string
+                    example: Data dihapus. Ketersediaan barang dicabut dari marketplace.
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  # ══════════════════════════════════════════════════════════════
+  # MODUL 3 — TRANSAKSI & KOMUNIKASI
+  # ══════════════════════════════════════════════════════════════
+
+  /chats:
+    post:
+      tags: [Transaksi]
+      summary: Buat ruang chat baru
+      description: |
+        Membuat sesi chat antara buyer dan seller terkait produk tertentu.
+        ID buyer diambil otomatis dari token — tidak perlu dikirim di request body.
+        
+        Satu kombinasi (buyer, seller, product) idealnya hanya memiliki satu ruang chat aktif.
+      operationId: createChat
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [seller_id, product_id]
+              properties:
+                seller_id:
+                  type: integer
+                  description: ID user seller pemilik produk
+                  example: 101
+                product_id:
+                  type: integer
+                  description: ID produk yang ingin ditanyakan
+                  example: 45
+      responses:
+        "201":
+          description: Ruang chat berhasil dibuat
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    $ref: "#/components/schemas/SuccessBoolean"
+                  data:
+                    type: object
+                    properties:
+                      id_chat:
+                        type: integer
+                        example: 88
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "422":
+          $ref: "#/components/responses/ValidationError"
+
+  /purchase-links:
+    post:
+      tags: [Transaksi]
+      summary: Buat link pembelian (seller)
+      description: |
+        Seller membuat tautan pembayaran unik yang dikirimkan ke buyer melalui chat
+        setelah kesepakatan harga tercapai.
+        
+        Token yang dihasilkan bersifat **sekali pakai** dan memiliki masa berlaku terbatas.
+        Buyer menggunakan token ini untuk masuk ke halaman checkout.
+        
+        **Role yang diizinkan:** seller
+      operationId: createPurchaseLink
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [chat_id, deal_price]
+              properties:
+                chat_id:
+                  type: integer
+                  description: ID sesi chat tempat negosiasi berlangsung
+                  example: 88
+                deal_price:
+                  type: number
+                  format: decimal
+                  minimum: 0.01
+                  description: Harga final hasil kesepakatan negosiasi
+                  example: 750000.00
+      responses:
+        "201":
+          description: Link pembelian berhasil dibuat
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    $ref: "#/components/schemas/SuccessBoolean"
+                  data:
+                    $ref: "#/components/schemas/PurchaseLinkObject"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "422":
+          $ref: "#/components/responses/ValidationError"
+
+  /purchase-links/{token}:
+    get:
+      tags: [Transaksi]
+      summary: Validasi link pembelian
+      description: |
+        Memvalidasi apakah token link pembelian masih berlaku sebelum buyer
+        diarahkan ke halaman checkout.
+        
+        Sistem memeriksa dua kondisi:
+        - `is_used = 0` → belum pernah digunakan
+        - `expired_at > GETDATE()` → belum kedaluwarsa
+      operationId: validatePurchaseLink
+      parameters:
+        - name: token
+          in: path
+          required: true
+          description: Token unik dari link pembelian
+          schema:
+            type: string
+            example: secure_transaction_token_xyz123
+      responses:
+        "200":
+          description: Token valid dan dapat digunakan untuk checkout
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    $ref: "#/components/schemas/SuccessBoolean"
+                  message:
+                    type: string
+                    example: Tautan valid untuk digunakan.
+        "400":
+          description: Token tidak valid — parameter salah
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    $ref: "#/components/schemas/ErrorBoolean"
+                  message:
+                    type: string
+                    example: Link sudah tidak valid. Tautan telah kedaluwarsa atau sudah digunakan sebelumnya.
+        "410":
+          description: Token sudah kedaluwarsa atau sudah pernah dipakai
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    $ref: "#/components/schemas/ErrorBoolean"
+                  message:
+                    type: string
+                    example: Link sudah tidak valid. Tautan telah kedaluwarsa atau sudah digunakan sebelumnya.
+
+  /transactions:
+    post:
+      tags: [Transaksi]
+      summary: Checkout — catat transaksi resmi
+      description: |
+        Proses akhir pencatatan transaksi. Dipanggil setelah buyer membuka link pembelian
+        yang valid dan mengonfirmasi pembayaran.
+        
+        Setelah transaksi dicatat:
+        - Status transaksi: `menunggu_pembayaran`
+        - Token link pembelian otomatis di-flag `is_used = 1`
+        - Scheduler Laravel akan mengubah status produk menjadi `sold_out` setelah 2×24 jam
+        
+        **Role yang diizinkan:** buyer
+      operationId: createTransaction
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [purchase_link_token, quantity]
+              properties:
+                purchase_link_token:
+                  type: string
+                  description: Token dari link pembelian yang valid
+                  example: secure_transaction_token_xyz123
+                quantity:
+                  type: integer
+                  minimum: 1
+                  description: Jumlah item yang dibeli
+                  example: 1
+      responses:
+        "201":
+          description: Transaksi berhasil dicatat
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    $ref: "#/components/schemas/SuccessBoolean"
+                  message:
+                    type: string
+                    example: Transaksi resmi dicatat.
+                  data:
+                    $ref: "#/components/schemas/TransactionObject"
+        "400":
+          description: Token link tidak valid atau sudah digunakan
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    $ref: "#/components/schemas/ErrorBoolean"
+                  message:
+                    type: string
+                    example: Token link pembelian tidak valid atau sudah kedaluwarsa.
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "422":
+          $ref: "#/components/responses/ValidationError"
+
+  # ══════════════════════════════════════════════════════════════
+  # MODUL 4 — MODERASI & PENGAWASAN
+  # ══════════════════════════════════════════════════════════════
+
+  /reports:
+    post:
+      tags: [Moderasi]
+      summary: Kirim laporan barang
+      description: |
+        Pengguna melaporkan produk yang diduga mengandung konten ilegal,
+        penipuan, atau melanggar ketentuan platform.
+        
+        Notifikasi otomatis dikirimkan ke pelapor setelah laporan tersimpan.
+      operationId: createReport
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [product_id, reason]
+              properties:
+                product_id:
+                  type: integer
+                  description: ID produk yang dilaporkan
+                  example: 45
+                reason:
+                  type: string
+                  description: Alasan pelaporan secara deskriptif
+                  example: Menjual barang palsu yang tidak sesuai deskripsi.
+      responses:
+        "201":
+          description: Laporan berhasil dikirim
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    $ref: "#/components/schemas/SuccessBoolean"
+                  message:
+                    type: string
+                    example: Laporan berhasil dikirim. Notifikasi otomatis terintegrasi ke pelapor.
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "422":
+          $ref: "#/components/responses/ValidationError"
+
+  /admin/products/{id}/status:
+    patch:
+      tags: [Moderasi]
+      summary: Ubah status moderasi produk (admin)
+      description: |
+        Endpoint eksklusif admin untuk memperbarui status produk secara parsial.
+        Digunakan dalam proses verifikasi barang yang diunggah seller.
+        
+        **Status yang dapat disetel:**
+        - `dijual` → produk disetujui, tampil di katalog
+        - `ditolak` → produk ditolak, tidak tampil di katalog, notifikasi dikirim ke seller
+        - `menunggu_verifikasi` → kembalikan ke antrian (jika diperlukan)
+        - `sold_out` → tandai sebagai terjual
+        
+        **Role yang diizinkan:** admin (divalidasi ketat via Laravel Middleware)
+      operationId: updateProductStatus
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID produk yang akan diubah statusnya
+          schema:
+            type: integer
+            example: 45
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [status]
+              properties:
+                status:
+                  type: string
+                  enum: [menunggu_verifikasi, dijual, sold_out, ditolak]
+                  description: Status baru produk
+                  example: ditolak
+      responses:
+        "200":
+          description: Status produk berhasil diubah
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    $ref: "#/components/schemas/SuccessBoolean"
+                  message:
+                    type: string
+                    example: Status produk ID 45 berhasil diubah menjadi 'ditolak'.
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/ValidationError"
