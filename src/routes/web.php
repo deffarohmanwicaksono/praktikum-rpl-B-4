@@ -33,12 +33,8 @@ Route::middleware('auth')->group(function () {
     })->name('home');
 
     // Search
-    Route::get('/search', function () {
-        return view('products.search', [
-            'keyword' => request('q'),
-            'products' => []
-        ]);
-    })->name('products.search');
+    Route::get('/search', [ProductController::class, 'search'])
+    ->name('products.search');
 
     // Detail Product
     Route::get('/products/{id}', [ProductController::class, 'show'])

@@ -16,4 +16,22 @@ class ProductController extends Controller
             'product' => $product
         ]);
     }
+
+    public function search(Request $request)
+{
+    $keyword = $request->get('q');
+
+    $products = Product::with(['productImages', 'category'])
+        ->where('status', 'dijual')
+        ->where(function($query) use ($keyword) {
+            $query->where('name', 'like', "%{$keyword}%")
+                  ->orWhere('description', 'like', "%{$keyword}%");
+        })
+        ->get();
+
+    return view('products.search', [
+        'keyword' => $keyword,
+        'products' => $products
+    ]);
+}
 }
