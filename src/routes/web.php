@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,9 +41,8 @@ Route::middleware('auth')->group(function () {
     })->name('products.search');
 
     // Detail Product
-    Route::get('/products/{id}', function ($id) {
-        return view('products.detail-product');
-    })->name('products.detail-product');
+    Route::get('/products/{id}', [ProductController::class, 'show'])
+    ->name('products.detail-product');
 
     // Wishlist
     Route::view('/wishlist', 'wishlist.wishlist')
