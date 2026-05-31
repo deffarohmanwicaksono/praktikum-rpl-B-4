@@ -49,6 +49,10 @@ Route::middleware('auth')->group(function () {
         ->name('chat.list');
     Route::view('/chat/session', 'chat.chat-session')
         ->name('chat.session');
+        
+    // Checkout
+    Route::view('/checkout', 'checkout.checkout')
+        ->name('checkout');
 
     // Notification
     Route::view('/notification', 'notification.notification')

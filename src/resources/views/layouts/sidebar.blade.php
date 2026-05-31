@@ -41,7 +41,7 @@
             </li>
 
             {{-- CHAT --}}
-            <li class="nav-item {{ request()->routeIs('chat.*') && request('from') != 'search' ? 'active' : '' }}">
+            <li class="nav-item {{ request()->routeIs('chat.*') && request('from') != 'search' || request()->is('checkout*') ? 'active' : '' }}">
                 <a href="{{ route('chat.list') }}" class="nav-link-custom">
                     <i class="bi bi-chat-dots"></i>
                     <span>Chat</span>

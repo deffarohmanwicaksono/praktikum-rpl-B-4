@@ -83,6 +83,7 @@
                 class="action-btn {{
                     request()->routeIs('chat.*')
                     && request('from') != 'search'
+                    || request()->is('checkout*')
                         ? 'active'
                         : ''
                 }}"

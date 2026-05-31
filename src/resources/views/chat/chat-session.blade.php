@@ -95,6 +95,6 @@
 
 <script>
     window.currentPOV = @json($currentPOV);
+    window.checkoutUrl = "{{ route('checkout') }}";
 </script>
-
 @endsection

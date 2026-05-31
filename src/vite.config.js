@@ -40,6 +40,10 @@ export default defineConfig({
                 // 9. Asset Halaman Sesi Chat (Chat Session)
                 'resources/css/pages/chat-session.css',
                 'resources/js/chat/chat-session.js',
+
+                // 10. Asset Halaman Checkout
+                'resources/css/pages/checkout.css',
+                'resources/js/checkout/checkout.js',
             ],
             refresh: true,
         }),
