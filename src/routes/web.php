@@ -49,6 +49,10 @@ Route::middleware('auth')->group(function () {
         ->name('chat.list');
     Route::view('/chat/session', 'chat.chat-session')
         ->name('chat.session');
+
+    // Kirim Link Pembelian
+    Route::view('/checkout/purchase-link', 'checkout.purchase-link')
+        ->name('checkout.purchase-link');
         
     // Checkout
     Route::view('/checkout', 'checkout.checkout')

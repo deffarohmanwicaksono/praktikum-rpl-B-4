@@ -536,6 +536,68 @@
     color: var(--white);
 }
 
+.msg-purchase-card {
+    background: var(--white);
+    border: 1px solid var(--border-gray);
+    border-radius: 12px;
+    padding: 12px;
+    width: 280px;
+    text-align: left;
+    box-shadow: 0 2px 8px rgba(36, 52, 71, 0.05);
+}
+.msg-purchase-info {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+.msg-purchase-img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid var(--border-gray);
+}
+.msg-purchase-title {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--dark-text);
+    line-height: 1.3;
+}
+.msg-purchase-price {
+    display: block;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--primary-blue);
+    margin-top: 4px;
+}
+.msg-purchase-cond {
+    font-size: 11px;
+    color: var(--gray-text);
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+.msg-purchase-btn {
+    display: block;
+    width: 100%;
+    text-align: center;
+    background: var(--primary-blue);
+    color: var(--white);
+    padding: 8px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 13px;
+    text-decoration: none;
+    transition: 0.2s;
+    border: none;
+}
+.msg-purchase-btn:hover {
+    background: var(--hover-blue);
+    color: var(--white);
+}
+
 /* ==============================================
    RESPONSIVE
    ============================================== */
