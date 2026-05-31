@@ -20,7 +20,7 @@
             'name' => 'Andi Pratama',
             'pov' => 'seller',
             'product' => 'Jaket Denim Pria',
-            'preview' => 'Halo kak, masih ada bukunya?',
+            'preview' => 'Halo kak, masih ada jaketnya?',
             'time' => '14:30',
             'unread' => 3,
             'image' => asset('images/Elemen-1.png'),

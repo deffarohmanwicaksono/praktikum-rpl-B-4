@@ -176,7 +176,7 @@ function renderChatData(pov) {
                         Link Pembelian
                     </span>
 
-                    <a href="#" class="link-card-url">
+                    <a href="${window.checkoutUrl}" class="link-card-url">
                         semart.app/p/jeans-jacket-123
                     </a>
 
