@@ -192,6 +192,8 @@
 
     </div>
 
+
+
     {{-- RIGHT --}}
     <div class="detail-right">
 
@@ -278,16 +280,20 @@
 
             </div>
 
-            <a
-                href="{{ route('chat.session', [
-                    'from' => 'search',
-                    'pov' => 'buyer',
-                    'partner' => 'Andi Pratama'
-                ]) }}"
-                class="chat-cta-btn"
-            >
-                Mulai Chat
-            </a>
+                        @if (auth()->id() !== $product->user_id)
+                <form action="{{ route('chat.store') }}" method="POST">
+                    @csrf
+                    <input type="hidden" name="seller_id" value="{{ $product->user_id }}">
+                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+                    <button type="submit" class="chat-cta-btn">
+                        Mulai Chat
+                    </button>
+                </form>
+            @else
+                <span class="chat-cta-btn" style="opacity: 0.5; cursor: not-allowed;">
+                    Produk Anda
+                </span>
+            @endif
 
         </div>
 

@@ -3,7 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductController;
-
+use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\ChatController;
 /*
 |--------------------------------------------------------------------------
 | Authentication
@@ -45,19 +46,22 @@ Route::middleware('auth')->group(function () {
         ->name('wishlist');
 
     // Chat
-    Route::view('/chat', 'chat.chat-list')
-        ->name('chat.list');
-    Route::view('/chat/session', 'chat.chat-session')
-        ->name('chat.session');
+        // Chat
+    Route::get('/chat', [ChatController::class, 'index'])->name('chat.list');
+    Route::post('/chat', [ChatController::class, 'store'])->name('chat.store');
+    Route::get('/chat/{chat}', [ChatController::class, 'show'])->name('chat.session');
+    Route::post('/chat/{chat}/message', [ChatController::class, 'sendMessage'])->name('chat.sendMessage');
+    Route::post('/chat/{chat}/purchase-link', [ChatController::class, 'sendPurchaseLink'])->name('chat.sendPurchaseLink');
 
-    // Kirim Link Pembelian
-    Route::view('/checkout/purchase-link', 'checkout.purchase-link')
-        ->name('checkout.purchase-link');
-        
+
     // Checkout
-    Route::view('/checkout', 'checkout.checkout')
-        ->name('checkout');
-
+    Route::get('/checkout/{token}', [CheckoutController::class, 'showCheckout'])->name('checkout');
+    Route::post('/checkout/{token}', [CheckoutController::class, 'store'])->name('checkout.store');
+    
+    // Upload Bukti Pembayaran
+    Route::get('/checkout/{transaction}/upload-proof', [CheckoutController::class, 'showUploadProof'])->name('checkout.uploadProofForm');
+    Route::post('/checkout/{transaction}/upload-proof', [CheckoutController::class, 'uploadProof'])->name('checkout.uploadProof');
+    
     // Notification
     Route::view('/notification', 'notification.notification')
         ->name('notification');
