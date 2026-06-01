@@ -54,11 +54,13 @@ Route::middleware('auth')->group(function () {
     Route::post('/chat/{chat}/purchase-link', [ChatController::class, 'sendPurchaseLink'])->name('chat.sendPurchaseLink');
 
 
-    // Kirim Link Pembelian
-    Route::view('/checkout/purchase-link', 'checkout.purchase-link')
-        ->name('checkout.purchase-link');
-
     // Checkout
+    Route::get('/checkout/{token}', [CheckoutController::class, 'showCheckout'])->name('checkout');
+    Route::post('/checkout/{token}', [CheckoutController::class, 'store'])->name('checkout.store');
+    
+    // Upload Bukti Pembayaran
+    Route::get('/checkout/{transaction}/upload-proof', [CheckoutController::class, 'showUploadProof'])->name('checkout.uploadProofForm');
+    Route::post('/checkout/{transaction}/upload-proof', [CheckoutController::class, 'uploadProof'])->name('checkout.uploadProof');
     
     // Notification
     Route::view('/notification', 'notification.notification')
