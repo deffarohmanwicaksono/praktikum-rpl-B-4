@@ -21,6 +21,11 @@ class DatabaseSeeder extends Seeder
             ChatSeeder::class,
             MessageSeeder::class,
             PurchaseLinkSeeder::class,
+            TransactionSeeder::class,
+            ReviewSeeder::class,
+            WishlistSeeder::class,
+            ReportSeeder::class,
+            NotificationSeeder::class,
         ]);
     }
 }
