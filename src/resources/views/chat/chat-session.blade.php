@@ -84,7 +84,7 @@
                 </div>
             </div>
 
-            <button type="button" class="btn-kirim-link">
+            <button type="button" class="btn-kirim-link" onclick="window.location.href='{{ route('checkout.purchase-link') }}?product=Laptop+MacBook+Air+M1+2020&price=7500000&condition=Bekas'">
                 <i class="bi bi-link-45deg"></i>
                 Kirim Link
             </button>

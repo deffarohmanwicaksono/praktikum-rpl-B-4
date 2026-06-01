@@ -491,19 +491,15 @@
     display: flex;
     align-items: center;
     justify-content: center;
-
     width: 32px;
     height: 32px;
-
     background: var(--primary-blue);
     border-radius: 8px;
-
     color: white;
 }
 
 .kirim-link-bar-title {
     display: block;
-
     color: var(--primary-blue);
     font-size: 13px;
     font-weight: 600;
@@ -518,13 +514,10 @@
     display: flex;
     align-items: center;
     gap: 6px;
-
     padding: 6px 14px;
-
     background: var(--white);
     border: 1px solid var(--primary-blue);
     border-radius: 8px;
-
     color: var(--primary-blue);
     font-size: 12px;
     font-weight: 600;
@@ -532,8 +525,121 @@
 
 .btn-kirim-link:hover {
     background: var(--primary-blue);
-
     color: var(--white);
+}
+
+/* ==============================================
+   DESAIN CUSTOM CARD LINK PEMBELIAN
+   ============================================== */
+.msg-purchase-card {
+    background: var(--white);
+    border: 1px solid var(--border-gray);
+    border-radius: 16px;
+    padding: 16px;
+    width: 300px;
+    text-align: left;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.msg-purchase-info {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 14px;
+}
+
+.msg-purchase-img {
+    width: 64px;
+    height: 64px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 1px solid var(--border-gray);
+}
+
+.msg-purchase-title {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--dark-text);
+    line-height: 1.3;
+}
+
+.msg-purchase-price {
+    display: block;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--primary-blue);
+    margin-top: 4px;
+}
+
+.msg-purchase-cond {
+    font-size: 11px;
+    color: var(--gray-text);
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.msg-purchase-cond i {
+    color: var(--primary-blue);
+}
+
+.msg-purchase-btn {
+    display: block;
+    width: 100%;
+    text-align: center;
+    background: var(--primary-blue);
+    color: var(--white);
+    padding: 10px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 13px;
+    text-decoration: none;
+    transition: 0.2s;
+    border: none;
+}
+
+.msg-purchase-btn:hover {
+    background: var(--hover-blue);
+    color: var(--white);
+}
+
+/* ==============================================
+   STATE / VARIASI KADALUWARSA (EXPIRED) - REVISI
+   ============================================== */
+.msg-purchase-card--expired {
+    background: var(--white);
+    border-color: var(--border-gray);
+}
+
+.msg-purchase-card--expired .msg-purchase-img {
+    opacity: 0.85; 
+}
+
+.msg-purchase-card--expired .msg-purchase-title {
+    text-decoration: line-through;
+    color: var(--gray-text);
+}
+
+.msg-purchase-card--expired .msg-purchase-cond {
+    font-size: 11px;
+    color: var(--gray-text);
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.msg-purchase-card--expired .msg-purchase-cond i {
+    color: var(--primary-blue);
+}
+
+.msg-purchase-btn--expired {
+    background: #E5E7EB !important;
+    color: #9CA3AF !important;
+    cursor: not-allowed;
+    box-shadow: none !important;
 }
 
 /* ==============================================
