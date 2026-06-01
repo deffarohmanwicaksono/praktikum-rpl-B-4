@@ -15,7 +15,12 @@
 @section('content')
 
 @php
-    $currentPOV = request()->get('pov', 'buyer');
+    $userId = auth()->id();
+    $partner = ($chat->seller_id === $userId) ? $chat->buyer : $chat->seller;
+    $productImage = $chat->product->productImages->first();
+    $imageUrl = $productImage
+        ? asset('storage/' . $productImage->image_path)
+        : asset('images/Elemen-1.png');
 @endphp
 
 <div class="chat-shell">
@@ -26,7 +31,7 @@
         <div class="chat-head-contact">
             <div class="chat-head-foto">
                 <img
-                    src="{{ asset('images/Elemen-1.png') }}"
+                    src="{{ $imageUrl }}"
                     alt="Produk"
                     class="chat-head-foto-img"
                 >
@@ -34,26 +39,62 @@
 
             <div class="chat-head-info">
                 <span class="chat-head-name" id="chatHeaderName">
-                    {{ $currentPOV === 'buyer' ? 'Andi Pratama' : 'Andi Pratama' }}
+                    {{ $partner->name }}
                 </span>
 
                 <span class="chat-head-product">
                     <i class="bi bi-tag-fill"></i>
-                    Jaket Denim Pria
+                    {{ $chat->product->name }}
                 </span>
             </div>
         </div>
     </div>
 
-    <div class="chat-messages" id="chatMessages"></div>
+        {{-- MESSAGES --}}
+    <div class="chat-messages" id="chatMessages">
+        @foreach ($messages as $msg)
+            @php
+                $isMe = $msg->sender_id === $userId;
+                $rowClass = $isMe ? 'msg-out' : 'msg-in';
+                $bubbleClass = $isMe ? 'msg-bubble--out' : 'msg-bubble--in';
+            @endphp
 
-    <div class="chat-input-bar">
+            <div class="msg-row {{ $rowClass }}">
+                @if (!$isMe)
+                    <div class="msg-avatar"><i class="bi bi-person-circle"></i></div>
+                @endif
+
+                <div class="msg-bubble {{ $bubbleClass }}">
+                    <p class="msg-text">{{ $msg->message }}</p>
+
+                    @if ($isMe)
+                        <div class="msg-out-meta">
+                            <span class="msg-time msg-time--out">{{ $msg->created_at->format('H:i') }}</span>
+                            <span class="msg-tick"><i class="bi bi-check2-all"></i></span>
+                        </div>
+                    @else
+                        <span class="msg-time">{{ $msg->created_at->format('H:i') }}</span>
+                    @endif
+                </div>
+
+                @if ($isMe)
+                    <div class="msg-avatar"><i class="bi bi-person-circle"></i></div>
+                @endif
+            </div>
+        @endforeach
+    </div>
+
+    {{-- INPUT PESAN --}}
+    <form action="{{ route('chat.sendMessage', $chat->id) }}" method="POST" class="chat-input-bar">
+        @csrf
         <div class="chat-input-wrap">
             <textarea
                 class="chat-textarea"
                 id="chatInput"
+                name="message"
                 placeholder="Tulis pesan..."
                 rows="1"
+                required
             ></textarea>
 
             <button type="button" class="chat-emoji-btn" id="emojiBtn">
@@ -61,11 +102,12 @@
             </button>
         </div>
 
-        <button type="button" class="btn-kirim" id="sendBtn">
+        <button type="submit" class="btn-kirim" id="sendBtn">
             <i class="bi bi-send-fill"></i>
         </button>
-    </div>
+    </form>
 
+    {{-- KIRIM LINK PEMBELIAN (hanya untuk seller) --}}
     @if ($currentPOV === 'seller')
         <div class="kirim-link-bar" id="kirimLinkBar">
             <div class="kirim-link-bar-left">
@@ -84,10 +126,50 @@
                 </div>
             </div>
 
-            <button type="button" class="btn-kirim-link" onclick="window.location.href='{{ route('checkout.purchase-link') }}?product=Laptop+MacBook+Air+M1+2020&price=7500000&condition=Bekas'">
+            <button type="button" class="btn-kirim-link" onclick="document.getElementById('purchaseLinkModal').style.display='flex'">
                 <i class="bi bi-link-45deg"></i>
                 Kirim Link
             </button>
+        </div>
+
+        {{-- Modal Kirim Link --}}
+        <div class="modal-overlay" id="purchaseLinkModal" style="display:none">
+            <div class="modal-card">
+                <div class="modal-header-custom">
+                    <h3 class="modal-title-custom">Kirim Link Pembelian</h3>
+                    <button class="modal-close-btn" onclick="document.getElementById('purchaseLinkModal').style.display='none'" aria-label="Tutup">
+                        <i class="bi bi-x-lg"></i>
+                    </button>
+                </div>
+                <form action="{{ route('chat.sendPurchaseLink', $chat->id) }}" method="POST">
+                    @csrf
+                    <div class="modal-body-custom">
+                        <div class="form-group-custom">
+                            <label class="form-label-custom">Harga Kesepakatan (Rp) <span class="required-star">*</span></label>
+                            <input type="number" name="deal_price" class="form-input-custom"
+                                   value="{{ $chat->product->price }}" min="1" required>
+                        </div>
+                        <div class="form-group-custom">
+                            <label class="form-label-custom">Masa Berlaku Link <span class="required-star">*</span></label>
+                            <select name="duration" class="form-input-custom" required>
+                                <option value="15">15 Menit</option>
+                                <option value="30">30 Menit</option>
+                                <option value="60">1 Jam</option>
+                                <option value="180" selected>3 Jam</option>
+                                <option value="360">6 Jam</option>
+                                <option value="720">12 Jam</option>
+                                <option value="1440">24 Jam</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer-custom">
+                        <button type="button" class="btn-modal-cancel" onclick="document.getElementById('purchaseLinkModal').style.display='none'">Batal</button>
+                        <button type="submit" class="btn-modal-submit">
+                            <i class="bi bi-send-fill"></i> Kirim Link
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     @endif
 
@@ -95,6 +177,13 @@
 
 <script>
     window.currentPOV = @json($currentPOV);
-    window.checkoutUrl = "{{ route('checkout') }}";
+
+    // Auto-scroll ke pesan terbawah
+    document.addEventListener('DOMContentLoaded', function() {
+        const chatMessages = document.getElementById('chatMessages');
+        if (chatMessages) {
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+    });
 </script>
 @endsection

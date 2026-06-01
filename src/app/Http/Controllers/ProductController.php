@@ -40,7 +40,7 @@ class ProductController extends Controller
 
 public function create()
 {
-    $categories = \App\Models\Category::all();
+    $categories = \app\Models\Category::all();
 
     return view('seller.upload-product', [
         'categories' => $categories
