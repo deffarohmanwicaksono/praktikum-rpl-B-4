@@ -37,6 +37,18 @@
     --success:        #10B981;
     --success-soft:   rgba(16,185,129,0.10);
 
+    --stat-blue-bg:    rgba(59, 157, 248, 0.10);
+    --stat-blue-icon:  #3B9DF8;
+
+    --growth-pos-bg:   rgba(59, 157, 248, 0.10);
+    --growth-pos-text: #3B9DF8;
+
+    --success-bg:    rgba(16, 185, 129, 0.11);
+    --success-text:  #059669;
+    --success-border: rgba(16, 185, 129, 0.28);
+    --danger-bg:     rgba(239, 68, 68, 0.10);
+    --danger-text:   #DC2626;
+
     --font-main: 'Poppins', sans-serif;
 
     --topbar-height: 64px;
