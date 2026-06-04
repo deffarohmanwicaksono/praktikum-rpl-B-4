@@ -67,12 +67,12 @@ Route::middleware('auth')->group(function () {
         ->name('notification');
 
     // Purchase History
-    Route::view('/purchase-history', 'purchase.purchase-history')
-        ->name('purchase.history');
+    Route::view('/purchase-history', 'history.purchase-history')
+        ->name('history.purchase-history');
 
     // Sales History
-    Route::view('/sales-history', 'sales.sales-history')
-        ->name('sales.history');
+    Route::view('/sales-history', 'history.sales-history')
+        ->name('history.sales-history');
 
     // Seller
     Route::view('/dashboard-seller', 'seller.dashboard-seller')

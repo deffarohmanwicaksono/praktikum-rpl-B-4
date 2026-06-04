@@ -58,16 +58,16 @@
             </li>
 
             {{-- RIWAYAT PEMBELIAN --}}
-            <li class="nav-item {{ request()->routeIs('purchase.history') ? 'active' : '' }}">
-                <a href="{{ route('purchase.history') }}" class="nav-link-custom">
+            <li class="nav-item {{ request()->routeIs('history.purchase-history') ? 'active' : '' }}">
+                <a href="{{ route('history.purchase-history') }}" class="nav-link-custom">
                     <i class="bi bi-bag-check"></i>
                     <span>Riwayat Pembelian</span>
                 </a>
             </li>
 
             {{-- RIWAYAT PENJUALAN --}}
-            <li class="nav-item {{ request()->routeIs('sales.history') ? 'active' : '' }}">
-                <a href="{{ route('sales.history') }}" class="nav-link-custom">
+            <li class="nav-item {{ request()->routeIs('history.sales-history') ? 'active' : '' }}">
+                <a href="{{ route('history.sales-history') }}" class="nav-link-custom">
                     <i class="bi bi-receipt"></i>
                     <span>Riwayat Penjualan</span>
                 </a>
