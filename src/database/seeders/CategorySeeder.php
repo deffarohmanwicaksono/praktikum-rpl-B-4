@@ -15,28 +15,36 @@ class CategorySeeder extends Seeder
     {
         Category::insert([
             [
-                'name' => 'Elektronik',
-                'description' => 'Barang elektronik'
+                'name' => 'Elektronik dan Gadget',
+                'description' => 'Laptop, smartphone, tablet, printer, headset, speaker, dan perangkat elektronik lainnya.'
             ],
             [
-                'name' => 'Buku',
-                'description' => 'Buku kuliah dan bacaan'
+                'name' => 'Buku dan Alat Tulis',
+                'description' => 'Buku fiksi, buku non-fiksi, kalkulator, alat tulis, dan perlengkapan kuliah lainnya.'
             ],
             [
-                'name' => 'Peralatan Kos',
-                'description' => 'Kebutuhan kos'
+                'name' => 'Perlengkapan Kos',
+                'description' => 'Barang kebutuhan sehari-hari, seperti peralatan dapur, peralatan mandi, dan perlengkapan tidur.'
             ],
             [
                 'name' => 'Fashion',
-                'description' => 'Pakaian dan aksesoris'
+                'description' => 'Pakaian, aksesoris, atribut kampus'
             ],
             [
                 'name' => 'Olahraga',
-                'description' => 'Peralatan olahraga'
+                'description' => 'Raket, bola, sepatu olahraga, dumbbell, dan perlengkapan olahraga lainnya.'
+            ],
+            [
+                'name' => 'Hobi & Koleksi',
+                'description' => 'Action figure, board game, kartu koleksi, alat musik, dan barang hobi lainnya.'
+            ],
+            [
+                'name' => 'Perawatan & Kecantikan',
+                'description' => 'Hair dryer, catokan, organizer kosmetik, skincare,dan perlengkapan perawatan pribadi lainnya.'
             ],
             [
                 'name' => 'Lainnya',
-                'description' => 'Kategori lainnya'
+                'description' => 'Barang kategori lainnya'
             ]
         ]);
     }
