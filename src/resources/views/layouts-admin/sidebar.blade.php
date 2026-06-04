@@ -20,14 +20,6 @@
                 </a>
             </li>
 
-            {{-- DAFTAR LAPORAN --}}
-            <li class="nav-item {{ request()->routeIs('admin.reports') ? 'active' : '' }}">
-                <a href="{{ route('admin.reports') }}" class="nav-link-custom">
-                    <i class="bi bi-file-earmark-bar-graph"></i>
-                    <span>Daftar Laporan</span>
-                </a>
-            </li>
-
             {{-- DAFTAR USER --}}
             <li class="nav-item {{ request()->routeIs('admin.users') ? 'active' : '' }}">
                 <a href="{{ route('admin.users') }}" class="nav-link-custom">
