@@ -1,224 +1,105 @@
 <?php
 
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\ChatController;
+use App\Http\Middleware\RoleMiddleware;
 
 /*
 |--------------------------------------------------------------------------
-| Authentication Views
+| Authentication
 |--------------------------------------------------------------------------
 */
 
-Route::view('/login', 'auth.login')
-    ->name('login');
-
-Route::post('/login', function () {
-
-    $validatedCredentials = request()->validate([
-
-        'email' => [
-            'required',
-            'email',
-            'ends_with:@student.uns.ac.id'
-        ],
-
-        'password' => [
-            'required'
-        ]
-
-    ], [
-
-        'email.required' => 'Email wajib diisi.',
-        'email.email' => 'Format email tidak valid.',
-        'email.ends_with' => 'Gunakan email SSO UNS.',
-
-        'password.required' => 'Password wajib diisi.'
-
-    ]);
-
-    if (Auth::attempt($validatedCredentials)) {
-
-        request()->session()->regenerate();
-
-        return redirect()->route('home');
-    }
-
-    return back()->withErrors([
-        'login' => 'Email atau password salah.'
-    ]);
-
-})->name('login.process');
+Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+Route::post('/login', [AuthController::class, 'login'])->name('login.process');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 /*
 |--------------------------------------------------------------------------
-| Logout
+| Pages (Butuh Login)
 |--------------------------------------------------------------------------
 */
+Route::middleware('auth')->group(function () {
 
-Route::post('/logout', function () {
+    // ==========================================
+    // ADMIN
+    // ==========================================
+    Route::middleware(RoleMiddleware::class . ':admin')->group(function () {
+        
+        // Dashboard
+        Route::get('/admin/dashboard-admin', function () {
+            return view('admin.dashboard-admin');
+        })->name('admin.dashboard-admin');
 
-    Auth::logout();
+        // Verifikasi Barang
+        Route::get('/admin/verification', function () {
+            return view('admin.verification');
+        })->name('admin.verification');
 
-    request()->session()->invalidate();
+        // Daftar Laporan
+        Route::get('/admin/reports', function () {
+            return view('admin.reports');
+        })->name('admin.reports');
 
-    request()->session()->regenerateToken();
+        // Daftar User
+        Route::get('/admin/users', function () {
+            return view('admin.users');
+        })->name('admin.users');
 
-    return redirect()->route('login');
+        // Daftar Produk
+        Route::get('/admin/products', function () {
+            return view('admin.products');
+        })->name('admin.products');
 
-})->name('logout');
+        // Daftar Transaksi
+        Route::get('/admin/transactions', function () {
+            return view('admin.transactions');
+        })->name('admin.transactions');
 
-/*
-|--------------------------------------------------------------------------
-| DUMMY PRODUCTS DATA
-|--------------------------------------------------------------------------
-*/
+    });
 
-$dummyProducts = [
-
-    1 => [
-        'id' => 1,
-        'name' => 'Laptop MacBook Air M1 2020',
-        'price' => 'Rp 7.500.000',
-        'category' => 'Elektronik',
-        'condition' => 'Bekas Seperti Baru',
-        'description' => 'Laptop andalan dengan performa chip M1 yang masih sangat kencang untuk kebutuhan kuliah, browsing, desain grafis ringan, hingga editing video/foto. Sangat cocok bagi mahasiswa atau pekerja kreatif yang membutuhkan mobilitas tinggi.',
-        'image' => asset('images/Elemen-1.png'),
-        'gallery' => [
-            asset('images/Elemen-1.png'),
-            asset('images/Elemen-1.png'),
-            asset('images/Elemen-1.png'),
-            asset('images/Elemen-1.png'),
-        ]
-    ]
-
-];
-
-/*
-|--------------------------------------------------------------------------
-| Home Page
-|--------------------------------------------------------------------------
-*/
-
-Route::get('/home', function () use ($dummyProducts) {
-
-    return view('home.home', [
-        'products' => $dummyProducts
-    ]);
-
-})->name('home');
-
-/*
-|--------------------------------------------------------------------------
-| Search Page
-|--------------------------------------------------------------------------
-*/
-
-Route::get('/search', function () use ($dummyProducts) {
-
-    $keyword = request('q');
-
-    return view('products.search', [
-        'keyword' => $keyword,
-        'products' => $dummyProducts
-    ]);
-
-})->name('products.search');
-
-/*
-|--------------------------------------------------------------------------
-| Detail Product Page
-|--------------------------------------------------------------------------
-*/
-
-Route::get('/products/{id}', function ($id) use ($dummyProducts) {
-
-    return view('products.detail-product', [
-        'product' => $dummyProducts[1]
-    ]);
-
-})->name('products.detail-product');
-
-/*
-|--------------------------------------------------------------------------
-| Wishlist Page
-|--------------------------------------------------------------------------
-*/
-
-Route::view('/wishlist', 'wishlist.wishlist')
-    ->name('wishlist');
-
-/*
-|--------------------------------------------------------------------------
-| Chat Page
-|--------------------------------------------------------------------------
-*/
-
-Route::view('/chat', 'chat.chat-list')
-    ->name('chat.list');
-
-Route::view('/chat/session', 'chat.chat-session')
-    ->name('chat.session');
-
-/*
-|--------------------------------------------------------------------------
-| Notification Page
-|--------------------------------------------------------------------------
-*/
-
-Route::view('/notification', 'notification.notification')
-    ->name('notification');
-
-/*
-|--------------------------------------------------------------------------
-| Purchase History Page
-|--------------------------------------------------------------------------
-*/
-
-Route::view('/purchase-history', 'purchase.purchase-history')
-    ->name('purchase.history');
-
-/*
-|--------------------------------------------------------------------------
-| Sales History Page
-|--------------------------------------------------------------------------
-*/
-
-Route::view('/sales-history', 'sales.sales-history')
-    ->name('sales.history');
-
-/*
-|--------------------------------------------------------------------------
-| Seller Dashboard Page
-|--------------------------------------------------------------------------
-*/
-
-Route::view('/dashboard-seller', 'seller.dashboard-seller')
-    ->name('seller.dashboard-seller');
-
-/*
-|--------------------------------------------------------------------------
-| Upload Product Page
-|--------------------------------------------------------------------------
-*/
-
-Route::view('/seller/upload-product', 'seller.upload-product')
-    ->name('seller.product.upload');
-
+    // ==========================================
+    // USER (Buyer & Seller)
+    // ==========================================
     
-/*
-|--------------------------------------------------------------------------
-| Edit Product Page
-|--------------------------------------------------------------------------
-*/
+    // Home & Pencarian
+    Route::get('/home', function () {
+        return view('home.home');
+    })->name('home');
 
-Route::view('/seller/edit-product', 'seller.edit-product')
-    ->name('seller.product.edit');
+    Route::get('/search', [ProductController::class, 'search'])->name('products.search');
+    Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.detail-product');
+    Route::view('/wishlist', 'wishlist.wishlist')->name('wishlist');
 
-/*
-|--------------------------------------------------------------------------
-| Profile Page
-|--------------------------------------------------------------------------
-*/
+    // Chat
+    Route::get('/chat', [ChatController::class, 'index'])->name('chat.list');
+    Route::post('/chat', [ChatController::class, 'store'])->name('chat.store');
+    Route::get('/chat/{chat}', [ChatController::class, 'show'])->name('chat.session');
+    Route::post('/chat/{chat}/message', [ChatController::class, 'sendMessage'])->name('chat.sendMessage');
+    Route::post('/chat/{chat}/purchase-link', [ChatController::class, 'sendPurchaseLink'])->name('chat.sendPurchaseLink');
 
-Route::view('/profile', 'profile.profileuser')
-    ->name('profile.profileuser');
+    // Checkout & Pembayaran
+    Route::get('/checkout/{token}', [CheckoutController::class, 'showCheckout'])->name('checkout');
+    Route::post('/checkout/{token}', [CheckoutController::class, 'store'])->name('checkout.store');
+    Route::get('/checkout/{transaction}/upload-proof', [CheckoutController::class, 'showUploadProof'])->name('checkout.uploadProofForm');
+    Route::post('/checkout/{transaction}/upload-proof', [CheckoutController::class, 'uploadProof'])->name('checkout.uploadProof');
+    
+    // Notifikasi & Profil
+    Route::view('/notification', 'notification.notification')->name('notification');
+    Route::view('/profile', 'profile.profile-user')->name('profile.profile-user');
+
+    // Riwayat (Purchase & Sales)
+    Route::view('/purchase-history', 'history.purchase-history')->name('history.purchase-history');
+    Route::view('/sales-history', 'history.sales-history')->name('history.sales-history');
+
+    // Seller
+    Route::view('/dashboard-seller', 'seller.dashboard-seller')->name('seller.dashboard-seller');
+    Route::view('/seller/upload-product', 'seller.upload-product')->name('seller.product.upload');
+    Route::get('/seller/edit-product/{id}', [ProductController::class, 'edit'])->name('seller.product.edit');
+    Route::put('/seller/edit-product/{id}', [ProductController::class, 'update'])->name('seller.product.update');
+    Route::delete('/seller/edit-product/{id}', [ProductController::class, 'destroy'])->name('seller.product.destroy');
+
+});

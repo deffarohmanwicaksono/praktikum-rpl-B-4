@@ -111,10 +111,6 @@
     transition: var(--transition-smooth);
 }
 
-.main-logo-img:hover {
-    transform: scale(1.03);
-}
-
 /* ==============================================
    TOPBAR SEARCH
    ============================================== */

@@ -41,7 +41,7 @@
             </li>
 
             {{-- CHAT --}}
-            <li class="nav-item {{ request()->routeIs('chat.*') && request('from') != 'search' ? 'active' : '' }}">
+            <li class="nav-item {{ request()->routeIs('chat.*') && request('from') != 'search' || request()->is('checkout*') ? 'active' : '' }}">
                 <a href="{{ route('chat.list') }}" class="nav-link-custom">
                     <i class="bi bi-chat-dots"></i>
                     <span>Chat</span>
@@ -53,21 +53,23 @@
                 <a href="{{ route('notification') }}" class="nav-link-custom">
                     <i class="bi bi-bell"></i>
                     <span>Notifikasi</span>
-                    <span class="nav-badge">3</span>
+                    @if(isset($unreadCount) && $unreadCount > 0)
+                        <span class="nav-badge">{{ $unreadCount }}</span>
+                    @endif
                 </a>
             </li>
 
             {{-- RIWAYAT PEMBELIAN --}}
-            <li class="nav-item {{ request()->routeIs('purchase.history') ? 'active' : '' }}">
-                <a href="{{ route('purchase.history') }}" class="nav-link-custom">
+            <li class="nav-item {{ request()->routeIs('history.purchase-history') ? 'active' : '' }}">
+                <a href="{{ route('history.purchase-history') }}" class="nav-link-custom">
                     <i class="bi bi-bag-check"></i>
                     <span>Riwayat Pembelian</span>
                 </a>
             </li>
 
             {{-- RIWAYAT PENJUALAN --}}
-            <li class="nav-item {{ request()->routeIs('sales.history') ? 'active' : '' }}">
-                <a href="{{ route('sales.history') }}" class="nav-link-custom">
+            <li class="nav-item {{ request()->routeIs('history.sales-history') ? 'active' : '' }}">
+                <a href="{{ route('history.sales-history') }}" class="nav-link-custom">
                     <i class="bi bi-receipt"></i>
                     <span>Riwayat Penjualan</span>
                 </a>
@@ -82,8 +84,8 @@
             </li>
 
             {{-- PROFIL --}}
-            <li class="nav-item {{ request()->routeIs('profile.profileuser') ? 'active' : '' }}">
-                <a href="{{ route('profile.profileuser') }}" class="nav-link-custom">
+            <li class="nav-item {{ request()->routeIs('profile.profile-user') ? 'active' : '' }}">
+                <a href="{{ route('profile.profile-user') }}" class="nav-link-custom">
                     <i class="bi bi-person-circle"></i>
                     <span>Profil</span>
                 </a>
