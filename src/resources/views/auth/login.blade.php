@@ -161,7 +161,7 @@
                 </div>
 
                 <div class="forgot-password-row">
-                    <a href="#" class="forgot-link">
+                    <a href="#" class="forgot-link" id="forgotPasswordLink">
                         Lupa Password?
                     </a>
                 </div>
@@ -196,4 +196,32 @@
 
 </div>
 
+{{-- Pastikan library ini termuat --}}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const forgotLink = document.getElementById('forgotPasswordLink');
+        const emailInput = document.getElementById('email');
+
+        if (forgotLink && emailInput) {
+            forgotLink.addEventListener('click', function(event) {
+                event.preventDefault(); // Mencegah halaman reload
+                const emailValue = emailInput.value.trim();
+
+                if (emailValue.endsWith('@student.uns.ac.id')) {
+                    Swal.fire({
+                        title: 'Simulasi Pemulihan Akun',
+                        html: `Sistem mendeteksi komponen akun dummy mahasiswa UNS.<br><br>
+                               <strong>Email:</strong> ${emailValue}<br>
+                               <strong>Password Default:</strong> password123`,
+                        icon: 'info',
+                        confirmButtonText: 'Saya Mengerti',
+                        confirmButtonColor: '#002855'
+                    });
+                }
+            });
+        }
+    });
+</script>
 @endsection
