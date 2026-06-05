@@ -13,6 +13,9 @@
 @endpush
 
 @section('content')
+<pre>
+{{ print_r($product->toArray(), true) }}
+</pre>
 
 <div class="detail-layout">
 

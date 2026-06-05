@@ -71,7 +71,7 @@ public function store(Request $request)
         foreach ($request->file('images') as $image) {
             $path = $image->store('products', 'public');
             $product->productImages()->create([
-                'image_path' => $path
+                'image_url' => $path
             ]);
         }
     }
@@ -119,7 +119,7 @@ public function update(Request $request, string $id)
         foreach ($request->file('images') as $image) {
             $path = $image->store('products', 'public');
             $product->productImages()->create([
-                'image_path' => $path
+                'image_url' => $path
             ]);
         }
     }
@@ -134,7 +134,7 @@ public function destroy(string $id)
         ->findOrFail($id);
 
     foreach ($product->productImages as $image) {
-        Storage::disk('public')->delete($image->image_path);
+        Storage::disk('public')->delete($image->image_url);
     }
 
     $product->delete();
