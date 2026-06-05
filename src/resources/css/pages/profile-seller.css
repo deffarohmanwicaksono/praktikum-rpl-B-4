@@ -1,0 +1,181 @@
+.page-header-section{
+    margin-top:24px;
+    margin-bottom:20px;
+}
+
+.page-title{
+    font-size:18px;
+    font-weight:700;
+    color:var(--dark-text);
+}
+
+.seller-profile-card{
+    display:flex;
+    align-items:center;
+    gap:20px;
+
+    background:var(--white);
+    border:1px solid var(--border-gray);
+    border-radius:16px;
+
+    padding:24px;
+    margin-bottom:28px;
+
+    box-shadow:var(--shadow-card);
+}
+
+.seller-avatar img{
+    width:96px;
+    height:96px;
+    border-radius:50%;
+    object-fit:cover;
+}
+
+.seller-info h2{
+    font-size:32px;
+    margin-bottom:8px;
+    color:var(--dark-text);
+}
+
+.verified-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+
+    background:#EEF4FF;
+    color:#4F6EF7;
+
+    border-radius:999px;
+
+    padding:5px 12px;
+    font-size:12px;
+    font-weight:600;
+
+    margin-bottom:14px;
+}
+
+.seller-rating{
+    display:flex;
+    align-items:center;
+    gap:4px;
+}
+
+.seller-rating i{
+    color:#F5B301;
+}
+
+.seller-rating span{
+    margin-left:6px;
+    font-size:14px;
+    font-weight:600;
+}
+
+.review-title{
+    font-size:15px;
+    font-weight:700;
+    margin-bottom:16px;
+}
+
+.review-card{
+    background:white;
+    border:1px solid var(--border-gray);
+    border-radius:14px;
+
+    padding:18px;
+    margin-bottom:16px;
+
+    box-shadow:var(--shadow-card);
+}
+
+.review-header{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.buyer-avatar{
+    width:44px;
+    height:44px;
+    border-radius:50%;
+    object-fit:cover;
+}
+
+.review-header h4{
+    font-size:15px;
+    font-weight:700;
+    margin-bottom:4px;
+}
+
+.review-stars{
+    color:#F5B301;
+    font-size:12px;
+}
+
+.review-comment{
+    margin-top:14px;
+    margin-bottom:16px;
+
+    color:var(--dark-text);
+    line-height:1.6;
+}
+
+.review-product{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.review-product img{
+    width:42px;
+    height:42px;
+    border-radius:8px;
+    object-fit:cover;
+}
+
+.product-name{
+    font-size:13px;
+    font-weight:600;
+}
+
+.product-date{
+    font-size:12px;
+    color:var(--gray-text);
+}
+
+.review-footer{
+    text-align:center;
+    margin-top:20px;
+}
+
+.btn-all-review{
+    border:1.5px solid var(--primary-blue);
+    background:white;
+    color:var(--primary-blue);
+
+    padding:12px 24px;
+
+    border-radius:10px;
+
+    font-weight:600;
+    cursor:pointer;
+
+    transition:.2s;
+}
+
+.btn-all-review:hover{
+    background:var(--primary-blue);
+    color:white;
+}
+
+@media(max-width:768px){
+
+    .seller-profile-card{
+        flex-direction:column;
+        text-align:center;
+    }
+
+    .seller-rating{
+        justify-content:center;
+    }
+
+}

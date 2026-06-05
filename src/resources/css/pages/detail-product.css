@@ -357,7 +357,7 @@
 
 .action-cards-row {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     gap: 12px;
 }
 
@@ -420,14 +420,6 @@
     color: var(--primary-blue);
 }
 
-.action-icon--report {
-    background: #FEF2F2;
-}
-
-.action-icon--report i {
-    color: #EF4444;
-}
-
 .action-text {
     display: flex;
     flex-direction: column;
@@ -446,10 +438,6 @@
     color: var(--gray-text);
 }
 
-.action-card--report:hover {
-    background: #FFF5F5;
-    border-color: #EF4444;
-}
 
 /* ==============================================
    RIGHT COLUMN — PRODUCT INFO
@@ -923,9 +911,6 @@
         display: none;
     }
 
-    .action-cards-row {
-        grid-template-columns: 1fr 1fr;
-    }
 }
 
 @media (max-width: 767px) {

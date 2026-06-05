@@ -1,5 +1,5 @@
 // ==========================================================================
-// SeMart Purchase History Real-time Interaction Logic (Bulletproof Version)
+// SeMart Purchase History
 // ==========================================================================
 
 const ratingHints = {
@@ -7,30 +7,27 @@ const ratingHints = {
     2: "Kurang puas, banyak kekurangan.",
     3: "Cukup baik, standar pelayanan oke.",
     4: "Puas, barang sesuai harapan.",
-    5: "Sangat puas! Respon mantap & barang prima."
+    5: "Sangat puas! Respon mantap & barang sesuai."
 };
 
 // =============================================
-// CORE FILTER, SEARCH & SORT ALGORITHM
+// CORE FILTER & SEARCH ALGORITHM
 // =============================================
 const processLiveQueryEngine = () => {
-    // Pindahkan pencarian DOM ke dalam fungsi agar selalu membaca HTML terbaru
     const tableBody    = document.getElementById('purchaseHistoryBody');
     const searchInput  = document.getElementById('searchPurchaseInput');
     const filterSelect = document.getElementById('filterStatusSelect');
-    const sortSelect   = document.getElementById('sortPurchaseSelect');
 
-    // Hentikan eksekusi jika tabel belum ada di HTML
-    if (!tableBody || !searchInput || !filterSelect || !sortSelect) return;
+    // Hentikan eksekusi jika komponen utama tabel belum dimuat
+    if (!tableBody || !searchInput || !filterSelect) return;
 
     const searchQuery = searchInput.value.toLowerCase().trim();
     const statusFilter = filterSelect.value;
-    const sortBy = sortSelect.value;
     
     let visibleRowsCount = 0;
     const allRows = Array.from(tableBody.querySelectorAll('.purchase-row'));
 
-    // Filter & Search
+    // Filter & Search Logic
     allRows.forEach(row => {
         const trxId = row.querySelector('.id-trx-text').textContent.toLowerCase();
         const productName = row.querySelector('.product-name-text').textContent.toLowerCase();
@@ -46,23 +43,6 @@ const processLiveQueryEngine = () => {
             row.style.display = 'none';
         }
     });
-
-    // Sorting
-    allRows.sort((rowA, rowB) => {
-        if (sortBy === 'baru') {
-            return new Date(rowB.dataset.timestamp) - new Date(rowA.dataset.timestamp);
-        } else if (sortBy === 'lama') {
-            return new Date(rowA.dataset.timestamp) - new Date(rowB.dataset.timestamp);
-        } else if (sortBy === 'harga-tinggi') {
-            return parseInt(rowB.dataset.price) - parseInt(rowA.dataset.price);
-        } else if (sortBy === 'harga-rendah') {
-            return parseInt(rowA.dataset.price) - parseInt(rowB.dataset.price);
-        }
-        return 0;
-    });
-
-    // Render ulang urutan baris ke dalam tabel
-    allRows.forEach(row => tableBody.appendChild(row));
 
     // State Kosong (Empty State) saat pencarian tidak ditemukan
     const existRuntimeRow = document.getElementById('runtimeEmptyRow');
@@ -87,19 +67,17 @@ const processLiveQueryEngine = () => {
 };
 
 // =============================================
-// GLOBAL EVENT DELEGATION (Search, Filter, Sort)
+// GLOBAL EVENT DELEGATION (Search & Filter)
 // =============================================
 
-// Mendeteksi ketikan pada kolom pencarian
 document.addEventListener('input', (e) => {
     if (e.target.id === 'searchPurchaseInput') {
         processLiveQueryEngine();
     }
 });
 
-// Mendeteksi perubahan pada dropdown (Status & Urutan)
 document.addEventListener('change', (e) => {
-    if (e.target.id === 'filterStatusSelect' || e.target.id === 'sortPurchaseSelect') {
+    if (e.target.id === 'filterStatusSelect') {
         processLiveQueryEngine();
     }
 });
@@ -109,6 +87,19 @@ document.addEventListener('change', (e) => {
 // =============================================
 document.addEventListener('click', (e) => {
     
+    // PERBAIKAN 1: Logika untuk membuka Lightbox saat gambar bukti diklik
+    const proofImage = e.target.closest('.payment-proof-image');
+    if (proofImage) {
+        const lightbox = document.getElementById('imageLightbox');
+        const lightboxImg = document.getElementById('lightboxImage');
+        
+        if (lightbox && lightboxImg) {
+            lightboxImg.src = proofImage.src;
+            openModal(lightbox); 
+        }
+        return;
+    }
+
     // 1. Tombol Detail Transaksi
     const detailBtn = e.target.closest('.btn-detail-view');
     if (detailBtn) {
@@ -123,6 +114,21 @@ document.addEventListener('click', (e) => {
         const modalTrxStatus = document.getElementById('modalTrxStatus');
         modalTrxStatus.textContent = detailBtn.dataset.status;
         modalTrxStatus.className = `status-badge ${detailBtn.dataset.statusClass}`;
+        
+        // PERBAIKAN 2: Memproses Bukti Pembayaran ke dalam modal detail
+        const proofImg = document.getElementById('modalPurchasePaymentProof');
+        const proofWrapper = document.getElementById('purchaseProofWrapper');
+        const noProofText = document.getElementById('modalPurchaseNoProofText');
+        
+        if (proofImg && detailBtn.dataset.payment) {
+            proofImg.src = detailBtn.dataset.payment;
+            if (proofWrapper) proofWrapper.style.display = 'flex';
+            if (noProofText) noProofText.style.display = 'none';
+        } else if (proofWrapper) {
+            proofImg.src = '';
+            proofWrapper.style.display = 'none';
+            if (noProofText) noProofText.style.display = 'block';
+        }
         
         openModal(modalDetail);
         return;
@@ -173,7 +179,8 @@ document.addEventListener('click', (e) => {
     }
 
     // 4. Tombol Tutup Modal & Overlay
-    if (e.target.closest('.modal-close-btn, .btn-modal-cancel') || e.target.classList.contains('modal-overlay')) {
+    // PERBAIKAN 3: Menambahkan class lightbox-close dan lightbox-overlay untuk ditutup juga
+    if (e.target.closest('.modal-close-btn, .btn-modal-cancel, .lightbox-close') || e.target.classList.contains('modal-overlay') || e.target.classList.contains('lightbox-overlay')) {
         closeAllActiveModals();
     }
 });
@@ -197,8 +204,9 @@ function openModal(targetModal) {
     }
 }
 
+// PERBAIKAN 4: Menambahkan lightbox-overlay agar ikut tertutup saat fungsi ini dipanggil
 function closeAllActiveModals() {
-    document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('open'));
+    document.querySelectorAll('.modal-overlay, .lightbox-overlay').forEach(m => m.classList.remove('open'));
     document.body.style.overflow = '';
 }
 

@@ -226,14 +226,14 @@
 
 .product-name-text {
     font-size: 13.5px;
-    font-weight: 700;
+    font-weight: 600;
     color: var(--dark-text);
     line-height: 1.4;
 }
 
 .price-text-new {
     font-size: 14px;
-    font-weight: 700;
+    font-weight: 650;
     color: var(--dark-text);
 }
 

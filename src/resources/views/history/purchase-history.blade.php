@@ -3,7 +3,10 @@
 @section('title', 'Riwayat Pembelian - SeMart')
 
 @push('styles')
-    @vite('resources/css/pages/purchase-history.css')
+    @vite([
+        'resources/css/components/history.css',
+        'resources/css/pages/purchase-history.css'
+        ])
 @endpush
 
 @push('scripts')
@@ -13,7 +16,7 @@
 @section('content')
 
 @php
-// Data dummy riwayat pembelian mahasiswa SeMart dengan penambahan parameter timestamp & integer price untuk keakuratan sorting
+// Data dummy riwayat pembelian mahasiswa SeMart
 $purchaseHistory = [
     [
         'id' => 'TRX-2026-001',
@@ -27,7 +30,8 @@ $purchaseHistory = [
         'status' => 'Menunggu Konfirmasi',
         'status_class' => 'status-menunggu',
         'image' => 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=120&q=80',
-        'note' => 'Mohon dikirim via COD di depan Perpustakaan Pusat ya kak.'
+        'note' => 'Mohon dikirim via COD di depan Perpustakaan Pusat ya kak.',
+        'payment_proof' => 'https://images.unsplash.com/photo-1620714223084-8fcacc6dfd8d?w=400&q=80' // Contoh ada bukti
     ],
     [
         'id' => 'TRX-2026-002',
@@ -41,7 +45,8 @@ $purchaseHistory = [
         'status' => 'Selesai',
         'status_class' => 'status-selesai',
         'image' => 'https://images.unsplash.com/photo-1598033129183-c4f50c736f10?w=120&q=80',
-        'note' => 'Barang sudah diterima langsung di Gedung Kuliah Bersama.'
+        'note' => 'Barang sudah diterima langsung di Gedung Kuliah Bersama.',
+        'payment_proof' => 'https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=400&q=80' // Contoh ada bukti
     ],
     [
         'id' => 'TRX-2026-003',
@@ -55,7 +60,8 @@ $purchaseHistory = [
         'status' => 'Selesai',
         'status_class' => 'status-selesai',
         'image' => 'https://images.unsplash.com/photo-1555538995-7ccc83f60088?w=120&q=80',
-        'note' => 'Fungsi fast charging berjalan normal di laptop.'
+        'note' => 'Fungsi fast charging berjalan normal di laptop.',
+        'payment_proof' => '' // Contoh tidak ada bukti
     ],
     [
         'id' => 'TRX-2026-004',
@@ -69,7 +75,8 @@ $purchaseHistory = [
         'status' => 'Gagal',
         'status_class' => 'status-gagal',
         'image' => 'https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=120&q=80',
-        'note' => 'Transaksi dibatalkan karena stok barang ternyata sudah pecah/rusak fisik.'
+        'note' => 'Transaksi dibatalkan karena stok barang ternyata sudah pecah/rusak fisik.',
+        'payment_proof' => '' // Contoh tidak ada bukti
     ]
 ];
 @endphp
@@ -116,7 +123,7 @@ $purchaseHistory = [
         <thead>
             <tr>
                 <th class="col-id">ID Transaksi</th>
-                <th class="col-barang">Barang</th>
+                <th class="col-barang">Nama Barang</th>
                 <th class="col-tanggal">Tanggal</th>
                 <th class="col-total">Total Harga</th>
                 <th class="col-status">Status</th>
@@ -132,6 +139,7 @@ $purchaseHistory = [
                 data-timestamp="{{ $trx['timestamp'] }}">
                 
                 <td class="col-id">
+                    <i class="bi bi-receipt"></i>
                     <span class="id-trx-text">{{ $trx['id'] }}</span>
                 </td>
                 
@@ -173,6 +181,7 @@ $purchaseHistory = [
                                 data-status="{{ $trx['status'] }}"
                                 data-status-class="{{ $trx['status_class'] }}"
                                 data-note="{{ $trx['note'] }}"
+                                data-payment="{{ $trx['payment_proof'] ?? '' }}"
                                 title="Lihat Ringkasan">
                             <i class="bi bi-eye"></i> Detail
                         </button>
@@ -225,6 +234,13 @@ $purchaseHistory = [
             
             <div class="detail-info-list">
                 <div class="info-item">
+                    <label>Bukti Pembayaran</label>
+                    <div class="payment-proof-wrapper" id="purchaseProofWrapper" style="display: none;">
+                        <img src="" id="modalPurchasePaymentProof" alt="Bukti Pembayaran" class="payment-proof-image">
+                    </div>
+                    <p id="modalPurchaseNoProofText" style="display: none; font-size: 12.5px; color: var(--gray-text); font-style: italic; margin-top: 4px; margin-bottom: 0;">Bukti pembayaran tidak dilampirkan.</p>
+                </div>
+                <div class="info-item">
                     <label>Nama Barang</label>
                     <p id="modalProductName" class="info-value text-bold"></p>
                 </div>
@@ -240,6 +256,7 @@ $purchaseHistory = [
                     <label>Total Pembayaran</label>
                     <p id="modalTotalPay" class="info-value price-highlight"></p>
                 </div>
+
                 <div class="info-item no-border">
                     <label>Catatan Transaksi</label>
                     <div class="note-box-container">
@@ -268,7 +285,6 @@ $purchaseHistory = [
         <form id="formSubmitReview" action="#" method="POST" onsubmit="event.preventDefault(); alert('Ulasan berhasil disimpan!'); document.getElementById('modalReviewPurchase').classList.remove('open');">
             <div class="modal-body-simple text-left-align">
                 
-                {{-- Info Ringkas Produk --}}
                 <div class="product-review-header">
                     <div class="review-avatar-wrap">
                         <img id="reviewProductImage" src="" alt="Thumbnail" class="review-avatar">
@@ -279,7 +295,6 @@ $purchaseHistory = [
                     </div>
                 </div>
 
-                {{-- Rating Komponen Bintang Interaktif --}}
                 <div class="rating-input-container">
                     <label class="rating-field-label">Kualitas Produk & Pelayanan</label>
                     <div class="star-rating-row" id="starRatingRow">
@@ -293,7 +308,6 @@ $purchaseHistory = [
                     <p class="rating-hint-text" id="ratingHintText">Pilih bintang untuk memberi nilai</p>
                 </div>
 
-                {{-- Textarea Input Ulasan --}}
                 <div class="review-textarea-container">
                     <label for="reviewCommentTextarea" class="rating-field-label">Tulis Ulasan Anda</label>
                     <textarea id="reviewCommentTextarea" class="review-custom-textarea" rows="4" placeholder="Bagikan pengalaman Anda saat berbelanja" required></textarea>
@@ -305,6 +319,14 @@ $purchaseHistory = [
                 <button type="submit" class="btn-modal-submit-primary" id="btnSubmitReviewAction">Kirim Ulasan</button>
             </div>
         </form>
+    </div>
+</div>
+
+{{-- LIGHTBOX IMAGE VIEWER --}}
+<div class="lightbox-overlay" id="imageLightbox">
+    <div class="lightbox-content">
+        <button class="lightbox-close" data-modal="imageLightbox">&times;</button>
+        <img src="" id="lightboxImage" alt="Preview" class="lightbox-image">
     </div>
 </div>
 

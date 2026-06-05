@@ -89,7 +89,7 @@ Route::middleware('auth')->group(function () {
     
     // Notifikasi & Profil
     Route::view('/notification', 'notification.notification')->name('notification');
-    Route::view('/profile', 'profile.profileuser')->name('profile.profileuser');
+    Route::view('/profile', 'profile.profile-user')->name('profile.profile-user');
 
     // Riwayat (Purchase & Sales)
     Route::view('/purchase-history', 'history.purchase-history')->name('history.purchase-history');

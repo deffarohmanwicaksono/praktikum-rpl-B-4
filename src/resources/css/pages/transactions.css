@@ -272,6 +272,14 @@
     width: fit-content;
 }
 
+.product-trx-id {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--gray-text);
+    font-family: monospace;
+    letter-spacing: 0.3px;
+}
+
 /* Seller info */
 .seller-name {
     display: block;
@@ -538,6 +546,23 @@
     letter-spacing: -0.3px;
     margin-bottom: 4px;
     line-height: 1.3;
+}
+
+.detail-trx-id-inline {
+    font-family: monospace;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    color: var(--primary-blue);
+}
+
+.detail-trx-id {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--gray-text);
+    font-family: monospace;
+    letter-spacing: 0.4px;
+    margin-bottom: 10px;
 }
 
 .detail-product-price {

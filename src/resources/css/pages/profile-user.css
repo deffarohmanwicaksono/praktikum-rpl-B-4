@@ -1,0 +1,200 @@
+.page-header-section{
+    margin-top:24px;
+    margin-bottom:20px;
+}
+
+.page-title{
+    font-size:22px;
+    font-weight:700;
+    color:var(--dark-text);
+    margin-bottom:4px;
+}
+
+.page-subtitle{
+    font-size:13px;
+    color:var(--gray-text);
+}
+
+.profile-card,
+.detail-card{
+    background:var(--white);
+    border:1px solid var(--border-gray);
+    border-radius:16px;
+    box-shadow:var(--shadow-card);
+    overflow:hidden;
+}
+
+.profile-card{
+    margin-bottom:20px;
+}
+
+.profile-header{
+    padding:28px;
+    display:flex;
+    gap:24px;
+    align-items:center;
+    background:
+    radial-gradient(circle at top right,
+    rgba(98,181,255,.10),
+    transparent 35%);
+}
+
+.profile-avatar img{
+    width:110px;
+    height:110px;
+    border-radius:50%;
+    object-fit:cover;
+}
+
+.profile-info h2{
+    font-size:30px;
+    font-weight:700;
+    margin-bottom:10px;
+}
+
+.profile-role-list{
+    display:flex;
+    gap:8px;
+    margin-bottom:12px;
+    flex-wrap:wrap;
+}
+
+.role-badge{
+    background:#EEF4FF;
+    color:#4F6EF7;
+    border:1px solid #D8E4FF;
+    border-radius:999px;
+    padding:4px 10px;
+    font-size:12px;
+    font-weight:600;
+}
+
+.profile-email,
+.profile-joined{
+    color:var(--gray-text);
+    font-size:14px;
+    margin-bottom:6px;
+}
+
+.profile-stats{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    border-top:1px solid var(--border-gray);
+}
+
+.stat-card{
+    padding:24px;
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.stat-card:not(:last-child){
+    border-right:1px solid var(--border-gray);
+}
+
+.stat-icon{
+    width:46px;
+    height:46px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.blue{
+    background:#EDF4FF;
+    color:#3B9DF8;
+}
+
+.green{
+    background:#ECFDF3;
+    color:#16A34A;
+}
+
+.yellow{
+    background:#FFF7E6;
+    color:#F59E0B;
+}
+
+.stat-card h3{
+    font-size:28px;
+    font-weight:700;
+    margin-bottom:2px;
+}
+
+.stat-card p{
+    color:var(--gray-text);
+    font-size:13px;
+}
+
+.detail-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:18px 24px;
+    border-bottom:1px solid var(--border-gray);
+}
+
+.detail-row:last-child{
+    border-bottom:none;
+}
+
+.detail-label{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    color:var(--gray-text);
+    font-size:14px;
+}
+
+.detail-value{
+    font-weight:600;
+    color:var(--dark-text);
+}
+
+.role-pill{
+    background:#EEF4FF;
+    color:#4F6EF7;
+    border:1px solid #D8E4FF;
+    padding:4px 12px;
+    border-radius:999px;
+    font-size:12px;
+    margin-left:6px;
+}
+
+.status-pill{
+    background:#ECFDF3;
+    color:#16A34A;
+    border:1px solid #BBF7D0;
+    padding:4px 12px;
+    border-radius:999px;
+    font-size:12px;
+}
+
+@media(max-width:768px){
+
+    .profile-header{
+        flex-direction:column;
+        text-align:center;
+    }
+
+    .profile-role-list{
+        justify-content:center;
+    }
+
+    .profile-stats{
+        grid-template-columns:1fr;
+    }
+
+    .stat-card{
+        border-right:none !important;
+        border-bottom:1px solid var(--border-gray);
+    }
+
+    .detail-row{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:10px;
+    }
+}

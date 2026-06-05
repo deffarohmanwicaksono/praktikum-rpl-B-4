@@ -1,7 +1,3 @@
-/* ==========================================================================
-   SeMart Purchase History
-   ========================================================================== */
-
 /* ==============================================
    PAGE HEADER STRUCTURE
    ============================================== */
@@ -104,7 +100,7 @@
 }
 
 /* ==============================================
-   TABLE RIWAYAT LAYOUT
+   TABLE RIWAYAT LAYOUT (GLOBAL & SINKRON)
    ============================================== */
 .table-wrapper.full-width {
     background: var(--white);
@@ -115,18 +111,18 @@
     margin-bottom: 30px;
 }
 
-.purchase-table {
+.purchase-table, .sales-table {
     width: 100%;
     border-collapse: collapse;
     font-size: 13px;
 }
 
-.purchase-table thead tr {
+.purchase-table thead tr, .sales-table thead tr {
     background: var(--soft-bg);
     border-bottom: 1.5px solid var(--border-gray);
 }
 
-.purchase-table thead th {
+.purchase-table thead th, .sales-table thead th {
     padding: 14px 16px;
     font-size: 12px;
     font-weight: 600;
@@ -136,25 +132,41 @@
     text-transform: uppercase;
 }
 
-/* Penyesuaian Kolom agar Tombol Vertikal Fit */
-.purchase-table th.col-id { width: 16%; text-align: center; padding-left: 20px; }
-.purchase-table th.col-barang { width: 32%; }
-.purchase-table th.col-tanggal { width: 15%; }
-.purchase-table th.col-total { width: 13%; }
-.purchase-table th.col-status { width: 12%; text-align: center; }
-.purchase-table th.col-aksi { width: 12%; text-align: center; padding-right: 20px; }
+/* ==============================================
+   PENYESUAIAN LEBAR KOLOM (FIX HEADER CENTER)
+   ============================================== */
 
-.purchase-table tbody td:first-child { padding-left: 20px; }
-.purchase-table tbody td:last-child { padding-right: 20px; }
+.purchase-table th.col-id, .sales-table th.col-id { width: 16%; }
+.purchase-table th.col-barang, .sales-table th.col-barang { width: 32%; }
+.purchase-table th.col-tanggal, .sales-table th.col-tanggal { width: 15%; }
+.purchase-table th.col-total, .sales-table th.col-total { width: 13%; }
+.purchase-table th.col-status, .sales-table th.col-status { width: 12%; }
+.purchase-table th.col-aksi, .sales-table th.col-aksi { width: 12%; }
 
-.purchase-row {
+/* Tambahkan ini jika isi data (td) ID, Status, dan Aksi ingin rapi di tengah juga */
+.purchase-table tbody td.col-id,
+.purchase-table tbody td.col-status,
+.purchase-table tbody td.col-aksi,
+.sales-table tbody td.col-id,
+.sales-table tbody td.col-status,
+.sales-table tbody td.col-aksi {
+    text-align: center;
+}
+
+/* Padding Sisi Ujung Tabel */
+.purchase-table tbody td:first-child, .sales-table tbody td:first-child { padding-left: 20px; }
+.purchase-table tbody td:last-child, .sales-table tbody td:last-child { padding-right: 20px; }
+
+/* Baris Tabel & Efek Hover */
+.purchase-row, .sales-row {
     border-bottom: 1px solid var(--border-gray);
     transition: background 0.15s;
 }
-.purchase-row:last-child { border-bottom: none; }
-.purchase-row:hover { background: var(--soft-bg); }
+/* PERBAIKAN: Ditambahkan .sales-row:last-child agar border bawah hilang di kedua tabel */
+.purchase-row:last-child, .sales-row:last-child { border-bottom: none; }
+.purchase-row:hover, .sales-row:hover { background: var(--soft-bg); }
 
-.purchase-table tbody td {
+.purchase-table tbody td, .sales-table tbody td {
     padding: 16px 16px;
     vertical-align: middle;
     color: var(--dark-text);
@@ -162,12 +174,15 @@
 
 .id-trx-text {
     font-weight: 600;
-    font-family: monospace;
     color: var(--dark-text);
-    background: var(--light-blue);
-    padding: 3px 8px;
     border-radius: 5px;
     font-size: 12px;
+}
+
+/* PERBAIKAN: Ditambahkan context sales untuk icon ID */
+.purchase-table .col-id i, .sales-table .col-id i { 
+    color: var(--primary-blue); 
+    font-size: 12px; 
 }
 
 /* Product Meta Components */
@@ -205,6 +220,7 @@
     line-height: 1.4;
 }
 
+/* Informasi Pembeli / Penjual */
 .seller-info-text {
     font-size: 11.5px;
     color: var(--gray-text);
@@ -235,7 +251,7 @@
 
 /* ==============================================
    STATUS BADGES
-   ============================================== */
+   ============================================= */
 .status-badge {
     display: inline-flex;
     align-items: center;
@@ -266,19 +282,29 @@
 }
 
 /* ==============================================
-   ACTION BUTTONS (ATAS-BAWAH LAYOUT)
+   ACTION BUTTONS & ALIGNMENT (PERBAIKAN SECARA URUTAN)
    ============================================== */
+.purchase-table tbody td:nth-last-child(2),
+.sales-table tbody td:nth-last-child(2),
+.purchase-table tbody td:last-child,
+.sales-table tbody td:last-child {
+    text-align: center;
+}
+
+/* Tetap mempertahankan selektor kelas bawaanmu sebagai backup */
 .purchase-table tbody td.col-status,
-.purchase-table tbody td.col-aksi {
+.purchase-table tbody td.col-aksi,
+.sales-table tbody td.col-status,
+.sales-table tbody td.col-aksi {
     text-align: center;
 }
 
 .action-buttons-group {
     display: flex;
-    flex-direction: column; /* Mengubah tombol menjadi vertikal atas-bawah */
-    align-items: stretch; /* Lebar tombol menyesuaikan seragam */
+    flex-direction: column; 
+    align-items: stretch; 
     justify-content: center;
-    gap: 8px; /* Jarak atas-bawah antar tombol */
+    gap: 8px; 
     width: 100%;
 }
 
@@ -287,7 +313,7 @@
     align-items: center;
     justify-content: center;
     gap: 6px;
-    padding: 8px 12px; /* Padding disesuaikan agar proporsional */
+    padding: 8px 12px; 
     background: var(--white);
     border: 1px solid var(--border-gray);
     border-radius: 8px;
@@ -306,17 +332,6 @@
 .btn-action.btn-detail-view:hover {
     background: var(--light-blue);
     border-color: var(--primary-blue);
-}
-
-.btn-action.btn-review-write {
-    background: var(--primary-blue);
-    border-color: var(--primary-blue);
-    color: var(--white);
-}
-.btn-action.btn-review-write:hover {
-    background: var(--hover-blue);
-    border-color: var(--hover-blue);
-    box-shadow: 0 2px 8px rgba(59, 157, 248, 0.25);
 }
 
 /* ==============================================
@@ -375,6 +390,7 @@
 }
 
 .modal-overlay.open { display: flex; }
+
 .modal-card {
     background: var(--white);
     border-radius: 16px;
@@ -383,6 +399,11 @@
     box-shadow: 0 20px 50px rgba(36,52,71,0.15);
     animation: slideUpModal 0.2s cubic-bezier(0.16, 1, 0.3, 1) both;
     overflow: hidden;
+    
+    /* PERBAIKAN: Batasi tinggi modal dan aktifkan flex agar konten di dalamnya bisa di-scroll */
+    max-height: 85vh; 
+    display: flex;
+    flex-direction: column;
 }
 
 @keyframes slideUpModal {
@@ -396,6 +417,8 @@
     justify-content: space-between;
     padding: 18px 24px;
     border-bottom: 1px solid var(--border-gray);
+    /* PERBAIKAN: Mencegah header mengecil saat konten di bawahnya kepanjangan */
+    flex-shrink: 0; 
 }
 
 .modal-title-custom { font-size: 15px; font-weight: 700; color: var(--dark-text); margin: 0; }
@@ -414,7 +437,23 @@
 }
 .modal-close-btn:hover { background: #FEE2E2; color: #DC2626; }
 
-.modal-body-simple { padding: 24px; }
+/* PERBAIKAN: Mengaktifkan Scrollbar vertical yang rapi di area body */
+.modal-body-simple { 
+    padding: 24px; 
+    overflow-y: auto; 
+    flex: 1; 
+    scroll-behavior: smooth;
+}
+
+/* PERBAIKAN: Kustomisasi Tampilan Scrollbar Internal Modal agar minimalis */
+.modal-body-simple::-webkit-scrollbar {
+    width: 6px;
+}
+.modal-body-simple::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.15);
+    border-radius: 10px;
+}
+
 .text-left-align { text-align: left; }
 
 .modal-trx-badge-wrapper {
@@ -458,8 +497,175 @@
 .note-text-value { margin: 0; font-size: 12.5px; color: var(--dark-text); line-height: 1.5; font-style: italic; }
 
 /* ==============================================
+   BUKTI PEMBAYARAN
+   ============================================== */
+
+/* Pembungkus Gambar Bukti Pembayaran */
+.payment-proof-wrapper {
+    margin-top: 8px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--border-gray);
+    background: var(--light-gray);
+    
+    /* PERBAIKAN: Tinggi dibatasi 160px agar lebih proporsional dengan modal */
+    height: 160px; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.payment-proof-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Contain agar gambar bukti transfer tidak terpotong (proporsional) */
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+.payment-proof-image:hover {
+    transform: scale(1.02); /* Efek membesar sedikit saat di-hover */
+}
+
+/* Bagian Bawah Modal & Tombol Aksi */
+.modal-footer-custom {
+    padding: 16px 24px;
+    background: var(--soft-bg);
+    border-top: 1px solid var(--border-gray);
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+     
+}
+
+.btn-modal-cancel {
+    padding: 9px 16px;
+    background: var(--white);
+    border: 1px solid var(--border-gray);
+    color: var(--gray-text);
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+.btn-modal-cancel:hover { 
+    background: var(--light-gray); 
+}
+
+.btn-modal-submit {
+    padding: 9px 16px;
+    border: none;
+    color: var(--white);
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.btn-modal-submit.bg-success { background: #10B981; }
+.btn-modal-submit.bg-success:hover { background: #059669; }
+
+/* Icon Konfirmasi di Modal Tutup Sales */
+.modal-icon-wrap {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    margin: 0 auto 16px auto;
+}
+
+.modal-confirm-text {
+    text-align: center;
+    font-size: 14px;
+    color: var(--dark-text);
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* ==============================================
+   LIGHTBOX IMAGE VIEWER (GLOBAL)
+   ============================================== */
+.lightbox-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(36, 52, 71, 0.9); /* Latar gelap pekat */
+    z-index: 3000; /* Di atas modal detail */
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    backdrop-filter: blur(8px); /* Blur lebih kuat */
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.25s ease;
+}
+
+.lightbox-overlay.open {
+    display: flex;
+    opacity: 1;
+    visibility: visible;
+}
+
+.lightbox-content {
+    position: relative;
+    max-width: 90vw;
+    max-height: 90vh;
+}
+
+.lightbox-image {
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 90vh;
+    object-fit: contain; /* Contain agar gambar bukti transfer tidak terpotong (proporsional) */
+    display: block;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.lightbox-close {
+    position: absolute;
+    top: -40px;
+    right: 0;
+    background: none;
+    border: none;
+    font-size: 36px;
+    color: var(--white);
+    cursor: pointer;
+    line-height: 1;
+}
+
+/* Tombol Tutup Transaksi dan Ulasan*/
+.btn-action.btn-close-sale {
+    background: var(--primary-blue);
+    border-color: var(--primary-blue);
+    color: var(--white);
+}
+.btn-action.btn-close-sale:hover {
+    background: var(--hover-blue);
+    border-color: var(--hover-blue);
+    box-shadow: 0 2px 8px rgba(59, 157, 248, 0.25);
+}
+
+.btn-action.btn-review-write {
+    background: var(--primary-blue);
+    border-color: var(--primary-blue);
+    color: var(--white);
+}
+.btn-action.btn-review-write:hover {
+    background: var(--hover-blue);
+    border-color: var(--hover-blue);
+    box-shadow: 0 2px 8px rgba(59, 157, 248, 0.25);
+}
+
+/* ==============================================
    ULASAN FORM GRAPHICS STYLES
    ============================================== */
+
 .product-review-header {
     display: flex;
     align-items: center;
@@ -480,10 +686,31 @@
     flex-shrink: 0;
 }
 
-.review-avatar { width: 100%; height: 100%; object-fit: cover; }
-.review-meta-wrap { display: flex; flex-direction: column; gap: 2px; }
-.review-product-title { font-size: 13.5px; font-weight: 700; color: var(--dark-text); margin: 0; line-height: 1.4; }
-.review-product-seller { font-size: 12px; color: var(--gray-text); margin: 0; }
+.review-avatar { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+}
+
+.review-meta-wrap { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 2px; 
+}
+
+.review-product-title { 
+    font-size: 13.5px; 
+    font-weight: 700; 
+    color: var(--dark-text); 
+    margin: 0; 
+    line-height: 1.4; 
+}
+
+.review-product-seller { 
+    font-size: 12px; 
+    color: var(--gray-text); 
+    margin: 0; 
+}
 
 .rating-input-container {
     display: flex;
@@ -515,7 +742,7 @@
     align-items: center;
     gap: 12px;
     font-size: 32px;
-    color: #D1D5DB;
+    color: var(--border-gray);
     cursor: pointer;
     margin-bottom: 8px;
 }
@@ -527,7 +754,7 @@
     transform: scale(1.15);
 }
 .review-star-item.active {
-    color: var(--warning-gold);
+    color: var(--primary-blue);
 }
 
 .rating-hint-text {

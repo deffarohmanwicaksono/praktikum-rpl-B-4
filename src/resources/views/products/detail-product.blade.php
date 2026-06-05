@@ -168,26 +168,6 @@
 
             </button>
 
-            <button class="action-card action-card--report">
-
-                <div class="action-icon-wrap action-icon--report">
-                    <i class="bi bi-flag"></i>
-                </div>
-
-                <div class="action-text">
-
-                    <span class="action-title">
-                        Laporkan Produk
-                    </span>
-
-                    <span class="action-sub">
-                        Laporkan jika melanggar aturan
-                    </span>
-
-                </div>
-
-            </button>
-
         </div>
 
     </div>
