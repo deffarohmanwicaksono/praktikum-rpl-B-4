@@ -228,7 +228,7 @@ $defaultProduct = $products[0];
     </div>
 
     {{-- =========================================
-         RIGHT PANEL: Komponen Detail Produk (Sticky)
+         RIGHT PANEL: Komponen Detail Produk
          ========================================= --}}
     <div class="panel-right" id="panelRight">
         <div class="detail-card" id="detailCard">

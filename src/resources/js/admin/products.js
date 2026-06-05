@@ -18,7 +18,7 @@ const tableBody       = document.getElementById('productsTableBody');
 const searchInput     = document.getElementById('searchInput');
 const filterStatus    = document.getElementById('filterStatus');
 const filterCategory  = document.getElementById('filterCategory');
-const tableInfoText   = document.getElementById('tableInfoText'); // Element teks paginasi
+const tableInfoText   = document.getElementById('tableInfoText');
 
 // Detail Panel DOM
 const detailCard         = document.getElementById('detailCard');
@@ -43,7 +43,6 @@ function updateTableInfo() {
     const allRows = document.querySelectorAll('.product-row');
     let visibleCount = 0;
     
-    // Hitung berapa baris yang sedang tidak disembunyikan
     allRows.forEach(row => {
         if (row.style.display !== 'none') {
             visibleCount++;
@@ -88,7 +87,6 @@ function filterTable() {
         }
     });
 
-    // Update teks jumlah produk setelah filter berjalan
     updateTableInfo();
 }
 

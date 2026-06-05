@@ -1,5 +1,5 @@
 /* ==============================================
-   SeMart Daftar Transaksi (Split Layout)
+   SeMart Daftar Transaksi
    ============================================== */
 
 /* ==============================================
@@ -276,7 +276,6 @@
     font-size: 11px;
     font-weight: 600;
     color: var(--gray-text);
-    font-family: monospace;
     letter-spacing: 0.3px;
 }
 
@@ -549,7 +548,6 @@
 }
 
 .detail-trx-id-inline {
-    font-family: monospace;
     font-weight: 700;
     letter-spacing: 0.4px;
     color: var(--primary-blue);
@@ -560,7 +558,6 @@
     font-size: 11px;
     font-weight: 600;
     color: var(--gray-text);
-    font-family: monospace;
     letter-spacing: 0.4px;
     margin-bottom: 10px;
 }
@@ -622,36 +619,64 @@
 }
 
 /* ==============================================
-   RESPONSIVE ADJUSTMENTS
+   RESPONSIVE — LARGE DESKTOP (min-width: 1400px)
+   ============================================== */
+@media (min-width: 1400px) {
+    .page-title { font-size: 24px; }
+    .trx-layout { grid-template-columns: minmax(0, 1fr) 400px; gap: 24px; }
+}
+
+/* ==============================================
+   RESPONSIVE — STANDARD DESKTOP (1200px - 1399px)
+   ============================================== */
+@media (max-width: 1399px) and (min-width: 1200px) {
+
+}
+
+/* ==============================================
+   RESPONSIVE — LAPTOP (992px - 1199px)
+   ============================================== */
+@media (max-width: 1199px) and (min-width: 992px) {
+    .trx-layout { grid-template-columns: minmax(0, 1fr) 320px; gap: 16px; }
+    .detail-card { padding: 20px 16px; }
+    .col-id { width: 28%; }
+    .col-user { width: 28%; }
+    .col-status { width: 20%; }
+    .col-total { display: none; } 
+    .col-aksi { width: 24%; }
+}
+
+/* ==============================================
+   RESPONSIVE — SMALL LAPTOP (max-width: 991px)
    ============================================== */
 @media (max-width: 991px) {
-    .toolbar-section {
-        flex-direction: column;
-        align-items: stretch;
-    }
+    .toolbar-section { flex-direction: column; align-items: stretch; gap: 12px; }
+    .search-box { width: 100%; }
+    .filter-box { width: 100%; justify-content: space-between; }
+    .filter-dropdown { flex: 1; justify-content: center; }
     
-    .search-box {
-        width: 100%;
-    }
+    .trx-layout { grid-template-columns: 1fr; }
+    .table-wrapper { overflow-x: auto; }
+    .trx-table { table-layout: auto; min-width: 700px; } 
     
-    .filter-box {
-        width: 100%;
-        justify-content: space-between;
-        flex-wrap: wrap;
-    }
+    .panel-right { position: static; max-height: none; margin-top: 20px; }
+}
+
+/* ==============================================
+   RESPONSIVE — TABLET / LARGE MOBILE (max-width: 767px)
+   ============================================== */
+@media (max-width: 767px) {
+    .page-header-section { margin-top: 16px; margin-bottom: 16px; }
+    .page-title { font-size: 20px; }
+    .toolbar-section { gap: 10px; }
     
-    .filter-dropdown {
-        flex: 1;
-        justify-content: center;
-    }
+    .filter-box { flex-direction: column; gap: 8px; }
+    .table-footer { flex-direction: column; gap: 12px; text-align: center; }
+    .pagination-wrap { justify-content: center; }
     
-    .transaction-layout {
-        grid-template-columns: 1fr;
-    }
+    .detail-card { padding: 20px 16px; }
+    .detail-user-grid { grid-template-columns: 1fr; gap: 16px; }
     
-    .panel-right {
-        position: static;
-        max-height: none;
-        margin-top: 20px;
-    }
+    .trx-ref-id { font-size: 16px; }
+    .header-trx-top { flex-direction: column; align-items: flex-start; gap: 8px; }
 }
