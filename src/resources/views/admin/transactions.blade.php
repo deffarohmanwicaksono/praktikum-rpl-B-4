@@ -194,6 +194,7 @@ $defaultTrx = $transactions[0];
                                     <img src="{{ $trx['product_image'] }}" alt="Produk">
                                 </div>
                                 <div class="product-info">
+                                    <span class="product-trx-id">TRX-2026-{{ str_pad($trx['id'], 3, '0', STR_PAD_LEFT) }}</span>
                                     <span class="product-name">{{ $trx['product_name'] }}</span>
                                     <span class="status-badge {{ $trx['status_class'] }}">{{ $trx['status'] }}</span>
                                 </div>
@@ -281,6 +282,12 @@ $defaultTrx = $transactions[0];
                 <p class="detail-product-price" id="detailProductPrice">{{ $defaultTrx['price'] }}</p>
 
                 <div class="detail-meta-list" style="margin-bottom: 0; padding-bottom: 0; border-bottom: none;">
+                    <div class="detail-meta-row">
+                        <i class="bi bi-hash detail-meta-icon"></i>
+                        <span class="detail-meta-label">ID Transaksi</span>
+                        <span class="detail-meta-value detail-trx-id-inline" id="detailTrxId">TRX-2026-{{ str_pad($defaultTrx['id'], 3, '0', STR_PAD_LEFT) }}</span>
+                    </div>
+
                     <div class="detail-meta-row">
                         <i class="bi bi-person-fill detail-meta-icon"></i>
                         <span class="detail-meta-label">Buyer</span>

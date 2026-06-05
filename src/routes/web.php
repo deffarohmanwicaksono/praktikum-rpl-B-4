@@ -87,13 +87,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/checkout/{transaction}/upload-proof', [CheckoutController::class, 'showUploadProof'])->name('checkout.uploadProofForm');
     Route::post('/checkout/{transaction}/upload-proof', [CheckoutController::class, 'uploadProof'])->name('checkout.uploadProof');
     
-    // Riwayat Belanja & Notifikasi
+    // Notifikasi & Profil
     Route::view('/notification', 'notification.notification')->name('notification');
-    Route::view('/purchase-history', 'purchase.purchase-history')->name('purchase.history');
-    Route::view('/profile', 'profile.profileuser')->name('profile.profileuser');
+    Route::view('/profile', 'profile.profile-user')->name('profile.profile-user');
 
-    // Fitur Jualan (Seller)
-    Route::view('/sales-history', 'sales.sales-history')->name('sales.history');
+    // Riwayat (Purchase & Sales)
+    Route::view('/purchase-history', 'history.purchase-history')->name('history.purchase-history');
+    Route::view('/sales-history', 'history.sales-history')->name('history.sales-history');
+
+    // Seller
     Route::view('/dashboard-seller', 'seller.dashboard-seller')->name('seller.dashboard-seller');
     Route::view('/seller/upload-product', 'seller.upload-product')->name('seller.product.upload');
     Route::get('/seller/edit-product/{id}', [ProductController::class, 'edit'])->name('seller.product.edit');

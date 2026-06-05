@@ -36,7 +36,7 @@
             <div class="user-profile-direct">
 
                 <a
-                    href="{{ route('profile.profileuser') }}"
+                    href="{{ route('profile.profile-user') }}"
                     class="user-btn-link"
                     aria-label="Profil Saya"
                 >
