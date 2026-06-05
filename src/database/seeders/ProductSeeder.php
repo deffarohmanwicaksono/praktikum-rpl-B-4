@@ -14,7 +14,7 @@ class ProductSeeder extends Seeder
     public function run(): void
     {
         Product::create([
-            'user_id' => 3,
+            'user_id' => 4,
             'category_id' => 1,
             'name' => 'Headset Gaming RGB',
             'description' => 'Headset gaming dengan pencahayaan RGB yang menarik, memberikan pengalaman audio yang imersif saat bermain game.',
@@ -22,7 +22,7 @@ class ProductSeeder extends Seeder
             'status' => 'dijual'
         ]);
         Product::create([
-            'user_id' => 3,
+            'user_id' => 4,
             'category_id' => 1,
             'name' => 'Laptop Lenovo Thinkpad Bekas',
             'description' => 'Laptop bekas yang masih normal digunakan untuk kebutuhan kuliah, mengetik laporan, browsing, dan pemrograman ringan. Baterai masih awet dan seluruh port berfungsi dengan baik.',
@@ -30,7 +30,7 @@ class ProductSeeder extends Seeder
             'status' => 'dijual'
         ]);
         Product::create([
-            'user_id' => 4,
+            'user_id' => 5,
             'category_id' => 2,
             'name' => 'Buku Kalkulus Stewart',
             'description' => 'Buku kalkulus edisi terbaru dengan kondisi sekitar 90%. Halaman lengkap, tidak ada yang hilang, hanya terdapat sedikit coretan stabilo pada beberapa bagian.',
