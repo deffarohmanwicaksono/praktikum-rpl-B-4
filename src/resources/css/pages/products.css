@@ -767,25 +767,51 @@
 }
 
 /* ==============================================
-   RESPONSIVE ADJUSTMENTS
+   RESPONSIVE — LARGE DESKTOP (min-width: 1400px)
    ============================================== */
 @media (min-width: 1400px) {
-    .product-layout { grid-template-columns: 1fr 370px; }
+    .page-title { font-size: 24px; }
+    .product-layout { grid-template-columns: minmax(0, 1fr) 400px; gap: 24px; }
 }
 
+/* ==============================================
+   RESPONSIVE — STANDARD DESKTOP (1200px - 1399px)
+   ============================================== */
 @media (max-width: 1399px) and (min-width: 1200px) {
-    .product-layout { grid-template-columns: 1fr 320px; }
 }
 
+/* ==============================================
+   RESPONSIVE — LAPTOP (992px - 1199px)
+   ============================================== */
 @media (max-width: 1199px) and (min-width: 992px) {
-    .product-layout { grid-template-columns: 1fr 290px; gap: 16px; }
+    .product-layout { grid-template-columns: minmax(0, 1fr) 320px; gap: 16px; }
 }
 
+/* ==============================================
+   RESPONSIVE — SMALL LAPTOP (max-width: 991px)
+   ============================================== */
 @media (max-width: 991px) {
-    .toolbar-section { flex-direction: column; align-items: stretch; }
+    .toolbar-section { flex-direction: column; align-items: stretch; gap: 12px; }
     .search-box { width: 100%; }
-    .filter-box { width: 100%; justify-content: space-between; flex-wrap: wrap;}
+    .filter-box { width: 100%; justify-content: space-between; }
     .filter-dropdown { flex: 1; justify-content: center; }
+    
     .product-layout { grid-template-columns: 1fr; }
-    .panel-right { position: static; max-height: none; }
+    .table-wrapper { overflow-x: auto; }
+    .product-table { table-layout: auto; min-width: 700px; }
+    
+    .panel-right { position: static; max-height: none; margin-top: 20px; }
+}
+
+/* ==============================================
+   RESPONSIVE — TABLET / LARGE MOBILE (max-width: 767px)
+   ============================================== */
+@media (max-width: 767px) {
+    .page-header-section { margin: 16px 0; }
+    .page-title { font-size: 20px; }
+    .toolbar-section { gap: 10px; }
+    
+    .filter-box { flex-direction: column; gap: 8px; }
+    .table-footer { flex-direction: column; gap: 12px; text-align: center; }
+    .pagination-wrap { justify-content: center; }
 }

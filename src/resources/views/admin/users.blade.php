@@ -22,7 +22,11 @@ $users = [
         'status' => 'Aktif',
         'status_class' => 'status-aktif',
         'joined' => '12 Jan 2024',
-        'phone' => '081234567890'
+        'phone' => '081234567890',
+        'products_sold' => 24,
+        'transactions' => 156,
+        'rating' => 4.2,
+        'reviews' => 12
     ],
     [
         'id' => 2,
@@ -32,7 +36,11 @@ $users = [
         'status' => 'Aktif',
         'status_class' => 'status-aktif',
         'joined' => '15 Feb 2024',
-        'phone' => '085712345678'
+        'phone' => '085712345678',
+        'products_sold' => 0,
+        'transactions' => 45,
+        'rating' => 0,
+        'reviews' => 0
     ],
     [
         'id' => 3,
@@ -42,7 +50,11 @@ $users = [
         'status' => 'Diblokir',
         'status_class' => 'status-diblokir',
         'joined' => '03 Mar 2024',
-        'phone' => '089987654321'
+        'phone' => '089987654321',
+        'products_sold' => 89,
+        'transactions' => 310,
+        'rating' => 4.8,
+        'reviews' => 215
     ],
     [
         'id' => 4,
@@ -52,7 +64,11 @@ $users = [
         'status' => 'Aktif',
         'status_class' => 'status-aktif',
         'joined' => '20 Mar 2024',
-        'phone' => '082134567891'
+        'phone' => '082134567891',
+        'products_sold' => 5,
+        'transactions' => 22,
+        'rating' => 5.0,
+        'reviews' => 8
     ],
     [
         'id' => 5,
@@ -62,7 +78,11 @@ $users = [
         'status' => 'Aktif',
         'status_class' => 'status-aktif',
         'joined' => '28 Mar 2024',
-        'phone' => '081398765432'
+        'phone' => '081398765432',
+        'products_sold' => 112,
+        'transactions' => 540,
+        'rating' => 4.9,
+        'reviews' => 320
     ],
     [
         'id' => 6,
@@ -72,7 +92,11 @@ $users = [
         'status' => 'Aktif',
         'status_class' => 'status-aktif',
         'joined' => '05 Apr 2024',
-        'phone' => '087812345678'
+        'phone' => '087812345678',
+        'products_sold' => 0,
+        'transactions' => 15,
+        'rating' => 0,
+        'reviews' => 0
     ],
     [
         'id' => 7,
@@ -82,7 +106,11 @@ $users = [
         'status' => 'Diblokir',
         'status_class' => 'status-diblokir',
         'joined' => '18 Apr 2024',
-        'phone' => '085212345678'
+        'phone' => '085212345678',
+        'products_sold' => 12,
+        'transactions' => 40,
+        'rating' => 3.5,
+        'reviews' => 10
     ]
 ];
 
@@ -224,6 +252,42 @@ $activeUser = $users[0];
                 </div>
                 <h4 class="detail-user-fullname" id="detailUserName">{{ $activeUser['name'] }}</h4>
                 <p class="detail-user-sub" id="detailUserEmail">{{ $activeUser['email'] }}</p>
+            </div>
+
+            {{-- STATISTIK KOMPONEN (PRODUK, TRANSAKSI, ULASAN) --}}
+            <div class="detail-stats-grid">
+                @php
+                    $isOnlyBuyer = count($activeUser['roles']) === 1 && in_array('Buyer', $activeUser['roles']);
+                @endphp
+                
+                {{-- Komponen 1: Produk Dijual --}}
+                <div class="stat-item">
+                    <div class="stat-icon-wrap"><i class="bi bi-bag"></i></div>
+                    <div class="stat-value" id="detailUserProducts">
+                        {{ $isOnlyBuyer ? '0' : ($activeUser['products_sold'] ?? 0) }}
+                    </div>
+                    <div class="stat-label">Produk Dijual</div>
+                </div>
+
+                {{-- Komponen 2: Transaksi Selesai --}}
+                <div class="stat-item">
+                    <div class="stat-icon-wrap"><i class="bi bi-graph-up"></i></div>
+                    <div class="stat-value" id="detailUserTransactions">
+                        {{ $activeUser['transactions'] ?? 0 }}
+                    </div>
+                    <div class="stat-label">Transaksi Selesai</div>
+                </div>
+
+                {{-- Komponen 3: Ulasan --}}
+                <div class="stat-item">
+                    <div class="stat-icon-wrap"><i class="bi bi-star"></i></div>
+                    <div class="stat-value" id="detailUserRating">
+                        {{ $isOnlyBuyer ? '-' : ($activeUser['rating'] ?? '0.0') }}
+                    </div>
+                    <div class="stat-label" id="detailUserReviews">
+                        {{ $isOnlyBuyer ? 'Tidak ada ulasan' : ($activeUser['reviews'] ?? 0) . ' Ulasan' }}
+                    </div>
+                </div>
             </div>
 
             <div class="detail-meta-list">

@@ -34,21 +34,18 @@
 
             {{-- USER --}}
             <div class="user-profile-direct">
-
-                <a
-                    href="{{ route('profile.profile-user') }}"
-                    class="user-btn-link"
-                    aria-label="Profil Saya"
-                >
+                <div class="user-btn-link" style="cursor: default;" aria-label="Profil Admin">
                     <i class="bi bi-person-circle user-profile-icon"></i>
 
                     <span class="user-name">
-                        Hai, {{ auth()->user()->name ?? 'User' }}
+                        Hai, {{ auth()->user()->name ?? 'Admin' }}
                     </span>
-                </a>
+                </div>
 
             </div>
 
         </div>
+        
+    </div>
 
 </header>
