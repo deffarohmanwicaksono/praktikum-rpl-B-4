@@ -22,16 +22,30 @@ class PurchaseLink extends Model
         'payment_methods' => 'array',
     ];
 
+    //Cek apakah link masih valid (belum dipakai & belum expired)
+    public function isValid(): bool
+    {
+        return !$this->is_used && $this->expired_at->isFuture();
+    }
+
+    // Relasi dengan model lain
     public function chat()
     {
         return $this->belongsTo(Chat::class);
     }
 
-    /**
-     * Cek apakah link masih valid (belum dipakai & belum expired)
-     */
-    public function isValid(): bool
+    public function product()
     {
-        return !$this->is_used && $this->expired_at->isFuture();
+        return $this->belongsTo(Product::class);
+    }
+
+    public function seller()
+    {
+        return $this->belongsTo(User::class, 'seller_id');
+    }
+
+    public function transaction()
+    {
+        return $this->hasOne(Transaction::class);
     }
 }
