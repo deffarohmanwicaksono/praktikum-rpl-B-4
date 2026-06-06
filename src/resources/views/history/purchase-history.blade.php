@@ -4,9 +4,9 @@
 
 @push('styles')
     @vite([
-        'resources/css/components/history.css',
-        'resources/css/pages/purchase-history.css'
-        ])
+    'resources/css/components/history.css',
+    'resources/css/pages/purchase-history.css'
+    ])
 @endpush
 
 @push('scripts')
@@ -16,7 +16,7 @@
 @section('content')
 
 @php
-// Data dummy riwayat pembelian mahasiswa SeMart
+// Data dummy riwayat pembelian
 $purchaseHistory = [
     [
         'id' => 'TRX-2026-001',

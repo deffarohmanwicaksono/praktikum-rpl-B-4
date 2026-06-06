@@ -101,5 +101,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/seller/edit-product/{id}', [ProductController::class, 'edit'])->name('seller.product.edit');
     Route::put('/seller/edit-product/{id}', [ProductController::class, 'update'])->name('seller.product.update');
     Route::delete('/seller/edit-product/{id}', [ProductController::class, 'destroy'])->name('seller.product.destroy');
+    Route::get('/seller/{id}', function ($id) {
+        return view('profile.profile-seller');
+        })->name('seller.profile');
 
 });

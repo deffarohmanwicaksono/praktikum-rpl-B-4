@@ -212,15 +212,118 @@
 }
 
 /* ==============================================
-   RESPONSIVE — MOBILE (MAX 767PX)
+   RESPONSIVE — LARGE DESKTOP
    ============================================== */
+@media (min-width: 1400px) {
+    .wishlist-header {
+        margin-top: 28px;
+        margin-bottom: 36px;
+    }
 
+    .wishlist-title {
+        font-size: 26px;
+    }
+
+    .wishlist-title i {
+        font-size: 24px;
+    }
+
+    .wishlist-sub {
+        font-size: 14.5px;
+    }
+
+    .wishlist-empty-full {
+        min-height: 450px;
+    }
+
+    .wishlist-empty-full .empty-icon {
+        width: 90px;
+        height: 90px;
+    }
+
+    .wishlist-empty-full .empty-icon i {
+        font-size: 42px;
+    }
+
+    .wishlist-empty-full .empty-title {
+        font-size: 20px;
+    }
+}
+
+/* ==============================================
+   RESPONSIVE — STANDARD DESKTOP
+   ============================================== */
+@media (max-width: 1399px) and (min-width: 1200px) {
+    .wishlist-header {
+        margin-top: 24px;
+        margin-bottom: 32px;
+    }
+
+    .wishlist-title {
+        font-size: 24px;
+    }
+}
+
+/* ==============================================
+   RESPONSIVE — LAPTOP
+   ============================================== */
+@media (max-width: 1199px) and (min-width: 992px) {
+    .wishlist-header {
+        margin-top: 20px;
+        margin-bottom: 28px;
+    }
+
+    .wishlist-empty-full {
+        min-height: 350px;
+    }
+}
+
+/* ==============================================
+   RESPONSIVE — SMALL LAPTOP / TABLET LANDSCAPE
+   ============================================== */
+@media (max-width: 991px) {
+    .wishlist-header {
+        margin-top: 16px;
+        margin-bottom: 24px;
+    }
+
+    .wishlist-title {
+        font-size: 20px;
+    }
+
+    .wishlist-title i {
+        font-size: 18px;
+    }
+
+    .clear-all-btn {
+        padding: 8px 16px;
+        font-size: 12.5px;
+    }
+
+    .wishlist-empty-full {
+        min-height: 320px;
+        padding: 36px 20px;
+    }
+
+    .wishlist-empty-full .empty-icon {
+        width: 70px;
+        height: 70px;
+        margin-bottom: 16px;
+    }
+
+    .wishlist-empty-full .empty-icon i {
+        font-size: 32px;
+    }
+}
+
+/* ==============================================
+   RESPONSIVE — TABLET / LARGE MOBILE
+   ============================================== */
 @media (max-width: 767px) {
     .wishlist-header {
         flex-direction: column;
         align-items: flex-start;
         gap: 12px;
-
         margin-top: 0;
         margin-bottom: 20px;
     }
@@ -229,7 +332,46 @@
         font-size: 18px;
     }
 
+    .wishlist-sub {
+        font-size: 12.5px;
+    }
+
     .clear-all-btn {
         align-self: flex-start;
+        padding: 7px 14px;
+        font-size: 12px;
+    }
+
+    .card-remove-btn {
+        padding: 8px 0;
+        font-size: 12px;
+    }
+
+    .wishlist-empty-full {
+        min-height: 280px;
+        padding: 28px 16px;
+    }
+
+    .wishlist-empty-full .empty-icon {
+        width: 60px;
+        height: 60px;
+    }
+
+    .wishlist-empty-full .empty-icon i {
+        font-size: 28px;
+    }
+
+    .wishlist-empty-full .empty-title {
+        font-size: 16px;
+    }
+
+    .wishlist-empty-full .empty-desc {
+        font-size: 12.5px;
+        margin-bottom: 20px;
+    }
+
+    .wishlist-empty-full .empty-cta-btn {
+        padding: 8px 20px;
+        font-size: 12.5px;
     }
 }
