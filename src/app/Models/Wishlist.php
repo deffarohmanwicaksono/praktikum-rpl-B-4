@@ -10,4 +10,15 @@ class Wishlist extends Model
         'user_id',
         'product_id',
     ];
+
+    // Relasi dengan model lain
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function product(): BelongsTo
+    {
+        return $this->belongsTo(Product::class);
+    }
 }

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('product_id')-> constrained('products');
             $table->foreignId('buyer_id')-> constrained('users');
-            // $table->foreignId('purchase_link_id')->constrained('purchase_links')->cascadeOnDelete();
+            $table->foreignId('purchase_link_id')->constrained('purchase_links')->cascadeOnDelete();
 
             $table->integer('quantity')-> default(1);
             $table->decimal('total_price', 18, 2);
