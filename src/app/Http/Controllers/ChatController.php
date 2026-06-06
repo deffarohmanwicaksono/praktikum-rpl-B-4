@@ -133,7 +133,7 @@ class ChatController extends Controller
             'chat_id'    => $chat->id,
             'token'      => $token,
             'deal_price' => $validated['deal_price'],
-            'expired_at' => now()->addMinutes($validated['duration']),
+            'expired_at' => now()->addMinutes((int) $validated['duration']),
             'is_used'    => false,
         ]);
 
@@ -141,7 +141,7 @@ class ChatController extends Controller
         Message::create([
             'chat_id'   => $chat->id,
             'sender_id' => $userId,
-            'message'   => '🔗 Link Pembelian telah dikirim! Harga: Rp ' . number_format($validated['deal_price'], 0, ',', '.') . ' — Klik untuk checkout: ' . route('checkout', $token),
+            'message'   => '[PURCHASE_LINK:' . $token . ']',
         ]);
 
         $chat->touch();

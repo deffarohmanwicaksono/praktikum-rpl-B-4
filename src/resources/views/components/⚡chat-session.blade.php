@@ -77,10 +77,11 @@ new class extends Component
             'is_used'    => false,
         ]);
 
+        // Menyimpan format token khusus agar bisa di-render sebagai kartu pembelian di view
         $message = Message::create([
             'chat_id'   => $this->chat->id,
             'sender_id' => auth()->id(),
-            'message'   => 'dY"- Link Pembelian telah dikirim! Harga: Rp ' . number_format($this->deal_price, 0, ',', '.') . ' ?" Klik untuk checkout: ' . route('checkout', $token),
+            'message'   => '[PURCHASE_LINK:' . $token . ']',
         ]);
 
         $this->chat->touch();
@@ -143,34 +144,75 @@ new class extends Component
          x-data
          x-init="$el.scrollTop = $el.scrollHeight; new MutationObserver(() => $el.scrollTop = $el.scrollHeight).observe($el, { childList: true })">
         @foreach ($chat->messages as $msg)
-            @php
-                $isMe = $msg->sender_id === $userId;
-                $rowClass = $isMe ? 'msg-out' : 'msg-in';
-                $bubbleClass = $isMe ? 'msg-bubble--out' : 'msg-bubble--in';
-            @endphp
+            @if(str_starts_with($msg->message, '[PURCHASE_LINK:'))
+                @php
+                    $token = str_replace(['[PURCHASE_LINK:', ']'], '', $msg->message);
+                    $link = $chat->purchaseLinks->where('token', $token)->first();
+                    $imgSrc = $chat->product->productImages->first() 
+                        ? asset('storage/' . $chat->product->productImages->first()->image_path)
+                        : asset('images/Elemen-1.png');
+                    $isExpired = !$link || $link->expired_at->isPast() || $link->is_used;
+                    $cardClass = $isExpired ? 'msg-purchase-card msg-purchase-card--expired' : 'msg-purchase-card';
+                    $btnClass = $isExpired ? 'msg-purchase-btn msg-purchase-btn--expired' : 'msg-purchase-btn';
+                    $btnText = $isExpired ? 'Sesi Berakhir' : 'Bayar Sekarang';
+                @endphp
+                <div class="msg-row msg-system">
+                    <div class="{{ $cardClass }}">
+                        <div class="msg-purchase-info">
+                            <img src="{{ $imgSrc }}" alt="Produk" class="msg-purchase-img">
+                            <div>
+                                <span class="msg-purchase-title">{{ $chat->product->name }}</span>
+                                <span class="msg-purchase-price">Rp {{ number_format($link->deal_price ?? 0, 0, ',', '.') }}</span>
+                                <span class="msg-purchase-cond">
+                                     @if($isExpired)
+                                         <i class="bi bi-exclamation-circle-fill"></i> Link Kadaluwarsa
+                                     @else
+                                         <i class="bi bi-tag-fill"></i> Sesuai Kesepakatan
+                                     @endif
+                                </span>
+                            </div>
+                        </div>
+                        @if($isExpired)
+                            <button type="button" class="{{ $btnClass }}" disabled>
+                                {{ $btnText }}
+                            </button>
+                        @else
+                            <button type="button" class="{{ $btnClass }}" onclick="window.location.href='{{ url('/checkout/' . $token) }}'">
+                                {{ $btnText }}
+                            </button>
+                        @endif
+                    </div>
+                </div>
+            @else
+                @php
+                    $isMe = $msg->sender_id === $userId;
+                    $rowClass = $isMe ? 'msg-out' : 'msg-in';
+                    $bubbleClass = $isMe ? 'msg-bubble--out' : 'msg-bubble--in';
+                @endphp
 
-            <div class="msg-row {{ $rowClass }}">
-                @if (!$isMe)
-                    <div class="msg-avatar"><i class="bi bi-person-circle"></i></div>
-                @endif
+                <div class="msg-row {{ $rowClass }}">
+                    @if (!$isMe)
+                        <div class="msg-avatar"><i class="bi bi-person-circle"></i></div>
+                    @endif
 
-                <div class="msg-bubble {{ $bubbleClass }}">
-                    <p class="msg-text">{{ $msg->message }}</p>
+                    <div class="msg-bubble {{ $bubbleClass }}">
+                        <p class="msg-text">{{ $msg->message }}</p>
+
+                        @if ($isMe)
+                            <div class="msg-out-meta">
+                                <span class="msg-time msg-time--out">{{ $msg->created_at->format('H:i') }}</span>
+                                <span class="msg-tick"><i class="bi bi-check2-all"></i></span>
+                            </div>
+                        @else
+                            <span class="msg-time">{{ $msg->created_at->format('H:i') }}</span>
+                        @endif
+                    </div>
 
                     @if ($isMe)
-                        <div class="msg-out-meta">
-                            <span class="msg-time msg-time--out">{{ $msg->created_at->format('H:i') }}</span>
-                            <span class="msg-tick"><i class="bi bi-check2-all"></i></span>
-                        </div>
-                    @else
-                        <span class="msg-time">{{ $msg->created_at->format('H:i') }}</span>
+                        <div class="msg-avatar"><i class="bi bi-person-circle"></i></div>
                     @endif
                 </div>
-
-                @if ($isMe)
-                    <div class="msg-avatar"><i class="bi bi-person-circle"></i></div>
-                @endif
-            </div>
+            @endif
         @endforeach
     </div>
 
