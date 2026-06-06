@@ -357,7 +357,7 @@
 
 .action-cards-row {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
     gap: 12px;
 }
 
@@ -418,6 +418,19 @@
 .action-icon-wrap i {
     font-size: 18px;
     color: var(--primary-blue);
+}
+
+.action-icon--report {
+    background: #FEF2F2;
+}
+
+.action-icon--report i {
+    color: #EF4444;
+}
+
+.action-card--report:hover {
+    background: #FFF5F5;
+    border-color: #EF4444;
 }
 
 .action-text {
@@ -897,20 +910,20 @@
    ============================================== */
 @media (max-width: 991px) {
     .detail-layout {
-        grid-template-columns: 1fr; /* Kolom kiri dan kanan di-stack */
+        grid-template-columns: 1fr;
         gap: 24px;
     }
 
     .detail-right {
-        position: static; /* Hilangkan sticky saat tampilan 1 kolom */
+        position: static;
     }
 
     .main-image-wrap {
-        max-height: 500px; /* Batasi tinggi gambar utama di tablet */
+        max-height: 500px;
     }
 
     .action-cards-row {
-        grid-template-columns: repeat(2, 1fr); /* 2 kolom untuk action cards */
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
@@ -946,7 +959,7 @@
     }
 
     .action-cards-row {
-        grid-template-columns: 1fr; /* Kembali ke 1 kolom di mobile */
+        grid-template-columns: 1fr;
     }
 
     .thumb {
