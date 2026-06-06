@@ -12,9 +12,6 @@ new class extends Component
     public Chat $chat;
     public string $textMessage = '';
 
-    public $deal_price;
-    public $duration = 180;
-
     public function mount(Chat $chat)
     {
         $userId = auth()->id();
@@ -25,9 +22,6 @@ new class extends Component
 
         $this->chat = $chat;
         $this->chat->load(['buyer', 'seller', 'product.productImages', 'messages.sender', 'purchaseLinks']);
-        
-        // Set default deal price dari harga produk
-        $this->deal_price = $this->chat->product->price;
     }
 
     public function getListeners()
@@ -54,44 +48,6 @@ new class extends Component
 
         $this->chat->load('messages.sender');
         $this->textMessage = '';
-    }
-
-    public function sendPurchaseLink()
-    {
-        if ($this->chat->seller_id !== auth()->id()) {
-            abort(403);
-        }
-
-        $this->validate([
-            'deal_price' => 'required|numeric|min:1',
-            'duration'   => 'required|integer|min:15',
-        ]);
-
-        $token = Str::uuid()->toString();
-
-        PurchaseLink::create([
-            'chat_id'    => $this->chat->id,
-            'token'      => $token,
-            'deal_price' => $this->deal_price,
-            'expired_at' => now()->addMinutes((int) $this->duration),
-            'is_used'    => false,
-        ]);
-
-        // Menyimpan format token khusus agar bisa di-render sebagai kartu pembelian di view
-        $message = Message::create([
-            'chat_id'   => $this->chat->id,
-            'sender_id' => auth()->id(),
-            'message'   => '[PURCHASE_LINK:' . $token . ']',
-        ]);
-
-        $this->chat->touch();
-
-        broadcast(new MessageSent($message))->toOthers();
-
-        $this->chat->load(['messages.sender', 'purchaseLinks']);
-        $this->reset(['deal_price', 'duration']);
-
-        session()->flash('success', 'Link pembelian berhasil dikirim!');
     }
 
     public function broadcastMessageReceived($event)
@@ -257,53 +213,11 @@ new class extends Component
                 </div>
             </div>
 
-            <button type="button" class="btn-kirim-link" onclick="document.getElementById('purchaseLinkModal').style.display='flex'">
+            <!-- Diubah menjadi link ke halaman pembuatan link pembelian khusus -->
+            <a href="{{ route('chat.purchaseLinkForm', $chat->id) }}" class="btn-kirim-link">
                 <i class="bi bi-link-45deg"></i>
                 Kirim Link
-            </button>
-        </div>
-
-        {{-- Modal Kirim Link --}}
-        <div class="modal-overlay" id="purchaseLinkModal" style="display:none" wire:ignore.self>
-            <div class="modal-card">
-                <div class="modal-header-custom">
-                    <h3 class="modal-title-custom">Kirim Link Pembelian</h3>
-                    <button type="button" class="modal-close-btn" onclick="document.getElementById('purchaseLinkModal').style.display='none'" aria-label="Tutup">
-                        <i class="bi bi-x-lg"></i>
-                    </button>
-                </div>
-                <form wire:submit.prevent="sendPurchaseLink">
-                    <div class="modal-body-custom">
-                        @if (session()->has('success'))
-                            <div style="color: green; margin-bottom: 10px; font-weight: bold;">
-                                {{ session('success') }}
-                            </div>
-                        @endif
-                        <div class="form-group-custom">
-                            <label class="form-label-custom">Harga Kesepakatan (Rp) <span class="required-star">*</span></label>
-                            <input type="number" wire:model="deal_price" class="form-input-custom" min="1" required>
-                        </div>
-                        <div class="form-group-custom">
-                            <label class="form-label-custom">Masa Berlaku Link <span class="required-star">*</span></label>
-                            <select wire:model="duration" class="form-input-custom" required>
-                                <option value="15">15 Menit</option>
-                                <option value="30">30 Menit</option>
-                                <option value="60">1 Jam</option>
-                                <option value="180">3 Jam</option>
-                                <option value="360">6 Jam</option>
-                                <option value="720">12 Jam</option>
-                                <option value="1440">24 Jam</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="modal-footer-custom">
-                        <button type="button" class="btn-modal-cancel" onclick="document.getElementById('purchaseLinkModal').style.display='none'">Batal</button>
-                        <button type="submit" class="btn-modal-submit" onclick="document.getElementById('purchaseLinkModal').style.display='none'">
-                            <i class="bi bi-send-fill"></i> Kirim Link
-                        </button>
-                    </div>
-                </form>
-            </div>
+            </a>
         </div>
     @endif
 

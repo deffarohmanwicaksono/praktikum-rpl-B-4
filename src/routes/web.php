@@ -55,8 +55,8 @@ Route::middleware('auth')->group(function () {
 
 
     // Kirim Link Pembelian
-    Route::view('/checkout/purchase-link', 'checkout.purchase-link')
-        ->name('checkout.purchase-link');
+    Route::get('/chat/{chat}/purchase-link', [ChatController::class, 'showPurchaseLinkForm'])
+        ->name('chat.purchaseLinkForm');
 
     // Checkout
     
