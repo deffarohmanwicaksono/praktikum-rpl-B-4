@@ -3,10 +3,10 @@
 @section('title', 'Riwayat Penjualan - SeMart')
 
 @push('styles')
-    @vite(
-        'resources/css/components/history.css',
-        'resources/css/pages/sales-history.css'
-        )
+    @vite([
+    'resources/css/components/history.css',
+    'resources/css/pages/sales-history.css'
+    ])
 @endpush
 
 @push('scripts')
@@ -25,7 +25,7 @@ $salesHistory = [
         'income' => 'Rp 250.000',
         'date' => '05 Juni 2026',
         'time' => '10:15 WIB',
-        'status' => 'Menunggu Diproses',
+        'status' => 'Menunggu Pembayaran',
         'status_class' => 'status-menunggu',
         'image' => 'https://images.unsplash.com/photo-1574607383476-f517f260d30b?w=120&q=80',
         'payment_proof' => 'https://images.unsplash.com/photo-1556740749-887f6717d7e4?w=800',
@@ -72,7 +72,7 @@ $salesHistory = [
                 <i class="bi bi-funnel filter-icon"></i>
                 <select class="filter-select" id="filterStatusSelect">
                     <option value="">Status: Semua</option>
-                <option value="status-menunggu">Menunggu Diproses</option>
+                <option value="status-menunggu">Menunggu Pembayaran</option>
                 <option value="status-selesai">Selesai</option>
             </select>
         </div>

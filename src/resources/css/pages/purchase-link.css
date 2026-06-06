@@ -1,6 +1,5 @@
 /* ==============================================
-   SeMart Purchase Link Page
-   Khusus komponen halaman kirim link
+   SeMart - Link Pembelian
    ============================================== */
 
 /* ==============================================
@@ -939,26 +938,280 @@
 }
 
 /* ==============================================
-   RESPONSIVE (PAGE SPECIFIC ONLY)
+   RESPONSIVE — LARGE DESKTOP
    ============================================== */
-@media (max-width: 1199px) and (min-width: 992px) {
-    .form-layout { max-width: 100%; }
+@media (min-width: 1400px) {
+    .section-card {
+        padding: 28px 32px;
+    }
+
+    .section-title {
+        font-size: 19px;
+    }
+
+    .order-product-name {
+        font-size: 16px;
+    }
+
+    .order-product-price {
+        font-size: 20px;
+    }
+
+    .price-input-wrap {
+        max-width: 380px;
+    }
 }
 
+/* ==============================================
+   RESPONSIVE — STANDARD DESKTOP & LAPTOP
+   ============================================== */
+@media (max-width: 1399px) and (min-width: 992px) {
+    .form-layout {
+        max-width: 100%;
+    }
+    
+    .price-input-wrap {
+        max-width: 340px;
+    }
+}
+
+/* ==============================================
+   RESPONSIVE — TABLET / SMALL LAPTOP
+   ============================================== */
 @media (max-width: 991px) {
-    .duration-options { gap: 8px; }
+    .form-layout {
+        margin-top: 16px;
+        margin-bottom: 30px;
+        gap: 14px;
+    }
+
+    .duration-options {
+        gap: 8px;
+    }
+
+    .price-input-wrap {
+        max-width: 100%;
+    }
 }
 
+/* ==============================================
+   RESPONSIVE — LARGE MOBILE
+   ============================================== */
 @media (max-width: 767px) {
-    .pm-row { 
-        flex-direction: column; 
-        align-items: flex-start; 
+    .section-card {
+        padding: 20px;
+        border-radius: 14px;
     }
-    .pm-actions { 
-        width: 100%; 
+
+    .order-product-row {
+        gap: 14px;
     }
-    .duration-option { 
-        flex: 1; 
-        min-width: 80px; 
+
+    .order-img-wrap {
+        width: 100px;
+        height: 78px;
+    }
+
+    .order-product-name {
+        font-size: 14px;
+    }
+
+    .order-product-price {
+        font-size: 16px;
+    }
+
+    /* Penyesuaian Baris Metode Pembayaran */
+    .pm-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 14px;
+        padding: 14px;
+    }
+
+    .pm-left {
+        width: 100%;
+    }
+
+    .pm-actions {
+        width: 100%;
+        border-top: 1px dashed var(--border-gray, #E5E7EB);
+        padding-top: 12px;
+    }
+
+    .pm-btn {
+        flex: 1;
+        justify-content: center;
+        padding: 8px 12px;
+    }
+
+    .duration-option {
+        flex: 1 1 calc(50% - 5px);
+        padding: 8px 12px;
+    }
+
+    /* Struktur Modal di Mobile */
+    .modal-card {
+        width: calc(100% - 24px);
+        margin: 12px;
+    }
+
+    .modal-header-custom,
+    .modal-body-custom,
+    .modal-footer-custom {
+        padding: 16px 20px;
+    }
+}
+
+/* ==============================================
+   RESPONSIVE — SMALL MOBILE
+   ============================================== */
+@media (max-width: 576px) {
+    .section-card {
+        padding: 16px;
+    }
+
+    .section-title {
+        font-size: 15.5px;
+        margin-bottom: 16px;
+    }
+
+    .form-section-header {
+        gap: 10px;
+        margin-bottom: 16px;
+    }
+
+    .form-section-num {
+        width: 24px;
+        height: 24px;
+        font-size: 12px;
+    }
+
+    .order-product-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+
+    .order-img-wrap {
+        width: 100%;
+        height: 140px;
+    }
+
+    .price-prefix {
+        padding: 0 12px;
+        font-size: 13px;
+        height: 42px;
+    }
+
+    .price-input {
+        font-size: 15px;
+        height: 42px;
+        padding: 0 12px;
+    }
+
+    .pm-actions {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .pm-btn {
+        width: 100%;
+    }
+
+    /* Opsi durasi ditumpuk penuh satu-satu */
+    .duration-option {
+        flex: 1 1 100%;
+    }
+
+    .deadline-preview {
+        font-size: 11.5px;
+        padding: 8px 12px;
+    }
+
+    .note-textarea {
+        font-size: 13px;
+        padding: 10px 12px;
+    }
+
+    /* Collapsible Info */
+    .info-collapse-btn {
+        padding: 14px 16px;
+    }
+
+    .info-collapse-body {
+        padding: 0 16px 14px;
+    }
+
+    .info-list li {
+        font-size: 12px;
+    }
+
+    /* Alert / Warning */
+    .info-alert {
+        padding: 12px;
+        gap: 10px;
+    }
+
+    .al-icon {
+        width: 32px;
+        height: 32px;
+        font-size: 14px;
+    }
+
+    .al-text {
+        font-size: 12px;
+    }
+
+    /* Tombol Submit Utama */
+    .submit-link-btn {
+        height: 46px;
+        font-size: 14.5px;
+        border-radius: 12px;
+    }
+
+    .modal-header-custom,
+    .modal-body-custom,
+    .modal-footer-custom {
+        padding: 14px 16px;
+    }
+
+    .modal-title-custom {
+        font-size: 14.5px;
+    }
+
+    .form-input-custom {
+        font-size: 13px;
+        padding: 8px 12px;
+    }
+
+    .btn-modal-cancel,
+    .btn-modal-submit {
+        padding: 8px 16px;
+        font-size: 12.5px;
+        flex: 1;
+        justify-content: center;
+    }
+    
+    .success-icon-circle {
+        width: 56px;
+        height: 56px;
+    }
+    
+    .success-icon-circle i {
+        font-size: 26px;
+    }
+
+    .success-title {
+        font-size: 18px;
+    }
+
+    .success-desc {
+        font-size: 12.5px;
+    }
+
+    /* Toast */
+    .toast-item-custom {
+        padding: 9px 16px;
+        font-size: 12.5px;
     }
 }

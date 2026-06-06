@@ -13,9 +13,6 @@
 @endpush
 
 @section('content')
-<pre>
-{{ print_r($product->toArray(), true) }}
-</pre>
 
 <div class="detail-layout">
 
@@ -138,7 +135,7 @@
 
             </div>
 
-            <a href="#" class="seller-profile-btn">
+            <a href="{{ route('seller.profile', ['id' => $product->user_id]) }}" class="seller-profile-btn">
                 Lihat Profil Seller
                 <i class="bi bi-arrow-right"></i>
             </a>
