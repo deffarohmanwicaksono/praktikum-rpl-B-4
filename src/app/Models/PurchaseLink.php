@@ -11,12 +11,15 @@ class PurchaseLink extends Model
         'token',
         'deal_price',
         'expired_at',
-        'is_used'
+        'is_used',
+        'note',
+        'payment_methods'
     ];
 
     protected $casts = [
         'expired_at' => 'datetime',
         'is_used'    => 'boolean',
+        'payment_methods' => 'array',
     ];
 
     //Cek apakah link masih valid (belum dipakai & belum expired)
