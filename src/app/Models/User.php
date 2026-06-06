@@ -21,6 +21,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'phone_number',
         'password',
         'role',
     ];
@@ -48,7 +49,7 @@ class User extends Authenticatable
         ];
     }
 
-        public function products()
+    public function products()
     {
         return $this->hasMany(Product::class);
     }
@@ -61,5 +62,10 @@ class User extends Authenticatable
     public function sellerChats()
     {
         return $this->hasMany(Chat::class, 'seller_id');
+    }
+
+    public function messages()
+    {
+        return $this->hasMany(Message::class, 'sender_id');
     }
 }
