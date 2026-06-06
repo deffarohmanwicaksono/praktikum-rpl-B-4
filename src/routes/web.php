@@ -81,6 +81,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/chat/{chat}/message', [ChatController::class, 'sendMessage'])->name('chat.sendMessage');
     Route::post('/chat/{chat}/purchase-link', [ChatController::class, 'sendPurchaseLink'])->name('chat.sendPurchaseLink');
 
+    // Kirim Link Pembelian
+    Route::get('/chat/{chat}/purchase-link', [ChatController::class, 'showPurchaseLinkForm'])
+        ->name('chat.purchaseLinkForm');
+
     // Checkout & Pembayaran
     Route::get('/checkout/{token}', [CheckoutController::class, 'showCheckout'])->name('checkout');
     Route::post('/checkout/{token}', [CheckoutController::class, 'store'])->name('checkout.store');
