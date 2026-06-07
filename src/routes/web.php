@@ -73,6 +73,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/search', [ProductController::class, 'search'])->name('products.search');
     Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.detail-product');
     Route::view('/wishlist', 'wishlist.wishlist')->name('wishlist');
+    Route::post('/reports', function () {
+        return back();
+    })->name('report.store');
 
     // Chat
     Route::get('/chat', [ChatController::class, 'index'])->name('chat.list');

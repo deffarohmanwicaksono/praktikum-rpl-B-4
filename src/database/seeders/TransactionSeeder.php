@@ -89,7 +89,7 @@ class TransactionSeeder extends Seeder
                 'purchase_link_id' => 13,
                 'quantity' => 1,
                 'total_price' => 620000,
-                'status' => 'dibayar',
+                'status' => 'selesai',
                 'payment_method' => 'Transfer Bank',
                 'payment_proof' => 'payments/bukti_transfer_003.jpg',
             ],
