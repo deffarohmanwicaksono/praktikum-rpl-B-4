@@ -225,4 +225,15 @@
 
 </section>
 
+@if(auth()->user()->role === 'buyer')
+<div class="profile-action-btn-wrap" style="margin-top: 24px; text-align: center;">
+    <form action="{{ route('profile.become-seller') }}" method="POST">
+        @csrf
+        <button type="submit" class="btn btn-primary" style="padding: 10px 24px; font-family: 'Poppins', sans-serif; font-weight: 500; border-radius: 8px; background-color: #0d6efd; border: none; color: #fff; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s;">
+            <i class="bi bi-shop"></i> Aktifkan Fitur Penjual (Seller)
+        </button>
+    </form>
+</div>
+@endif
+
 @endsection

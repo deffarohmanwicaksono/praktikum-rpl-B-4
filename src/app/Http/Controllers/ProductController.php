@@ -67,6 +67,12 @@ public function store(Request $request)
         'status'      => 'menunggu_verifikasi',
     ]);
 
+    // Upgrade role user menjadi 'seller' jika sebelumnya adalah 'buyer'
+    $user = auth()->user();
+    if ($user->role === 'buyer') {
+        $user->update(['role' => 'seller']);
+    }
+
     if ($request->hasFile('images')) {
         foreach ($request->file('images') as $image) {
             $path = $image->store('products', 'public');

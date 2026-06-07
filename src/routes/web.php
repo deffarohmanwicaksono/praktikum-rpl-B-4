@@ -96,6 +96,13 @@ Route::middleware('auth')->group(function () {
     // Notifikasi & Profil
     Route::view('/notification', 'notification.notification')->name('notification');
     Route::view('/profile', 'profile.profile-user')->name('profile.profile-user');
+    Route::post('/profile/become-seller', function () {
+        $user = auth()->user();
+        if ($user->role === 'buyer') {
+            $user->update(['role' => 'seller']);
+        }
+        return back()->with('success', 'Akun Seller Anda berhasil diaktifkan! Silakan mulai mengunggah produk.');
+    })->name('profile.become-seller');
 
     // Riwayat (Purchase & Sales)
     Route::view('/purchase-history', 'history.purchase-history')->name('history.purchase-history');
