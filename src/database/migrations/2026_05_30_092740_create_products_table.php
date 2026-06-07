@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('name', 200);
             $table->string('description') ->nullable();
             $table->decimal('price', 18, 2);
+            $table->integer('stock')->default(1);
             $table->enum('status', [ 'menunggu_verifikasi', 'dijual', 'sold_out', 'ditolak' ])->default('menunggu_verifikasi');
             $table->timestamps();
         });

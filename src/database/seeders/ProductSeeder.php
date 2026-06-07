@@ -27,7 +27,7 @@ class ProductSeeder extends Seeder
             'name' => 'Laptop Lenovo Thinkpad Bekas',
             'description' => 'Laptop bekas yang masih normal digunakan untuk kebutuhan kuliah, mengetik laporan, browsing, dan pemrograman ringan. Baterai masih awet dan seluruh port berfungsi dengan baik.',
             'price' => 3500000,
-            'status' => 'dijual'
+            'status' => 'sold_out'
         ]);
         Product::create([
             'user_id' => 5,
@@ -35,7 +35,8 @@ class ProductSeeder extends Seeder
             'name' => 'Buku Kalkulus Stewart',
             'description' => 'Buku kalkulus edisi terbaru dengan kondisi sekitar 90%. Halaman lengkap, tidak ada yang hilang, hanya terdapat sedikit coretan stabilo pada beberapa bagian.',
             'price' => 80000,
-            'status' => 'dijual'
+            'stock' => 2,
+            'status' => 'sold_out'
         ]);
         Product::create([
             'user_id' => 21,
@@ -87,7 +88,7 @@ class ProductSeeder extends Seeder
             'name' => 'Kalkulator Casio FX-991EX',
             'description' => 'Kalkulator scientific yang umum digunakan pada mata kuliah matematika, fisika, dan teknik. Kondisi masih sangat baik.',
             'price' => 250000,
-            'status' => 'sold_out'
+            'status' => 'dijual'
         ]);
 
         Product::create([
@@ -123,7 +124,7 @@ class ProductSeeder extends Seeder
             'name' => 'Rak Plastik 4 Susun',
             'description' => 'Rak penyimpanan serbaguna untuk menyimpan buku, pakaian, atau perlengkapan kos. Kondisi masih kokoh.',
             'price' => 120000,
-            'status' => 'sold_out'
+            'status' => 'menunggu_verifikasi'
         ]);
 
         Product::create([
@@ -159,7 +160,7 @@ class ProductSeeder extends Seeder
             'name' => 'Tas Ransel Eiger',
             'description' => 'Tas ransel dengan kapasitas besar yang dapat digunakan untuk membawa laptop dan perlengkapan kuliah.',
             'price' => 250000,
-            'status' => 'sold_out'
+            'status' => 'dijual'
         ]);
 
         Product::create([
@@ -204,7 +205,7 @@ class ProductSeeder extends Seeder
             'name' => 'Bola Futsal Specs',
             'description' => 'Bola futsal dengan kondisi masih baik dan tekanan udara stabil untuk digunakan bermain rutin.',
             'price' => 120000,
-            'status' => 'sold_out'
+            'status' => 'menunggu_verifikasi'
         ]);
 
         Product::create([
@@ -231,7 +232,7 @@ class ProductSeeder extends Seeder
             'name' => 'Gitar Akustik Yamaha',
             'description' => 'Gitar akustik yang masih nyaman dimainkan dan cocok untuk pemula maupun hobi bermusik.',
             'price' => 650000,
-            'status' => 'dijual'
+            'status' => 'sold_out'
         ]);
 
         Product::create([
@@ -249,7 +250,7 @@ class ProductSeeder extends Seeder
             'name' => 'Catokan Rambut Nova',
             'description' => 'Catokan rambut portable dengan kondisi baik dan suhu pemanasan masih normal.',
             'price' => 85000,
-            'status' => 'sold_out'
+            'status' => 'ditolak'
         ]);
 
         Product::create([
@@ -275,6 +276,89 @@ class ProductSeeder extends Seeder
             'description' => 'Kursi belajar yang nyaman digunakan untuk mengerjakan tugas dan belajar dalam waktu lama. Kondisi masih sangat baik.',
             'price' => 275000,
             'status' => 'menunggu_verifikasi'
+        ]);
+
+        // Procduct tambahan
+        Product::create([
+            'user_id' => 2,
+            'category_id' => 1,
+            'name' => 'Power Bank Xiaomi 10000mAh',
+            'description' => 'Power bank masih berfungsi normal dan mampu mengisi daya smartphone beberapa kali.',
+            'price' => 150000,
+            'status' => 'dijual'
+        ]);
+        Product::create([
+            'user_id' => 2,
+            'category_id' => 1,
+            'name' => 'Keyboard Mechanical Fantech',
+            'description' => 'Keyboard mechanical dengan switch biru, cocok untuk mengetik dan bermain game.',
+            'price' => 275000,
+            'status' => 'dijual'
+        ]);
+        Product::create([
+            'user_id' => 2,
+            'category_id' => 2,
+            'name' => 'Buku Basis Data',
+            'description' => 'Buku referensi basis data yang masih lengkap dan layak digunakan untuk kuliah.',
+            'price' => 85000,
+            'status' => 'dijual'
+        ]);
+        Product::create([
+            'user_id' => 3,
+            'category_id' => 4,
+            'name' => 'Jaket Denim Biru',
+            'description' => 'Jaket denim ukuran L dengan kondisi masih sangat baik.',
+            'price' => 180000,
+            'status' => 'dijual'
+        ]);
+        Product::create([
+            'user_id' => 3,
+            'category_id' => 3,
+            'name' => 'Dispenser Air Mini',
+            'description' => 'Dispenser ukuran kecil yang cocok digunakan di kamar kos.',
+            'price' => 200000,
+            'status' => 'dijual'
+        ]);
+        Product::create([
+            'user_id' => 3,
+            'category_id' => 5,
+            'name' => 'Matras Yoga',
+            'description' => 'Matras yoga tebal dan nyaman digunakan untuk olahraga ringan.',
+            'price' => 120000,
+            'status' => 'dijual'
+        ]);
+
+        Product::create([
+            'user_id' => 27,
+            'category_id' => 6,
+            'name' => 'UNO Card Game',
+            'description' => 'Permainan kartu UNO lengkap dan masih dalam kondisi baik.',
+            'price' => 35000,
+            'status' => 'dijual'
+        ]);
+        Product::create([
+            'user_id' => 28,
+            'category_id' => 3,
+            'name' => 'Cermin Berdiri',
+            'description' => 'Cermin berdiri ukuran sedang yang cocok untuk kamar kos.',
+            'price' => 95000,
+            'status' => 'dijual'
+        ]);
+        Product::create([
+            'user_id' => 29,
+            'category_id' => 7,
+            'name' => 'Organizer Kosmetik',
+            'description' => 'Organizer kosmetik plastik dengan beberapa sekat penyimpanan.',
+            'price' => 70000,
+            'status' => 'dijual'
+        ]);
+        Product::create([
+            'user_id' => 31,
+            'category_id' => 6,
+            'name' => 'Ukulele Concert',
+            'description' => 'Ukulele dengan suara masih nyaring dan nyaman dimainkan pemula.',
+            'price' => 280000,
+            'status' => 'dijual'
         ]);
     }
 }
