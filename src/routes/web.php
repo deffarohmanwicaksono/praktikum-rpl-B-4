@@ -30,9 +30,7 @@ Route::middleware('auth')->group(function () {
     Route::middleware(RoleMiddleware::class . ':admin')->group(function () {
         
         // Dashboard
-        Route::get('/admin/dashboard-admin', function () {
-            return view('admin.dashboard-admin');
-        })->name('admin.dashboard-admin');
+        Route::get('/admin/dashboard-admin', [\App\Http\Controllers\AdminController::class, 'dashboardIndex'])->name('admin.dashboard-admin');
 
         // Verifikasi Barang
         Route::get('/admin/verification', function () {

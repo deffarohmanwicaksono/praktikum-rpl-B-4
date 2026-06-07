@@ -12,25 +12,29 @@
 
 @section('content')
 
+<script>
+    const chartDatasets = @json($chartData);
+</script>
+
 @php
 $stats = [
     [
         'label' => 'Total User',
-        'value' => 128,
+        'value' => $totalUsers,
         'desc'  => 'jumlah akun terdaftar',
         'icon'  => 'bi-people-fill',
         'growth'=> '12.5%'
     ],
     [
         'label' => 'Total Produk',
-        'value' => 74,
+        'value' => $totalProducts,
         'desc'  => 'per status barang',
         'icon'  => 'bi-box-seam-fill',
         'growth'=> '8.3%'
     ],
     [
         'label' => 'Total Transaksi',
-        'value' => 39,
+        'value' => $totalTransactions,
         'desc'  => 'semua transaksi',
         'icon'  => 'bi-cart-check-fill',
         'growth'=> '15.6%'
