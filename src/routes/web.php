@@ -40,9 +40,9 @@ Route::middleware('auth')->group(function () {
         })->name('admin.verification');
 
         // Daftar Laporan
-        Route::get('/admin/reports', function () {
-            return view('admin.reports');
-        })->name('admin.reports');
+        Route::get('/admin/reports', [\App\Http\Controllers\AdminController::class, 'reportsIndex'])->name('admin.reports');
+        Route::post('/admin/reports/{report}/action', [\App\Http\Controllers\AdminController::class, 'actionReport'])->name('admin.actionReport');
+        Route::post('/admin/reports/{report}/reject', [\App\Http\Controllers\AdminController::class, 'rejectReport'])->name('admin.rejectReport');
 
         // Daftar User
         Route::get('/admin/users', function () {

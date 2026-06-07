@@ -12,89 +12,19 @@
 
 @section('content')
 
-@php
-$reports = [
-    [
-        'id'             => 1,
-        'product_name'   => 'Jaket Denim Pria',
-        'category'       => 'Pakaian',
-        'image'          => 'https://images.unsplash.com/photo-1551537482-f2075a1d41f2?w=80&q=80',
-        'detail_image'   => 'https://images.unsplash.com/photo-1551537482-f2075a1d41f2?w=600&q=80',
-        'seller_name'    => 'Andi Pratama',
-        'seller_handle'  => '@andi.pratama',
-        'price'          => 'Rp120.000',
-        'condition'      => 'Bekas Seperti Baru',
-        'pelapor_name'   => 'Budi Santoso',
-        'pelapor_handle' => '@budi.santoso',
-        'date'           => '05 Juni 2026',
-        'time'           => '09:14 WIB',
-        'status'         => 'menunggu',
-        'alasan'         => 'Foto produk tidak sesuai dengan kondisi asli barang. Barang yang saya terima jauh berbeda dari foto yang dipasang.',
-        'peringatan'     => null,
-    ],
-    [
-        'id'             => 2,
-        'product_name'   => 'Tas Ransel Eiger Original',
-        'category'       => 'Sepatu & Tas',
-        'image'          => 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=80&q=80',
-        'detail_image'   => 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=600&q=80',
-        'seller_name'    => 'Siti Aisyah',
-        'seller_handle'  => '@siti.aisyah',
-        'price'          => 'Rp175.000',
-        'condition'      => 'Bekas Baik',
-        'pelapor_name'   => 'Dewi Lestari',
-        'pelapor_handle' => '@dewi.lestari',
-        'date'           => '03 Juni 2026',
-        'time'           => '14:30 WIB',
-        'status'         => 'ditindaklanjuti',
-        'alasan'         => 'Seller tidak merespons pesan selama lebih dari 5 hari setelah pembayaran dilakukan.',
-        'peringatan'     => 'Anda mendapatkan peringatan dari admin SeMart karena tidak merespons pembeli dalam waktu yang wajar. Harap segera konfirmasi setiap transaksi dalam 1x24 jam. Pelanggaran berulang dapat mengakibatkan pembekuan akun.',
-    ],
-    [
-        'id'             => 3,
-        'product_name'   => 'Kalkulator Casio fx-991EX',
-        'category'       => 'Elektronik',
-        'image'          => 'https://images.unsplash.com/photo-1564466809058-bf4114d55352?w=80&q=80',
-        'detail_image'   => 'https://images.unsplash.com/photo-1564466809058-bf4114d55352?w=600&q=80',
-        'seller_name'    => 'Budi Santoso',
-        'seller_handle'  => '@budi.santoso',
-        'price'          => 'Rp85.000',
-        'condition'      => 'Bekas Seperti Baru',
-        'pelapor_name'   => 'Nabila Putri',
-        'pelapor_handle' => '@nabila.putri',
-        'date'           => '01 Juni 2026',
-        'time'           => '11:05 WIB',
-        'status'         => 'ditolak',
-        'alasan'         => 'Laporan dianggap tidak valid karena tidak disertai bukti pendukung yang cukup.',
-        'peringatan'     => null,
-    ],
-    [
-        'id'             => 4,
-        'product_name'   => 'Buku Atomic Habits',
-        'category'       => 'Buku',
-        'image'          => 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=80&q=80',
-        'detail_image'   => 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=600&q=80',
-        'seller_name'    => 'Dewi Lestari',
-        'seller_handle'  => '@dewi.lestari',
-        'price'          => 'Rp90.000',
-        'condition'      => 'Bekas Layak Pakai',
-        'pelapor_name'   => 'Clara Renata',
-        'pelapor_handle' => '@clara.renata',
-        'date'           => '28 Mei 2026',
-        'time'           => '16:22 WIB',
-        'status'         => 'menunggu',
-        'alasan'         => 'Harga yang diminta lebih tinggi dari yang tertera di listing setelah pembeli menghubungi seller.',
-        'peringatan'     => null,
-    ],
-];
+<script>
+    const reportData = @json($reportData);
+</script>
 
+@php
 $statusLabels = [
     'menunggu'         => 'Menunggu',
     'ditindaklanjuti'  => 'Ditindaklanjuti',
     'ditolak'          => 'Ditolak',
 ];
 
-$defaultReport = $reports[0];
+$firstReport = $reports->first();
+$firstReportData = $firstReport ? $reportData[$firstReport->id] : null;
 @endphp
 
 {{-- PAGE HEADER --}}
@@ -121,52 +51,63 @@ $defaultReport = $reports[0];
                     </tr>
                 </thead>
                 <tbody id="reportTableBody">
-                    @foreach($reports as $index => $report)
+                    @forelse($reports as $index => $report)
+                    @php
+                        $imageUrl = $report->product->productImages->first()->image_url ?? 'images/default-product.jpg';
+                        if (!str_starts_with($imageUrl, 'http')) {
+                            $imageUrl = asset($imageUrl);
+                        }
+                    @endphp
                     <tr class="report-row {{ $index === 0 ? 'active-row' : '' }}"
-                        data-id="{{ $report['id'] }}"
-                        data-report="{{ json_encode($report) }}">
+                        data-id="{{ $report->id }}">
 
                         {{-- Nama Barang --}}
                         <td class="col-barang">
                             <div class="product-cell">
                                 <div class="product-thumb">
-                                    <img src="{{ $report['image'] }}" alt="{{ $report['product_name'] }}">
+                                    <img src="{{ $imageUrl }}" alt="{{ $report->product->name ?? 'Produk' }}">
                                 </div>
                                 <div class="product-cell-info">
-                                    <span class="product-cell-name">{{ $report['product_name'] }}</span>
-                                    <span class="product-cat-badge">{{ $report['category'] }}</span>
+                                    <span class="product-cell-name">{{ $report->product->name ?? 'Produk dihapus' }}</span>
+                                    <span class="product-cat-badge">{{ $report->product->category->name ?? 'Umum' }}</span>
                                 </div>
                             </div>
                         </td>
 
                         {{-- Pelapor --}}
                         <td class="col-pelapor">
-                            <span class="pelapor-name">{{ $report['pelapor_name'] }}</span>
-                            <span class="pelapor-handle">{{ $report['pelapor_handle'] }}</span>
+                            <span class="pelapor-name">{{ $report->user->name }}</span>
+                            <span class="pelapor-handle">{{ '@' . explode('@', $report->user->email)[0] }}</span>
                         </td>
 
                         {{-- Status --}}
                         <td class="col-status">
-                            <span class="status-badge status-{{ $report['status'] }}">
-                                {{ $statusLabels[$report['status']] }}
+                            <span class="status-badge status-{{ $report->status }}">
+                                {{ $statusLabels[$report->status] ?? $report->status }}
                             </span>
                         </td>
 
                         {{-- Tanggal --}}
                         <td class="col-tanggal">
-                            <span class="date-text">{{ $report['date'] }}</span>
-                            <span class="time-text">{{ $report['time'] }}</span>
+                            <span class="date-text">{{ $report->created_at->format('d M Y') }}</span>
+                            <span class="time-text">{{ $report->created_at->format('H:i') }} WIB</span>
                         </td>
 
                         {{-- Aksi --}}
                         <td class="col-aksi">
                             <button class="btn-detail {{ $index === 0 ? 'active' : '' }}"
-                                    data-id="{{ $report['id'] }}">
+                                    data-id="{{ $report->id }}">
                                 <i class="bi bi-eye"></i> Detail
                             </button>
                         </td>
                     </tr>
-                    @endforeach
+                    @empty
+                    <tr>
+                        <td colspan="5" style="text-align: center; padding: 40px; color: var(--gray-text);">
+                            Belum ada laporan masuk dari pengguna.
+                        </td>
+                    </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>
@@ -189,6 +130,7 @@ $defaultReport = $reports[0];
 
     {{-- RIGHT PANEL --}}
     <div class="panel-right" id="panelRight">
+        @if($firstReportData)
         <div class="detail-card" id="detailCard">
 
             <h3 class="detail-section-title">Detail Laporan</h3>
@@ -196,46 +138,48 @@ $defaultReport = $reports[0];
             {{-- Gallery --}}
             <div class="detail-gallery">
                 <div class="detail-main-img-wrap">
-                    <img src="{{ $defaultReport['detail_image'] }}"
-                         alt="{{ $defaultReport['product_name'] }}"
+                    <img src="{{ $firstReportData['images'][0] ?? asset('images/default-product.jpg') }}"
+                         alt="{{ $firstReportData['productName'] }}"
                          class="detail-main-img"
                          id="detailMainImg">
                 </div>
                 <div class="detail-thumbnails" id="detailThumbnails">
-                    <button class="thumb-btn active" data-src="{{ $defaultReport['detail_image'] }}">
-                        <img src="{{ $defaultReport['image'] }}" alt="">
+                    @foreach($firstReportData['images'] as $idx => $imgUrl)
+                    <button class="thumb-btn {{ $idx === 0 ? 'active' : '' }}" data-src="{{ $imgUrl }}">
+                        <img src="{{ $imgUrl }}" alt="">
                     </button>
+                    @endforeach
                 </div>
             </div>
 
             {{-- Product Info --}}
             <div class="detail-info">
-                <h2 class="detail-product-name" id="detailName">{{ $defaultReport['product_name'] }}</h2>
-                <p class="detail-product-price" id="detailPrice">{{ $defaultReport['price'] }}</p>
+                <h2 class="detail-product-name" id="detailName">{{ $firstReportData['productName'] }}</h2>
+                <p class="detail-product-price" id="detailPrice">{{ $firstReportData['price'] }}</p>
 
                 <div class="detail-meta-list">
                     <div class="detail-meta-row">
                         <i class="bi bi-shop detail-meta-icon"></i>
                         <span class="detail-meta-label">Seller</span>
                         <div class="detail-meta-value">
-                            <span class="dv-name" id="detailSellerName">{{ $defaultReport['seller_name'] }}</span>
-                            <span class="dv-handle" id="detailSellerHandle">{{ $defaultReport['seller_handle'] }}</span>
+                            <span class="dv-name" id="detailSellerName">{{ $firstReportData['sellerName'] }}</span>
+                            <span class="dv-handle" id="detailSellerHandle">{{ $firstReportData['sellerHandle'] }}</span>
                         </div>
                     </div>
                     <div class="detail-meta-row">
                         <i class="bi bi-tag detail-meta-icon"></i>
                         <span class="detail-meta-label">Kategori</span>
-                        <span class="detail-meta-value" id="detailKategori">{{ $defaultReport['category'] }}</span>
+                        <span class="detail-meta-value" id="detailKategori">{{ $firstReportData['category'] }}</span>
                     </div>
                     <div class="detail-meta-row">
                         <i class="bi bi-stars detail-meta-icon"></i>
                         <span class="detail-meta-label">Kondisi</span>
-                        <span class="detail-meta-value" id="detailKondisi">{{ $defaultReport['condition'] }}</span>
+                        <span class="detail-meta-value" id="detailKondisi">{{ $firstReportData['condition'] }}</span>
                     </div>
                     <div class="detail-meta-row">
                         <i class="bi bi-person detail-meta-icon"></i>
                         <span class="detail-meta-label">Dilaporkan</span>
-                        <span class="detail-meta-value" id="detailDilaporkan">{{ $defaultReport['date'] }}, {{ $defaultReport['time'] }}</span>
+                        <span class="detail-meta-value" id="detailDilaporkan">{{ $firstReportData['dilaporkan'] }}</span>
                     </div>
                 </div>
 
@@ -245,7 +189,7 @@ $defaultReport = $reports[0];
                         <i class="bi bi-exclamation-triangle-fill"></i>
                         Alasan Laporan
                     </p>
-                    <p class="detail-alasan-text" id="detailAlasan">{{ $defaultReport['alasan'] }}</p>
+                    <p class="detail-alasan-text" id="detailAlasan">{{ $firstReportData['alasan'] }}</p>
                 </div>
 
                 {{-- Action Area (status-aware, dirender oleh JS) --}}
@@ -253,9 +197,25 @@ $defaultReport = $reports[0];
             </div>
 
         </div>
+        @else
+        <div class="detail-card" style="display: flex; align-items: center; justify-content: center; height: 100%; color: var(--gray-text);">
+            Tidak ada detail laporan untuk ditampilkan.
+        </div>
+        @endif
     </div>
 
 </div>
+
+@if($firstReport)
+{{-- Hidden action forms --}}
+<form id="formTindak" action="#" method="POST" style="display: none;">
+    @csrf
+    <input type="hidden" name="peringatan" id="tindakPeringatanInput">
+</form>
+
+<form id="formTolak" action="#" method="POST" style="display: none;">
+    @csrf
+</form>
 
 {{-- MODAL: KONFIRMASI TINDAKLANJUTI --}}
 <div class="modal-overlay" id="modalTindaklanjuti">
@@ -309,5 +269,6 @@ $defaultReport = $reports[0];
         </div>
     </div>
 </div>
+@endif
 
 @endsection
