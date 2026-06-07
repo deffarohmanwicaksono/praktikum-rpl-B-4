@@ -11,6 +11,8 @@ use App\Http\Controllers\ChatController;
 |--------------------------------------------------------------------------
 */
 
+Route::redirect('/', '/login');
+
 Route::get('/login', [AuthController::class, 'showLogin'])
     ->name('login');
 
