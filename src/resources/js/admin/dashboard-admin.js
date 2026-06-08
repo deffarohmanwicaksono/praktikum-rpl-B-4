@@ -71,33 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!chartCanvas) return;
 
-    const datasets = {
-        6: {
-            labels: ["Nov '23","Des '23","Jan '24","Feb '24","Mar '24","Apr '24"],
-            user: [70,80,92,105,115,128],
-            produk: [28,36,50,62,72,80]
-        },
-        3: {
-            labels: ["Feb '24","Mar '24","Apr '24"],
-            user: [105,115,128],
-            produk: [62,72,80]
-        },
-        12: {
-            labels: [
-                "May '23","Jun '23","Jul '23","Aug '23",
-                "Sep '23","Oct '23","Nov '23","Des '23",
-                "Jan '24","Feb '24","Mar '24","Apr '24"
-            ],
-            user: [
-                30,38,44,52,58,64,
-                70,80,92,105,115,128
-            ],
-            produk: [
-                8,12,16,18,22,25,
-                28,36,50,62,72,80
-            ]
-        }
-    };
+    const datasets = chartDatasets;
 
     const chart = new Chart(chartCanvas, {
         type: 'line',
