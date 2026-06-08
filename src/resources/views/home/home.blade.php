@@ -14,71 +14,6 @@
 
 @section('content')
 
-@php
-$products = [
-    [
-        'name' => 'iPad Air 4 64GB',
-        'price' => 'Rp 4.200.000',
-        'condition' => 'Bekas Seperti Baru',
-        'image' => asset('images/Elemen-1.png'),
-    ],
-    [
-        'name' => 'Buku Kalkulus',
-        'price' => 'Rp 45.000',
-        'condition' => 'Bekas Baik',
-        'image' => asset('images/Elemen-1.png'),
-    ],
-    [
-        'name' => 'Jaket Hoodie Uniqlo',
-        'price' => 'Rp 120.000',
-        'condition' => 'Bekas Baik',
-        'image' => asset('images/Elemen-1.png'),
-    ],
-    [
-        'name' => 'Headset Sony WH-CH510',
-        'price' => 'Rp 250.000',
-        'condition' => 'Bekas Baik',
-        'image' => asset('images/Elemen-1.png'),
-    ],
-    [
-        'name' => 'Meja Belajar Lipat',
-        'price' => 'Rp 150.000',
-        'condition' => 'Bekas Baik',
-        'image' => asset('images/Elemen-1.png'),
-    ],
-    [
-        'name' => 'MacBook Air M1 8GB',
-        'price' => 'Rp 9.500.000',
-        'condition' => 'Bekas Seperti Baru',
-        'image' => asset('images/Elemen-1.png'),
-    ],
-    [
-        'name' => 'Nike Air Max 270',
-        'price' => 'Rp 380.000',
-        'condition' => 'Bekas Baik',
-        'image' => asset('images/Elemen-1.png'),
-    ],
-    [
-        'name' => 'Raket Badminton Yonex',
-        'price' => 'Rp 85.000',
-        'condition' => 'Bekas Layak Pakai',
-        'image' => asset('images/Elemen-1.png'),
-    ],
-    [
-        'name' => 'Kemeja Flanel Oversize',
-        'price' => 'Rp 55.000',
-        'condition' => 'Bekas Seperti Baru',
-        'image' => asset('images/Elemen-1.png'),
-    ],
-    [
-        'name' => 'Sepatu Running Adidas',
-        'price' => 'Rp 290.000',
-        'condition' => 'Bekas Baik',
-        'image' => asset('images/Elemen-1.png'),
-    ],
-];
-@endphp
-
 {{-- HERO --}}
 <section class="hero-banner" style="background-image: url('{{ asset('images/Elemen-2.png') }}');">
     <div class="hero-content">
@@ -102,9 +37,13 @@ $products = [
 {{-- PRODUCT GRID --}}
 <section class="product-grid">
 
-    @foreach ($products as $product)
-        @include('components.product-card', $product)
-    @endforeach
+    @forelse ($products as $product)
+       @include('components.product-card', ['product' => $product])
+    @empty
+        <div class="no-product">
+            <p>Belum ada produk yang dijual saat ini.</p>
+        </div>
+    @endforelse
 
 </section>
 

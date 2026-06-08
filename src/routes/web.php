@@ -30,7 +30,7 @@ Route::middleware('auth')->group(function () {
     // ADMIN
     // ==========================================
     Route::middleware(RoleMiddleware::class . ':admin')->group(function () {
-        
+
         // Dashboard
         Route::get('/admin/dashboard-admin', function () {
             return view('admin.dashboard-admin');
@@ -66,11 +66,16 @@ Route::middleware('auth')->group(function () {
     // ==========================================
     // USER (Buyer & Seller)
     // ==========================================
-    
+
     // Home & Pencarian
-    Route::get('/home', function () {
-        return view('home.home');
-    })->name('home');
+    // routes/web.php
+Route::get('/home', function () {
+    $products = \App\Models\Product::with('productImages')
+                    ->where('status', 'dijual')
+                    ->latest()
+                    ->get();
+    return view('home.home', compact('products'));
+})->name('home')->middleware(['web', 'auth']);
 
     Route::get('/search', [ProductController::class, 'search'])->name('products.search');
     Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.detail-product');
@@ -93,7 +98,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/checkout/{token}', [CheckoutController::class, 'store'])->name('checkout.store');
     Route::get('/checkout/{transaction}/upload-proof', [CheckoutController::class, 'showUploadProof'])->name('checkout.uploadProofForm');
     Route::post('/checkout/{transaction}/upload-proof', [CheckoutController::class, 'uploadProof'])->name('checkout.uploadProof');
-    
+
     // Notifikasi & Profil
     Route::view('/notification', 'notification.notification')->name('notification');
     Route::view('/profile', 'profile.profile-user')->name('profile.profile-user');
