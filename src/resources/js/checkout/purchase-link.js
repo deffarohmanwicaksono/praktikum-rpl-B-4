@@ -60,9 +60,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // NOTE CHAR COUNTER
     // =============================================
     const noteTextarea = document.getElementById('sellerNote');
-    noteTextarea.addEventListener('input', () => {
-        document.getElementById('noteCharCount').textContent = noteTextarea.value.length;
-    });
+    if (noteTextarea) {
+        noteTextarea.addEventListener('input', () => {
+            document.getElementById('noteCharCount').textContent = noteTextarea.value.length;
+        });
+    }
 
     // =============================================
     // INFO COLLAPSIBLE
@@ -71,11 +73,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const infoCollapseBody = document.getElementById('infoCollapseBody');
     const infoChevron      = document.getElementById('infoChevron');
 
-    infoToggleBtn.addEventListener('click', () => {
-        const isOpen = infoCollapseBody.classList.toggle('collapsed');
-        infoChevron.style.transform = isOpen ? 'rotate(180deg)' : 'rotate(0deg)';
-        infoToggleBtn.setAttribute('aria-expanded', String(!isOpen));
-    });
+    if (infoToggleBtn && infoCollapseBody && infoChevron) {
+        infoToggleBtn.addEventListener('click', () => {
+            const isOpen = infoCollapseBody.classList.toggle('collapsed');
+            infoChevron.style.transform = isOpen ? 'rotate(180deg)' : 'rotate(0deg)';
+            infoToggleBtn.setAttribute('aria-expanded', String(!isOpen));
+        });
+    }
 
     // =============================================
     // PAYMENT METHOD MODAL (FULL CRUD LOGIC)
@@ -90,8 +94,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const methodOwnerInput    = document.getElementById('methodOwner');
     const saveMethodBtn       = document.getElementById('saveMethodBtn');
     const paymentMethodList   = document.getElementById('paymentMethodList');
+    const paymentMethodsInput = document.getElementById('paymentMethodsInput');
 
+    let paymentMethods = window.purchaseData ? window.purchaseData.payments : [];
     let editingMethodId = null;
+
+    // Fungsi untuk memperbarui hidden input JSON
+    function updatePaymentMethodsField() {
+        if (paymentMethodsInput) {
+            paymentMethodsInput.value = JSON.stringify(paymentMethods);
+        }
+    }
+
+    // Inisialisasi awal value hidden input
+    updatePaymentMethodsField();
 
     // Attach ke window agar bisa dipanggil dari inline onclick HTML
     window.openAddModal = function() {
@@ -138,135 +154,179 @@ document.addEventListener('DOMContentLoaded', () => {
             row.style.animation = 'fadeOut 0.25s ease forwards'; 
             setTimeout(() => {
                 row.remove();
+                paymentMethods = paymentMethods.filter(item => item.id !== id);
+                updatePaymentMethodsField();
                 showToast('Metode pembayaran dihapus');
             }, 250); 
         }
     };
 
     [closeMethodModal, cancelMethodModal].forEach(btn => {
-        btn.addEventListener('click', () => {
+        if (btn) {
+            btn.addEventListener('click', () => {
+                paymentMethodModal.classList.remove('open');
+                document.body.style.overflow = '';
+            });
+        }
+    });
+
+    if (saveMethodBtn) {
+        saveMethodBtn.addEventListener('click', () => {
+            const type = methodTypeInput.value;
+            const provider = methodProviderInput.value.trim();
+            const account = methodAccountInput.value.trim();
+            const owner = methodOwnerInput.value.trim();
+
+            if (!type || !provider || !account || !owner) {
+                alert('Mohon isi semua field data yang bertanda bintang (*)');
+                return;
+            }
+
+            const typeLabel = type === 'bank' ? 'Transfer Bank' : 'E-Wallet';
+            const keyLabel = type === 'bank' ? 'No. Rekening' : 'No. HP';
+            const iconClass = type === 'bank' ? 'bi-bank2' : 'bi-phone';
+            const modifierClass = type === 'bank' ? 'pm-icon--bank' : 'pm-icon--ewallet';
+
+            const rowInnerContent = `
+                <div class="pm-left">
+                    <div class="pm-type-icon ${modifierClass}">
+                        <i class="bi ${iconClass}"></i>
+                    </div>
+                    <div class="pm-info">
+                        <span class="pm-type-label">${typeLabel} – ${provider}</span>
+                        <div class="pm-detail-row">
+                            <span class="pm-detail-key">${keyLabel}</span>
+                            <span class="pm-detail-val">${account}</span>
+                        </div>
+                        <div class="pm-detail-row">
+                            <span class="pm-detail-key">a/n</span>
+                            <span class="pm-detail-val">${owner}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="pm-actions">
+                    <button type="button" class="pm-btn pm-btn--edit" onclick="openEditModal('${editingMethodId || ''}')">
+                        <i class="bi bi-pencil"></i> Edit
+                    </button>
+                    <button type="button" class="pm-btn pm-btn--delete" onclick="deleteMethod('${editingMethodId || ''}')">
+                        <i class="bi bi-trash3"></i> Hapus
+                    </button>
+                </div>
+            `;
+
+            if (editingMethodId) {
+                const row = document.querySelector(`.pm-row[data-id="${editingMethodId}"]`);
+                if (row) {
+                    row.innerHTML = rowInnerContent;
+                    row.querySelector('.pm-btn--edit').setAttribute('onclick', `openEditModal('${editingMethodId}')`);
+                    row.querySelector('.pm-btn--delete').setAttribute('onclick', `deleteMethod('${editingMethodId}')`);
+                }
+                
+                // Update array data
+                const idx = paymentMethods.findIndex(item => item.id === editingMethodId);
+                if (idx !== -1) {
+                    paymentMethods[idx] = {
+                        id: editingMethodId,
+                        type: type,
+                        provider: provider,
+                        label: `${typeLabel} – ${provider}`,
+                        key_label: keyLabel,
+                        number: account,
+                        owner: owner,
+                        icon: iconClass
+                    };
+                }
+                updatePaymentMethodsField();
+                showToast('Metode pembayaran diperbarui');
+            } else {
+                const uniqueId = 'pm_' + Date.now();
+                const newRow = document.createElement('div');
+                newRow.className = 'pm-row';
+                newRow.setAttribute('data-id', uniqueId);
+                newRow.innerHTML = rowInnerContent;
+                
+                newRow.querySelector('.pm-btn--edit').setAttribute('onclick', `openEditModal('${uniqueId}')`);
+                newRow.querySelector('.pm-btn--delete').setAttribute('onclick', `deleteMethod('${uniqueId}')`);
+                
+                paymentMethodList.appendChild(newRow);
+                
+                // Tambah ke array data
+                paymentMethods.push({
+                    id: uniqueId,
+                    type: type,
+                    provider: provider,
+                    label: `${typeLabel} – ${provider}`,
+                    key_label: keyLabel,
+                    number: account,
+                    owner: owner,
+                    icon: iconClass
+                });
+                updatePaymentMethodsField();
+                showToast('Metode pembayaran ditambahkan');
+            }
+
             paymentMethodModal.classList.remove('open');
             document.body.style.overflow = '';
         });
-    });
-
-    saveMethodBtn.addEventListener('click', () => {
-        const type = methodTypeInput.value;
-        const provider = methodProviderInput.value.trim();
-        const account = methodAccountInput.value.trim();
-        const owner = methodOwnerInput.value.trim();
-
-        if (!type || !provider || !account || !owner) {
-            alert('Mohon isi semua field data yang bertanda bintang (*)');
-            return;
-        }
-
-        const typeLabel = type === 'bank' ? 'Transfer Bank' : 'E-Wallet';
-        const keyLabel = type === 'bank' ? 'No. Rekening' : 'No. HP';
-        const iconClass = type === 'bank' ? 'bi-bank2' : 'bi-phone';
-        const modifierClass = type === 'bank' ? 'pm-icon--bank' : 'pm-icon--ewallet';
-
-        const rowInnerContent = `
-            <div class="pm-left">
-                <div class="pm-type-icon ${modifierClass}">
-                    <i class="bi ${iconClass}"></i>
-                </div>
-                <div class="pm-info">
-                    <span class="pm-type-label">${typeLabel} – ${provider}</span>
-                    <div class="pm-detail-row">
-                        <span class="pm-detail-key">${keyLabel}</span>
-                        <span class="pm-detail-val">${account}</span>
-                    </div>
-                    <div class="pm-detail-row">
-                        <span class="pm-detail-key">a/n</span>
-                        <span class="pm-detail-val">${owner}</span>
-                    </div>
-                </div>
-            </div>
-            <div class="pm-actions">
-                <button class="pm-btn pm-btn--edit" onclick="openEditModal('${editingMethodId || ''}')">
-                    <i class="bi bi-pencil"></i> Edit
-                </button>
-                <button class="pm-btn pm-btn--delete" onclick="deleteMethod('${editingMethodId || ''}')">
-                    <i class="bi bi-trash3"></i> Hapus
-                </button>
-            </div>
-        `;
-
-        if (editingMethodId) {
-            const row = document.querySelector(`.pm-row[data-id="${editingMethodId}"]`);
-            if (row) {
-                row.innerHTML = rowInnerContent;
-                row.querySelector('.pm-btn--edit').setAttribute('onclick', `openEditModal('${editingMethodId}')`);
-                row.querySelector('.pm-btn--delete').setAttribute('onclick', `deleteMethod('${editingMethodId}')`);
-            }
-            showToast('Metode pembayaran diperbarui');
-        } else {
-            const uniqueId = 'pm_' + Date.now();
-            const newRow = document.createElement('div');
-            newRow.className = 'pm-row';
-            newRow.setAttribute('data-id', uniqueId);
-            newRow.innerHTML = rowInnerContent;
-            
-            newRow.querySelector('.pm-btn--edit').setAttribute('onclick', `openEditModal('${uniqueId}')`);
-            newRow.querySelector('.pm-btn--delete').setAttribute('onclick', `deleteMethod('${uniqueId}')`);
-            
-            paymentMethodList.appendChild(newRow);
-            showToast('Metode pembayaran ditambahkan');
-        }
-
-        paymentMethodModal.classList.remove('open');
-        document.body.style.overflow = '';
-    });
+    }
 
     // =============================================
     // CONFIRM SEND MODAL
     // =============================================
     const confirmSendModal = document.getElementById('confirmSendModal');
     const successModal     = document.getElementById('successModal');
+    const submitLinkBtn    = document.getElementById('submitLinkBtn');
+    const confirmSendBtn   = document.getElementById('confirmSendBtn');
 
-    document.getElementById('submitLinkBtn').addEventListener('click', () => {
-        const priceRaw = agreedPriceInput.value || '7.200.000';
-        document.getElementById('confirmPrice').textContent = 'Rp ' + priceRaw;
-        const selDur = document.querySelector('.duration-option.selected input');
-        document.getElementById('confirmDuration').textContent = durationLabels[selDur.value] || '3 Jam';
-        
-        confirmSendModal.classList.add('open');
-        document.body.style.overflow = 'hidden';
-    });
+    if (submitLinkBtn) {
+        submitLinkBtn.addEventListener('click', () => {
+            const priceRaw = agreedPriceInput.value || '0';
+            document.getElementById('confirmPrice').textContent = 'Rp ' + priceRaw;
+            const selDur = document.querySelector('.duration-option.selected input');
+            document.getElementById('confirmDuration').textContent = durationLabels[selDur.value] || '3 Jam';
+            
+            confirmSendModal.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        });
+    }
 
-    document.getElementById('cancelSendBtn').addEventListener('click', () => {
-        confirmSendModal.classList.remove('open');
-        document.body.style.overflow = '';
-    });
-    document.getElementById('closeConfirmModal').addEventListener('click', () => {
-        confirmSendModal.classList.remove('open');
-        document.body.style.overflow = '';
-    });
+    if (document.getElementById('cancelSendBtn')) {
+        document.getElementById('cancelSendBtn').addEventListener('click', () => {
+            confirmSendModal.classList.remove('open');
+            document.body.style.overflow = '';
+        });
+    }
+    
+    if (document.getElementById('closeConfirmModal')) {
+        document.getElementById('closeConfirmModal').addEventListener('click', () => {
+            confirmSendModal.classList.remove('open');
+            document.body.style.overflow = '';
+        });
+    }
 
-    document.getElementById('confirmSendBtn').addEventListener('click', () => {
-        confirmSendModal.classList.remove('open');
-        successModal.classList.add('open');
-    });
-
-    document.getElementById('backToChatBtn').addEventListener('click', () => {
-        successModal.classList.remove('open');
-        document.body.style.overflow = '';
-    });
+    if (confirmSendBtn) {
+        confirmSendBtn.addEventListener('click', () => {
+            confirmSendModal.classList.remove('open');
+            // Menyerahkan form (submit) ke Laravel Backend
+            document.getElementById('purchaseLinkForm').submit();
+        });
+    }
 
     // Close modals on overlay click + ESC
     [paymentMethodModal, confirmSendModal, successModal].forEach(m => {
-        m.addEventListener('click', e => { 
-            if (e.target === m) { 
-                m.classList.remove('open'); 
-                document.body.style.overflow = ''; 
-            } 
-        });
+        if (m) {
+            m.addEventListener('click', e => { 
+                if (e.target === m) { 
+                    m.classList.remove('open'); 
+                    document.body.style.overflow = ''; 
+                } 
+            });
+        }
     });
     
     document.addEventListener('keydown', e => {
         if (e.key === 'Escape') {
-            [paymentMethodModal, confirmSendModal, successModal].forEach(m => { m.classList.remove('open'); });
+            [paymentMethodModal, confirmSendModal, successModal].forEach(m => { if (m) m.classList.remove('open'); });
             document.body.style.overflow = '';
         }
     });
@@ -276,9 +336,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // =============================================
     function showToast(msg) {
         const t = document.getElementById('toastContainer');
-        document.getElementById('toastMsg').textContent = msg;
-        t.classList.add('show');
-        clearTimeout(t._t);
-        t._t = setTimeout(() => t.classList.remove('show'), 2800);
+        if (t) {
+            document.getElementById('toastMsg').textContent = msg;
+            t.classList.add('show');
+            clearTimeout(t._t);
+            t._t = setTimeout(() => t.classList.remove('show'), 2800);
+        }
     }
 });

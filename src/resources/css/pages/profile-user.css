@@ -1,0 +1,410 @@
+/* ==============================================
+   SeMart - Profil User
+   ============================================== */
+
+.page-header-section {
+    margin-top: 24px;
+    margin-bottom: 20px;
+}
+
+.page-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--dark-text);
+    margin-bottom: 4px;
+}
+
+.page-subtitle {
+    font-size: 13px;
+    color: var(--gray-text);
+}
+
+.profile-card,
+.detail-card {
+    background: var(--white);
+    border: 1px solid var(--border-gray);
+    border-radius: 16px;
+    box-shadow: var(--shadow-card, 0 4px 6px -1px rgba(0, 0, 0, 0.05));
+    overflow: hidden;
+}
+
+.profile-card {
+    margin-bottom: 20px;
+}
+
+/* Header Profil */
+.profile-header {
+    padding: 40px 24px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+    text-align: center;
+}
+
+.profile-avatar-icon {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    margin: 0;
+    border: 1px solid rgba(59, 157, 248, 0.2);
+    background: linear-gradient(135deg, rgba(59, 157, 248, 0.15) 0%, rgba(45, 212, 191, 0.12) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary-blue);
+    font-size: 70px;
+    box-shadow: 0 8px 16px -4px rgba(13, 110, 253, 0.15);
+}
+
+.profile-info {
+    width: 100%;
+}
+
+.profile-info h2 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: var(--dark-text);
+}
+
+.profile-role-list {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+}
+
+.role-badge {
+    background: var(--light-blue);
+    color: var(--primary-blue);
+    border: 1px solid var(--secondary-blue);
+    border-radius: 999px;
+    padding: 4px 12px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* Area Meta (Email & Bergabung) */
+.profile-meta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    color: var(--gray-text);
+    font-size: 14px;
+}
+
+.profile-email,
+.profile-joined {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+}
+
+.profile-email i,
+.profile-joined i {
+    color: var(--primary-blue);
+    font-size: 16px;
+}
+
+.meta-divider {
+    color: var(--border-gray);
+    font-size: 12px;
+}
+
+/* Statistik */
+.profile-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-top: 1px solid var(--border-gray);
+}
+
+.stat-card {
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.stat-card:not(:last-child) {
+    border-right: 1px solid var(--border-gray);
+}
+
+.stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+}
+
+.stat-icon.blue {
+    background: var(--light-blue);
+    color: var(--primary-blue);
+}
+
+.stat-card h3 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: var(--dark-text);
+}
+
+/* Rating Wrapper dan Bintang */
+.rating-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.rating-stars {
+    display: inline-flex;
+    gap: 2px;
+    margin-left: 10px;
+}
+
+.rating-stars i {
+    color: var(--primary-blue);
+    font-size: 16px; 
+}
+
+.stat-card p {
+    color: var(--gray-text);
+    font-size: 13px;
+    margin: 0;
+}
+
+/* Detail Card */
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border-gray);
+}
+
+.detail-row:last-child {
+    border-bottom: none;
+}
+
+.detail-label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--gray-text);
+    font-size: 15px;
+}
+
+.detail-label i {
+    color: var(--primary-blue);
+    font-size: 18px;
+}
+
+.detail-value {
+    font-weight: 500;
+    color: var(--dark-text);
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.role-pill {
+    background: var(--light-blue);
+    color: var(--primary-blue);
+    border: 1px solid var(--secondary-blue);
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* Status pill */
+.status-pill {
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    border: 1px solid transparent;
+}
+
+.status-aktif {
+    background: var(--status-aktif-bg);
+    border-color: var(--status-aktif-border);
+    color: var(--status-aktif-text);
+}
+
+.status-diblokir {
+    background: var(--status-diblokir-bg);
+    border-color: var(--status-diblokir-border);
+    color: var(--status-diblokir-text);
+}
+
+/* ==============================================
+   RESPONSIVE — LARGE DESKTOP
+   ============================================== */
+@media (min-width: 1400px) {
+    .page-header-section {
+        margin-top: 32px;
+        margin-bottom: 28px;
+    }
+
+    .page-title {
+        font-size: 26px;
+    }
+
+    .page-subtitle {
+        font-size: 14.5px;
+    }
+
+    .profile-avatar-icon {
+        width: 130px;
+        height: 130px;
+        font-size: 75px;
+    }
+
+    .profile-info h2 {
+        font-size: 28px;
+    }
+
+    .stat-card h3 {
+        font-size: 26px;
+    }
+}
+
+/* ==============================================
+   RESPONSIVE — STANDARD DESKTOP
+   ============================================== */
+@media (max-width: 1399px) and (min-width: 1200px) {
+    .page-header-section {
+        margin-top: 28px;
+    }
+
+    .page-title {
+        font-size: 24px;
+    }
+}
+
+/* ==============================================
+   RESPONSIVE — LAPTOP
+   ============================================== */
+@media (max-width: 1199px) and (min-width: 992px) {
+    .profile-header {
+        padding: 32px 24px 24px;
+    }
+
+    .profile-avatar-icon {
+        width: 100px;
+        height: 100px;
+        font-size: 60px;
+    }
+}
+
+/* ==============================================
+   RESPONSIVE — SMALL LAPTOP / TABLET LANDSCAPE
+   ============================================== */
+@media (max-width: 991px) {
+    .stat-card {
+        padding: 20px 16px;
+        gap: 12px;
+    }
+
+    .stat-icon {
+        width: 42px;
+        height: 42px;
+        font-size: 20px;
+    }
+
+    .detail-row {
+        padding: 16px 20px;
+    }
+}
+
+/* ==============================================
+   RESPONSIVE — TABLET / LARGE MOBILE
+   ============================================== */
+@media (max-width: 767px) {
+    .page-header-section {
+        margin-top: 16px;
+        margin-bottom: 16px;
+    }
+
+    .page-title {
+        font-size: 20px;
+    }
+
+    .profile-avatar-icon {
+        width: 90px;
+        height: 90px;
+        font-size: 50px;
+    }
+
+    .profile-info h2 {
+        font-size: 22px;
+    }
+
+    .profile-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .stat-card {
+        border-right: none !important;
+        border-bottom: 1px solid var(--border-gray);
+        justify-content: flex-start;
+    }
+    
+    .stat-card:last-child {
+        border-bottom: none;
+    }
+
+    .detail-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+}
+
+/* ==============================================
+   RESPONSIVE — SMALL MOBILE
+   ============================================== */
+@media (max-width: 576px) {
+    .profile-header {
+        padding: 24px 16px 20px;
+    }
+    
+    .profile-avatar-icon {
+        width: 80px;
+        height: 80px;
+        font-size: 44px;
+    }
+
+    .profile-meta {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .meta-divider {
+        display: none; 
+    }
+
+    .stat-card {
+        padding: 16px;
+        gap: 12px;
+    }
+    
+    .stat-card h3 {
+        font-size: 20px;
+    }
+    
+    .rating-stars i {
+        font-size: 14px;
+    }
+
+    .detail-row {
+        padding: 16px;
+    }
+}

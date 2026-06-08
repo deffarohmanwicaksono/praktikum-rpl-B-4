@@ -9,16 +9,15 @@ use Symfony\Component\HttpFoundation\Response;
 
 class RoleMiddleware
 {
-    /**
-     * Handle an incoming request.
-     */
     public function handle(Request $request, Closure $next, ...$roles): Response
     {
         if (!Auth::check()) {
             return redirect()->route('login');
         }
 
-        if (in_array(Auth::user()->role, $roles)) {
+        $userRoles = Auth::user()->roles ?? [];
+
+        if (count(array_intersect($userRoles, $roles)) > 0) {
             return $next($request);
         }
 

@@ -100,7 +100,9 @@
 
                 <div class="notif-icon-wrapper">
                     <i class="bi bi-bell"></i>
-                    <span class="notif-badge">3</span>
+                    @if(isset($unreadCount) && $unreadCount > 0)
+                        <span class="notif-badge">{{ $unreadCount }}</span>
+                    @endif
                 </div>
 
                 <span>Notifikasi</span>
@@ -111,7 +113,7 @@
             <div class="user-profile-direct">
 
                 <a
-                    href="{{ route('profile.profileuser') }}"
+                    href="{{ route('profile.profile-user') }}"
                     class="user-btn-link"
                     aria-label="Profil Saya"
                 >

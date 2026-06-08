@@ -1,0 +1,36 @@
+/* ==============================================
+    SALES: TOMBOL & MODAL KONFIRMASI
+   ============================================== */
+
+/* Tombol Tutup Penjualan */
+.btn-action.btn-close-sale {
+    background: var(--primary-blue);
+    border-color: var(--primary-blue);
+    color: var(--white);
+}
+
+.btn-action.btn-close-sale:hover {
+    background: var(--hover-blue);
+    border-color: var(--hover-blue);
+    box-shadow: 0 2px 8px rgba(59, 157, 248, 0.25);
+}
+
+/* Icon Konfirmasi di Modal Tutup Sales */
+.modal-icon-wrap {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    margin: 0 auto 16px auto;
+}
+
+.modal-confirm-text {
+    text-align: center;
+    font-size: 14px;
+    color: var(--dark-text);
+    line-height: 1.5;
+    margin: 0;
+}

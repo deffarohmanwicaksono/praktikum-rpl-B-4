@@ -1,0 +1,412 @@
+/* ==============================================
+   SeMart - Profil Seller
+   ============================================== */
+
+.page-header-section {
+    margin-top: 24px;
+    margin-bottom: 20px;
+}
+
+.page-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--dark-text);
+    margin-bottom: 4px;
+}
+
+.page-subtitle {
+    font-size: 13px;
+    color: var(--gray-text);
+}
+
+/* Seller Profile Card */
+.seller-profile-card {
+    background: var(--white);
+    border: 1px solid var(--border-gray);
+    border-radius: 16px;
+    box-shadow: var(--shadow-card, 0 4px 6px -1px rgba(0, 0, 0, 0.05));
+    overflow: hidden;
+    margin-bottom: 32px;
+}
+
+.profile-header {
+    padding: 40px 24px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+    text-align: center;
+}
+
+.seller-avatar-icon {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    margin: 0;
+    border: 1px solid rgba(59, 157, 248, 0.2);
+    background: linear-gradient(135deg, rgba(59, 157, 248, 0.15) 0%, rgba(45, 212, 191, 0.12) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary-blue);
+    font-size: 70px;
+    box-shadow: 0 8px 16px -4px rgba(13, 110, 253, 0.15);
+}
+
+.seller-info {
+    width: 100%;
+}
+
+.seller-info h2 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: var(--dark-text);
+}
+
+.seller-badges {
+    margin-bottom: 12px;
+}
+
+.verified-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    background: var(--light-blue);
+    color: var(--primary-blue);
+    border: 1px solid var(--secondary-blue, #bfdbfe);
+    border-radius: 999px;
+    padding: 4px 12px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* Info Bergabung */
+.seller-joined {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    color: var(--gray-text);
+    font-size: 14px;
+}
+
+.seller-joined i {
+    color: var(--primary-blue);
+    font-size: 16px;
+}
+
+/* ==============================================
+   Statistik
+   ============================================== */
+.profile-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    border-top: 1px solid var(--border-gray);
+    background: var(--white);
+}
+
+.stat-card {
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+}
+
+.stat-card:not(:last-child) {
+    border-right: 1px solid var(--border-gray);
+}
+
+.stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+}
+
+.stat-icon.blue {
+    background: var(--light-blue);
+    color: var(--primary-blue);
+}
+
+.stat-card h3 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: var(--dark-text);
+    display: flex;
+    align-items: center;
+}
+
+.rating-stars {
+    display: inline-flex;
+    gap: 2px;
+    margin-left: 10px;
+}
+
+.rating-stars i,
+.review-stars i {
+    color: var(--primary-blue);
+    font-size: 16px; 
+}
+
+.stat-card p {
+    color: var(--gray-text);
+    font-size: 13px;
+    margin: 0;
+}
+
+/* ==============================================
+   Ulasan Pembeli
+   ============================================== */
+.review-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: var(--dark-text);
+}
+
+.reviews-list-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px; 
+    margin-bottom: 40px;
+}
+
+.review-card {
+    background: var(--white);
+    border: 1px solid var(--border-gray);
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: var(--shadow-card, 0 4px 6px -1px rgba(0, 0, 0, 0.05));
+}
+
+.review-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.buyer-avatar-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--light-blue);
+    color: var(--primary-blue);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+.review-header h4 {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: var(--dark-text);
+}
+
+.review-stars {
+    display: flex;
+    gap: 2px;
+}
+
+.review-comment {
+    margin-top: 14px;
+    margin-bottom: 16px;
+    color: var(--dark-text);
+    line-height: 1.6;
+    font-size: 14px;
+}
+
+.review-product {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #f9fafb;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid var(--border-gray);
+}
+
+.review-product img {
+    width: 42px;
+    height: 42px;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.product-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--dark-text);
+}
+
+.product-date {
+    font-size: 12px;
+    color: var(--gray-text);
+    margin-top: 2px;
+}
+
+/* ==============================================
+   RESPONSIVE — LARGE DESKTOP
+   ============================================== */
+@media (min-width: 1400px) {
+    .page-header-section {
+        margin-top: 32px;
+        margin-bottom: 28px;
+    }
+
+    .page-title {
+        font-size: 26px;
+    }
+
+    .page-subtitle {
+        font-size: 14.5px;
+    }
+
+    .seller-avatar-icon {
+        width: 110px;
+        height: 110px;
+        font-size: 65px;
+    }
+
+    .seller-info h2 {
+        font-size: 26px;
+    }
+
+    .stat-card h3 {
+        font-size: 26px;
+    }
+}
+
+/* ==============================================
+   RESPONSIVE — STANDARD DESKTOP
+   ============================================== */
+@media (max-width: 1399px) and (min-width: 1200px) {
+    .page-header-section {
+        margin-top: 28px;
+    }
+
+    .page-title {
+        font-size: 24px;
+    }
+}
+
+/* ==============================================
+   RESPONSIVE — LAPTOP
+   ============================================== */
+@media (max-width: 1199px) and (min-width: 992px) {
+    .profile-header {
+        padding: 32px 24px 24px;
+    }
+}
+
+/* ==============================================
+   RESPONSIVE — SMALL LAPTOP / TABLET LANDSCAPE
+   ============================================== */
+@media (max-width: 991px) {
+    .stat-card {
+        padding: 20px;
+    }
+}
+
+/* ==============================================
+   RESPONSIVE — TABLET / LARGE MOBILE
+   ============================================== */
+@media (max-width: 767px) {
+    .page-header-section {
+        margin-top: 16px;
+        margin-bottom: 16px;
+    }
+
+    .page-title {
+        font-size: 20px;
+    }
+
+    .seller-avatar-icon {
+        width: 80px;
+        height: 80px;
+        font-size: 48px;
+    }
+
+    .seller-info h2 {
+        font-size: 22px;
+    }
+
+    .profile-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .stat-card {
+        border-right: none !important;
+        border-bottom: 1px solid var(--border-gray);
+        justify-content: flex-start;
+    }
+    
+    .stat-card:last-child {
+        border-bottom: none;
+    }
+}
+
+/* ==============================================
+   RESPONSIVE — SMALL MOBILE
+   ============================================== */
+@media (max-width: 576px) {
+    .profile-header {
+        padding: 24px 16px 20px;
+    }
+    
+    .seller-avatar-icon {
+        width: 70px;
+        height: 70px;
+        font-size: 40px;
+    }
+
+    .stat-card {
+        padding: 16px;
+        gap: 12px;
+    }
+    
+    .stat-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
+    }
+    
+    .stat-card h3 {
+        font-size: 20px;
+    }
+    
+    .rating-stars i, 
+    .review-stars i {
+        font-size: 14px;
+    }
+    
+    .review-card {
+        padding: 16px;
+    }
+    
+    .buyer-avatar-icon {
+        width: 36px;
+        height: 36px;
+        font-size: 20px;
+    }
+    
+    .review-product {
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .review-product img {
+        width: 38px;
+        height: 38px;
+    }
+}

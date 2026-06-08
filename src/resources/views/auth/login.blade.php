@@ -161,7 +161,7 @@
                 </div>
 
                 <div class="forgot-password-row">
-                    <a href="#" class="forgot-link">
+                    <a href="#" class="forgot-link" id="forgotPasswordLink">
                         Lupa Password?
                     </a>
                 </div>
@@ -183,7 +183,7 @@
                 <p class="footer-text">
                     Belum punya akun?
 
-                    <a href="#" class="footer-link">
+                    <a href="#" class="footer-link" id="contactAdminLink">
                         Hubungi admin kampus
                     </a>
                 </p>
@@ -196,4 +196,79 @@
 
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const forgotLink = document.getElementById('forgotPasswordLink');
+        const emailInput = document.getElementById('email');
+
+        if (forgotLink && emailInput) {
+            forgotLink.addEventListener('click', function(event) {
+                event.preventDefault();
+                const emailValue = emailInput.value.trim();
+
+                if (emailValue.endsWith('@student.uns.ac.id')) {
+                    Swal.fire({
+                        title: 'Simulasi Pemulihan Akun',
+                        html: `Sistem mendeteksi komponen akun dummy mahasiswa UNS.<br><br>
+                               <strong>Email:</strong> ${emailValue}<br>
+                               <strong>Password Default:</strong> password123`,
+                        icon: 'info',
+                        confirmButtonText: 'Saya Mengerti',
+                        confirmButtonColor: '#002855'
+                    });
+                }
+            });
+        }
+    });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const forgotLink = document.getElementById('forgotPasswordLink');
+        const emailInput = document.getElementById('email');
+        // Ambil elemen baru untuk link admin
+        const contactAdminLink = document.getElementById('contactAdminLink');
+
+        // Logika Lupa Password (yang sudah dibuat sebelumnya)
+        if (forgotLink && emailInput) {
+            forgotLink.addEventListener('click', function(event) {
+                event.preventDefault();
+                const emailValue = emailInput.value.trim();
+
+                if (emailValue.endsWith('@student.uns.ac.id')) {
+                    Swal.fire({
+                        title: 'Simulasi Pemulihan Akun',
+                        html: `Sistem mendeteksi komponen akun dummy mahasiswa UNS.<br><br>
+                               <strong>Email:</strong> ${emailValue}<br>
+                               <strong>Password Default:</strong> password123`,
+                        icon: 'info',
+                        confirmButtonText: 'Saya Mengerti',
+                        confirmButtonColor: '#002855'
+                    });
+                }
+            });
+        }
+
+        if (contactAdminLink) {
+            contactAdminLink.addEventListener('click', function(event) {
+                event.preventDefault(); 
+
+                Swal.fire({
+                    title: 'Pendaftaran Akun Baru',
+                    html: `Untuk mahasiswa UNS yang belum memiliki akun di SeMart, <br>
+                           silakan daftarkan diri Anda melalui Unit Pelayanan TI Kampus atau hubungi:<br><br>
+                           <strong>Email Admin:</strong> admin.semart@uns.ac.id<br>
+                           <strong>Lokasi:</strong> Gedung UPT Teknologi Informasi dan Komunikasi UNS`,
+                    icon: 'question',
+                    confirmButtonText: 'Tutup',
+                    confirmButtonColor: '#002855'
+                });
+            });
+        }
+    });
+</script>
 @endsection
