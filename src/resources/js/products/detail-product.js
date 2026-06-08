@@ -362,4 +362,45 @@ document.addEventListener('DOMContentLoaded', () => {
                   `;
         });
     }
+
+    // =============================================
+    // REPORT MODAL LOGIC
+    // =============================================
+    const reportModal = document.getElementById('reportModal');
+    const openReportBtn = document.getElementById('openReportModalBtn');
+    const closeReportBtn = document.getElementById('closeReportModalBtn');
+    const cancelReportBtn = document.getElementById('cancelReportBtn');
+
+    function openReport() {
+        if (!reportModal) return;
+        reportModal.classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeReport() {
+        if (!reportModal) return;
+        reportModal.classList.remove('open');
+        document.body.style.overflow = '';
+    }
+
+    if (openReportBtn) {
+        openReportBtn.addEventListener('click', openReport);
+    }
+
+    if (closeReportBtn) {
+        closeReportBtn.addEventListener('click', closeReport);
+    }
+
+    if (cancelReportBtn) {
+        cancelReportBtn.addEventListener('click', closeReport);
+    }
+
+    if (reportModal) {
+        reportModal.addEventListener('click', (e) => {
+            if (e.target === reportModal) {
+                closeReport();
+            }
+        });
+    }
+
 });

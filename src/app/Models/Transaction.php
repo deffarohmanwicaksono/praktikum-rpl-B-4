@@ -24,6 +24,7 @@ class Transaction extends Model
         'paid_at' => 'datetime',
     ];
 
+    // Relasi dengan model lain
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);

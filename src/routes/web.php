@@ -42,9 +42,9 @@ Route::middleware('auth')->group(function () {
         })->name('admin.verification');
 
         // Daftar Laporan
-        Route::get('/admin/reports', function () {
-            return view('admin.reports');
-        })->name('admin.reports');
+        Route::get('/admin/reports', [\App\Http\Controllers\AdminController::class, 'reportsIndex'])->name('admin.reports');
+        Route::post('/admin/reports/{report}/action', [\App\Http\Controllers\AdminController::class, 'actionReport'])->name('admin.actionReport');
+        Route::post('/admin/reports/{report}/reject', [\App\Http\Controllers\AdminController::class, 'rejectReport'])->name('admin.rejectReport');
 
         // Daftar User
         Route::get('/admin/users', function () {
@@ -75,6 +75,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/search', [ProductController::class, 'search'])->name('products.search');
     Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.detail-product');
     Route::view('/wishlist', 'wishlist.wishlist')->name('wishlist');
+    Route::post('/reports', [\App\Http\Controllers\ReportController::class, 'store'])->name('report.store');
 
     // Chat
     Route::get('/chat', [ChatController::class, 'index'])->name('chat.list');
