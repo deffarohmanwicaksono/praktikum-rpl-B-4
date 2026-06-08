@@ -17,13 +17,18 @@ class ReviewSeeder extends Seeder
             [
                 'transaction_id' => 1,
                 'rating' => 5,
-                'comment' => 'Barang sesuai deskripsi.'
+                'comment' => 'Laptop masih sangat bagus, sesuai deskripsi dan performanya lancar. Seller juga responsif saat diajak diskusi.'
             ],
             [
-                'transaction_id' => 2,
+                'transaction_id' => 3,
                 'rating' => 4,
-                'comment' => 'Pengiriman cepat.'
-            ]
+                'comment' => 'Buku dalam kondisi baik dan lengkap. Pengiriman cepat, hanya ada sedikit bekas penggunaan pada sampul.'
+            ],
+            [
+                'transaction_id' => 6,
+                'rating' => 5,
+                'comment' => 'Gitar sesuai deskripsi, suara masih bagus dan senar dalam kondisi baik. Seller ramah dan proses transaksi berjalan lancar.'
+            ],
         ]);
     }
 }
