@@ -13,9 +13,6 @@
 @endpush
 
 @section('content')
-<pre>
-{{ print_r($product->toArray(), true) }}
-</pre>
 
 <div class="detail-layout">
 
@@ -138,7 +135,7 @@
 
             </div>
 
-            <a href="#" class="seller-profile-btn">
+            <a href="{{ route('seller.profile', ['id' => $product->user_id ?? 1]) }}" class="seller-profile-btn">
                 Lihat Profil Seller
                 <i class="bi bi-arrow-right"></i>
             </a>
@@ -165,6 +162,27 @@
 
                     <span class="action-sub">
                         Simpan untuk nanti
+                    </span>
+
+                </div>
+
+            </button>
+
+            {{-- TOMBOL LAPORKAN BARANG SUDAH DITAMBAHKAN ID --}}
+            <button class="action-card action-card--report" id="openReportModalBtn">
+
+                <div class="action-icon-wrap action-icon--report">
+                    <i class="bi bi-flag"></i>
+                </div>
+
+                <div class="action-text">
+
+                    <span class="action-title">
+                        Laporkan Produk
+                    </span>
+
+                    <span class="action-sub">
+                        Laporkan jika melanggar aturan
                     </span>
 
                 </div>
@@ -263,11 +281,11 @@
 
             </div>
 
-                        @if (auth()->id() !== $product->user_id)
-                <form action="{{ route('chat.store') }}" method="POST">
+            @if (auth()->check() && auth()->id() !== ($product->user_id ?? 0))
+                <form action="{{ route('chat.store') ?? '#' }}" method="POST">
                     @csrf
-                    <input type="hidden" name="seller_id" value="{{ $product->user_id }}">
-                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+                    <input type="hidden" name="seller_id" value="{{ $product->user_id ?? '' }}">
+                    <input type="hidden" name="product_id" value="{{ $product->id ?? '' }}">
                     <button type="submit" class="chat-cta-btn">
                         Mulai Chat
                     </button>
@@ -307,6 +325,91 @@
         1 / 5
     </div>
 
+</div>
+
+{{-- REPORT MODAL --}}
+<div class="report-modal-overlay" id="reportModal">
+    <div class="report-modal-content">
+        <div class="report-modal-header">
+            <h3>Laporkan Produk</h3>
+            <button class="report-modal-close" id="closeReportModalBtn">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+
+        <form action="{{ route('report.store') ?? '#' }}" method="POST">
+            @csrf
+            <input type="hidden" name="product_id" value="{{ $product->id ?? '' }}">
+
+            <div class="report-modal-body">
+                {{-- Info Produk --}}
+                <div class="report-product-card">
+
+                    <div class="report-product-image">
+                        <img
+                            src="{{ asset('images/Elemen-1.png') }}"
+                            alt="{{ $product->name ?? 'Produk' }}"
+                        >
+                    </div>
+
+                    <div class="report-product-info">
+
+                        <h4>
+                            {{ $product->name ?? 'Laptop MacBook Air M1 2020' }}
+                        </h4>
+
+                        <p class="report-product-price">
+                            Rp {{ number_format($product->price ?? 7500000, 0, ',', '.') }}
+                        </p>
+
+                        <span class="report-product-seller">
+                            Seller:
+                            {{ $product->user->name ?? 'Andi Pratama' }}
+                        </span>
+
+                    </div>
+
+                </div>
+
+                {{-- Info Pelapor --}}
+                <div class="report-reporter-card">
+
+                    <div class="report-reporter-avatar">
+                        <i class="bi bi-person-fill"></i>
+                    </div>
+
+                    <div class="report-reporter-info">
+
+                        <span class="report-reporter-label">
+                            Pelapor
+                        </span>
+
+                        <strong>
+                            {{ auth()->user()->name ?? 'Nama Pelapor' }}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+                {{-- Form Input Alasan --}}
+                <div class="report-form-group">
+                    <label for="reportReason">Alasan Laporan <span class="text-danger">*</span></label>
+                    <textarea 
+                        id="reportReason" 
+                        name="reason" 
+                        rows="4" 
+                        placeholder="Jelaskan secara detail mengapa produk ini dilaporkan..." 
+                        required></textarea>
+                </div>
+            </div>
+
+            <div class="report-modal-footer">
+                <button type="button" class="btn-cancel" id="cancelReportBtn">Batal</button>
+                <button type="submit" class="btn-submit">Kirim Laporan</button>
+            </div>
+        </form>
+    </div>
 </div>
 
 @endsection

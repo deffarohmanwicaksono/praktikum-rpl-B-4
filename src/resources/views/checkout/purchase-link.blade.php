@@ -13,15 +13,15 @@
 @section('content')
 
 @php
+    $userId = auth()->id();
+    $partner = ($chat->seller_id === $userId) ? $chat->buyer : $chat->seller;
+    $productImage = $chat->product->productImages->first();
+    $imageUrl = $productImage
+        ? asset('storage/' . $productImage->image_path)
+        : asset('images/Elemen-1.png');
 
-$purchase = [
-    'product_name' => 'Laptop MacBook Air M1 2020',
-    'product_price' => 7500000,
-    'agreed_price' => 7200000,
-    'product_condition' => 'Bekas Seperti Baru',
-    'buyer_name' => 'Andi Pratama',
-    'image' => asset('images/Elemen-1.png'),
-    'payments' => [
+    // Default payment methods untuk di-fill pertama kali
+    $payments = [
         [
             'id' => 'pm_1',
             'type' => 'bank',
@@ -29,7 +29,7 @@ $purchase = [
             'label' => 'Transfer Bank – BCA',
             'key_label' => 'No. Rekening',
             'number' => '1234567890',
-            'owner' => 'Andi Pratama',
+            'owner' => auth()->user()->name ?? 'Andi Pratama',
             'icon' => 'bank2'
         ],
         [
@@ -39,20 +39,33 @@ $purchase = [
             'label' => 'E-Wallet – DANA',
             'key_label' => 'No. HP',
             'number' => '081234567890',
-            'owner' => 'Andi Pratama',
+            'owner' => auth()->user()->name ?? 'Andi Pratama',
             'icon' => 'phone'
         ]
-    ]
-];
+    ];
+
+    $purchase = [
+        'product_name' => $chat->product->name,
+        'product_price' => $chat->product->price,
+        'agreed_price' => $chat->product->price,
+        'product_condition' => $chat->product->condition ?? 'Bekas Seperti Baru',
+        'buyer_name' => $chat->buyer->name,
+        'image' => $imageUrl,
+        'payments' => $payments
+    ];
 @endphp
 
 <script>
 window.purchaseData = {
-    listingPrice: {{ $purchase['product_price'] }}
+    listingPrice: {{ $purchase['product_price'] }},
+    payments: @json($purchase['payments'])
 };
 </script>
 
-<div class="form-layout">
+<form action="{{ route('chat.sendPurchaseLink', $chat->id) }}" method="POST" class="form-layout" id="purchaseLinkForm">
+    @csrf
+    <!-- Hidden input untuk menampung JSON metode pembayaran dari JS -->
+    <input type="hidden" name="payment_methods" id="paymentMethodsInput">
 
     {{-- Info Produk --}}
     <div class="section-card" id="sectionProductInfo">
@@ -85,9 +98,9 @@ window.purchaseData = {
 
         <div class="price-input-wrap">
             <span class="price-prefix">Rp</span>
-            <input type="text" id="agreedPrice" class="price-input"
+            <input type="text" name="deal_price" id="agreedPrice" class="price-input"
                    value="{{ number_format($purchase['agreed_price'], 0, ',', '.') }}" placeholder="0"
-                   inputmode="numeric" autocomplete="off">
+                   inputmode="numeric" autocomplete="off" required>
         </div>
 
         <div class="price-note" id="priceNote">
@@ -137,10 +150,10 @@ window.purchaseData = {
                     </div>
                 </div>
                 <div class="pm-actions">
-                    <button class="pm-btn pm-btn--edit" onclick="openEditModal('{{ $payment['id'] }}')">
+                    <button type="button" class="pm-btn pm-btn--edit" onclick="openEditModal('{{ $payment['id'] }}')">
                         <i class="bi bi-pencil"></i> Edit
                     </button>
-                    <button class="pm-btn pm-btn--delete" onclick="deleteMethod('{{ $payment['id'] }}')">
+                    <button type="button" class="pm-btn pm-btn--delete" onclick="deleteMethod('{{ $payment['id'] }}')">
                         <i class="bi bi-trash3"></i> Hapus
                     </button>
                 </div>
@@ -149,7 +162,7 @@ window.purchaseData = {
         </div>
 
         <div class="btn-add-pm-wrapper" style="margin-top: 16px;">
-            <button class="add-method-btn" id="addMethodBtn" onclick="openAddModal()">
+            <button type="button" class="add-method-btn" id="addMethodBtn" onclick="openAddModal()">
                 <i class="bi bi-plus-circle"></i>
                 Tambah Metode Pembayaran
             </button>
@@ -212,7 +225,7 @@ window.purchaseData = {
                 <p class="section-desc">Tambahkan catatan atau instruksi untuk buyer.</p>
             </div>
         </div>
-        <textarea class="note-textarea" id="sellerNote"
+        <textarea class="note-textarea" name="note" id="sellerNote"
                   placeholder="Contoh: Transfer ke BCA ya kak!"
                   maxlength="200"></textarea>
         <p class="note-char-counter">
@@ -222,7 +235,7 @@ window.purchaseData = {
 
     {{-- Informasi Collapsible --}}
     <div class="info-collapsible" id="infoCollapsible">
-        <button class="info-collapse-btn" id="infoToggleBtn" aria-expanded="true">
+        <button type="button" class="info-collapse-btn" id="infoToggleBtn" aria-expanded="true">
             <div class="info-btn-left">
                 <i class="bi bi-info-circle-fill info-icon-blue"></i>
                 <span>Informasi</span>
@@ -239,12 +252,12 @@ window.purchaseData = {
         </div>
     </div>
 
-    <button class="submit-link-btn" id="submitLinkBtn">
+    <button type="button" class="submit-link-btn" id="submitLinkBtn">
         <i class="bi bi-send-fill"></i>
         Kirim Link ke Buyer
     </button>
 
-</div>
+</form>
 
 {{-- MODALS --}}
 {{-- Modal Tambah/Edit Metode Pembayaran --}}
@@ -252,7 +265,7 @@ window.purchaseData = {
     <div class="modal-card">
         <div class="modal-header-custom">
             <h3 class="modal-title-custom" id="modalMethodTitle">Tambah Metode Pembayaran</h3>
-            <button class="modal-close-btn" id="closeMethodModal" aria-label="Tutup">
+            <button type="button" class="modal-close-btn" id="closeMethodModal" aria-label="Tutup">
                 <i class="bi bi-x-lg"></i>
             </button>
         </div>
@@ -282,13 +295,13 @@ window.purchaseData = {
             <div class="form-group-custom">
                 <label class="form-label-custom">Atas Nama <span class="required-star">*</span></label>
                 <input type="text" class="form-input-custom" id="methodOwner"
-                       value="{{ Auth::user()->name ?? 'Andi Pratama' }}" placeholder="Nama pemilik rekening">
+                       value="{{ auth()->user()->name ?? 'Andi Pratama' }}" placeholder="Nama pemilik rekening">
             </div>
 
         </div>
         <div class="modal-footer-custom">
-            <button class="btn-modal-cancel" id="cancelMethodModal">Batal</button>
-            <button class="btn-modal-submit" id="saveMethodBtn">
+            <button type="button" class="btn-modal-cancel" id="cancelMethodModal">Batal</button>
+            <button type="button" class="btn-modal-submit" id="saveMethodBtn">
                 <i class="bi bi-check-lg"></i> Simpan
             </button>
         </div>
@@ -300,7 +313,7 @@ window.purchaseData = {
     <div class="modal-card modal-card--sm">
         <div class="modal-header-custom">
             <h3 class="modal-title-custom">Konfirmasi Kirim Link</h3>
-            <button class="modal-close-btn" id="closeConfirmModal" aria-label="Tutup">
+            <button type="button" class="modal-close-btn" id="closeConfirmModal" aria-label="Tutup">
                 <i class="bi bi-x-lg"></i>
             </button>
         </div>
@@ -333,8 +346,9 @@ window.purchaseData = {
             </div>
         </div>
         <div class="modal-footer-custom">
-            <button class="btn-modal-cancel" id="cancelSendBtn">Periksa Lagi</button>
-            <button class="btn-modal-submit" id="confirmSendBtn">
+            <button type="button" class="btn-modal-cancel" id="cancelSendBtn">Periksa Lagi</button>
+            <!-- Diubah menjadi type button karena eksekusi submit dilakukan via Javascript -->
+            <button type="button" class="btn-modal-submit" id="confirmSendBtn">
                 <i class="bi bi-send-fill"></i> Ya, Kirim Sekarang
             </button>
         </div>
@@ -357,7 +371,7 @@ window.purchaseData = {
             </p>
         </div>
         <div class="modal-footer-custom" style="justify-content:center; padding-top:0; padding-bottom:24px">
-            <a href="{{ route('chat.session') }}?pov=seller&link_sent=true" class="btn-modal-submit" id="backToChatBtn">
+            <a href="{{ route('chat.session', $chat->id) }}?pov=seller&link_sent=true" class="btn-modal-submit" id="backToChatBtn">
                 <i class="bi bi-chat-dots"></i> Kembali ke Chat
             </a>
         </div>

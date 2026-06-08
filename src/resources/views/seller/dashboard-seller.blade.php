@@ -173,12 +173,6 @@ $sellerProducts = [
                             <a href="{{ route('seller.product.edit', $product['id']) }}" class="btn-action btn-detail-edit" title="Edit Produk">
                                 <i class="bi bi-pencil"></i> Edit
                             </a>
-                            
-                            @if($product['status_class'] === 'status-dijual')
-                                <button class="btn-action btn-status-toggle btn-tutup-lapak" data-id="{{ $product['id'] }}" data-name="{{ $product['name'] }}" data-action="tutup" title="Tutup Lapak">
-                                    <i class="bi bi-lock"></i> Tutup
-                                </button>
-                            @endif
 
                             <button class="btn-action btn-status-toggle btn-hapus-produk" data-id="{{ $product['id'] }}" data-name="{{ $product['name'] }}" data-action="hapus" title="Hapus Produk">
                                 <i class="bi bi-trash"></i> Hapus
@@ -204,7 +198,7 @@ $sellerProducts = [
     </table>
 
     {{-- =============================================
-         STATUS LEGEND (Terintegrasi di dalam Wrapper)
+         STATUS LEGEND
          ============================================= --}}
     <div class="table-footer-legend">
         <div class="legend-header">Keterangan Status:</div>
@@ -234,7 +228,7 @@ $sellerProducts = [
 </div>
 
 {{-- =============================================
-     MODAL: KONFIRMASI AKSI (HAPUS / TUTUP LAPAK)
+     MODAL: KONFIRMASI AKSI (HAPUS)
      ============================================= --}}
 <div class="modal-overlay" id="modalActionSeller">
     <div class="modal-card">

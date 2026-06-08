@@ -36,7 +36,7 @@
 {{-- HEADER --}}
 <section class="page-header-section">
     <div>
-        <h1 class="page-title">Profil Anda</h1>
+        <h1 class="page-title">Profil Saya</h1>
         <p class="page-subtitle">
             Informasi lengkap mengenai pengguna.
         </p>
@@ -48,9 +48,9 @@
 
     <div class="profile-header">
 
-        <div class="profile-avatar">
-            <img src="{{ $user['avatar'] }}"
-                 alt="{{ $user['name'] }}">
+        {{-- AVATAR ICON --}}
+        <div class="profile-avatar-icon">
+            <i class="bi bi-person-fill"></i>
         </div>
 
         <div class="profile-info">
@@ -58,24 +58,24 @@
             <h2>{{ $user['name'] }}</h2>
 
             <div class="profile-role-list">
-
                 @foreach($user['role'] as $role)
                     <span class="role-badge">
                         {{ $role }}
                     </span>
                 @endforeach
-
             </div>
 
-            <p class="profile-email">
-                <i class="bi bi-envelope"></i>
-                {{ $user['email'] }}
-            </p>
-
-            <p class="profile-joined">
-                <i class="bi bi-calendar-event"></i>
-                Bergabung sejak {{ $user['joined'] }}
-            </p>
+            <div class="profile-meta">
+                <span class="profile-email">
+                    <i class="bi bi-envelope"></i>
+                    {{ $user['email'] }}
+                </span>
+                <span class="meta-divider">•</span>
+                <span class="profile-joined">
+                    <i class="bi bi-calendar-event"></i>
+                    Bergabung {{ $user['joined'] }}
+                </span>
+            </div>
 
         </div>
 
@@ -88,7 +88,6 @@
             <div class="stat-icon blue">
                 <i class="bi bi-bag"></i>
             </div>
-
             <div>
                 <h3>{{ $user['products'] }}</h3>
                 <p>Produk Dijual</p>
@@ -96,10 +95,9 @@
         </div>
 
         <div class="stat-card">
-            <div class="stat-icon green">
+            <div class="stat-icon blue">
                 <i class="bi bi-graph-up"></i>
             </div>
-
             <div>
                 <h3>{{ $user['transactions'] }}</h3>
                 <p>Transaksi Selesai</p>
@@ -108,12 +106,24 @@
 
         @if($isSeller)
         <div class="stat-card">
-            <div class="stat-icon yellow">
+            <div class="stat-icon blue">
                 <i class="bi bi-star"></i>
             </div>
-
             <div>
-                <h3>{{ $user['rating'] }}</h3>
+                <h3 class="rating-wrapper">
+                    {{ $user['rating'] }}
+                    <span class="rating-stars">
+                        @for($i = 1; $i <= 5; $i++)
+                            @if($user['rating'] >= $i)
+                                <i class="bi bi-star-fill"></i>
+                            @elseif($user['rating'] >= $i - 0.5)
+                                <i class="bi bi-star-half"></i>
+                            @else
+                                <i class="bi bi-star"></i>
+                            @endif
+                        @endfor
+                    </span>
+                </h3>
                 <p>{{ $user['reviews'] }} Ulasan</p>
             </div>
         </div>
@@ -133,13 +143,11 @@
         </div>
 
         <div class="detail-value">
-
             @foreach($user['role'] as $role)
                 <span class="role-pill">
                     {{ $role }}
                 </span>
             @endforeach
-
         </div>
     </div>
 
@@ -150,7 +158,7 @@
         </div>
 
         <div class="detail-value">
-            <span class="status-pill">
+            <span class="status-pill status-{{ strtolower($user['status']) }}">
                 {{ $user['status'] }}
             </span>
         </div>
@@ -169,7 +177,7 @@
 
     <div class="detail-row">
         <div class="detail-label">
-            <i class="bi bi-calendar-check"></i>
+            <i class="bi bi-calendar-event"></i>
             Bergabung
         </div>
 

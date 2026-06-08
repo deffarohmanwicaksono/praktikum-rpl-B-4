@@ -1,4 +1,8 @@
 /* ==============================================
+   SeMart - History
+   ============================================== */
+
+/* ==============================================
    PAGE HEADER STRUCTURE
    ============================================== */
 .page-header-section {
@@ -100,7 +104,7 @@
 }
 
 /* ==============================================
-   TABLE RIWAYAT LAYOUT (GLOBAL & SINKRON)
+   TABLE RIWAYAT LAYOUT (GLOBAL)
    ============================================== */
 .table-wrapper.full-width {
     background: var(--white);
@@ -109,6 +113,7 @@
     box-shadow: var(--shadow-card);
     overflow: hidden;
     margin-bottom: 30px;
+    width: 100%;
 }
 
 .purchase-table, .sales-table {
@@ -130,12 +135,10 @@
     letter-spacing: 0.2px;
     text-align: center;
     text-transform: uppercase;
+    white-space: nowrap;
 }
 
-/* ==============================================
-   PENYESUAIAN LEBAR KOLOM (FIX HEADER CENTER)
-   ============================================== */
-
+/* Lebar Kolom Header */
 .purchase-table th.col-id, .sales-table th.col-id { width: 16%; }
 .purchase-table th.col-barang, .sales-table th.col-barang { width: 32%; }
 .purchase-table th.col-tanggal, .sales-table th.col-tanggal { width: 15%; }
@@ -143,7 +146,7 @@
 .purchase-table th.col-status, .sales-table th.col-status { width: 12%; }
 .purchase-table th.col-aksi, .sales-table th.col-aksi { width: 12%; }
 
-/* Tambahkan ini jika isi data (td) ID, Status, dan Aksi ingin rapi di tengah juga */
+/* Perataan Kolom Body */
 .purchase-table tbody td.col-id,
 .purchase-table tbody td.col-status,
 .purchase-table tbody td.col-aksi,
@@ -153,16 +156,15 @@
     text-align: center;
 }
 
-/* Padding Sisi Ujung Tabel */
 .purchase-table tbody td:first-child, .sales-table tbody td:first-child { padding-left: 20px; }
 .purchase-table tbody td:last-child, .sales-table tbody td:last-child { padding-right: 20px; }
 
-/* Baris Tabel & Efek Hover */
+/* Baris Tabel & Hover */
 .purchase-row, .sales-row {
     border-bottom: 1px solid var(--border-gray);
     transition: background 0.15s;
 }
-/* PERBAIKAN: Ditambahkan .sales-row:last-child agar border bawah hilang di kedua tabel */
+
 .purchase-row:last-child, .sales-row:last-child { border-bottom: none; }
 .purchase-row:hover, .sales-row:hover { background: var(--soft-bg); }
 
@@ -179,7 +181,6 @@
     font-size: 12px;
 }
 
-/* PERBAIKAN: Ditambahkan context sales untuk icon ID */
 .purchase-table .col-id i, .sales-table .col-id i { 
     color: var(--primary-blue); 
     font-size: 12px; 
@@ -220,34 +221,19 @@
     line-height: 1.4;
 }
 
-/* Informasi Pembeli / Penjual */
 .seller-info-text {
     font-size: 11.5px;
     color: var(--gray-text);
 }
+
 .seller-info-text strong { color: var(--primary-blue); }
 
 /* Date Components */
-.date-time-wrapper {
-    display: flex;
-    flex-direction: column;
-}
+.date-time-wrapper { display: flex; flex-direction: column; }
+.date-text-main { font-weight: 600; color: var(--dark-text); }
+.time-text-sub { font-size: 11px; color: var(--gray-text); }
 
-.date-text-main {
-    font-weight: 600;
-    color: var(--dark-text);
-}
-
-.time-text-sub {
-    font-size: 11px;
-    color: var(--gray-text);
-}
-
-.price-text-new {
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--primary-blue);
-}
+.price-text-new { font-size: 14px; font-weight: 700; color: var(--primary-blue); }
 
 /* ==============================================
    STATUS BADGES
@@ -263,42 +249,13 @@
     white-space: nowrap;
 }
 
-.status-menunggu {
-    background: var(--status-menunggu-bg);
-    border-color: var(--status-menunggu-border);
-    color: var(--status-menunggu-text);
-}
-
-.status-selesai {
-    background: var(--status-selesai-bg);
-    border-color: var(--status-selesai-border);
-    color: var(--status-selesai-text);
-}
-
-.status-gagal {
-    background: var(--status-gagal-bg);
-    border-color: var(--status-gagal-border);
-    color: var(--status-gagal-text);
-}
+.status-menunggu { background: var(--status-menunggu-bg); border-color: var(--status-menunggu-border); color: var(--status-menunggu-text); }
+.status-selesai { background: var(--status-selesai-bg); border-color: var(--status-selesai-border); color: var(--status-selesai-text); }
+.status-gagal { background: var(--status-gagal-bg); border-color: var(--status-gagal-border); color: var(--status-gagal-text); }
 
 /* ==============================================
-   ACTION BUTTONS & ALIGNMENT (PERBAIKAN SECARA URUTAN)
+   ACTION BUTTONS & ALIGNMENT (GLOBAL)
    ============================================== */
-.purchase-table tbody td:nth-last-child(2),
-.sales-table tbody td:nth-last-child(2),
-.purchase-table tbody td:last-child,
-.sales-table tbody td:last-child {
-    text-align: center;
-}
-
-/* Tetap mempertahankan selektor kelas bawaanmu sebagai backup */
-.purchase-table tbody td.col-status,
-.purchase-table tbody td.col-aksi,
-.sales-table tbody td.col-status,
-.sales-table tbody td.col-aksi {
-    text-align: center;
-}
-
 .action-buttons-group {
     display: flex;
     flex-direction: column; 
@@ -329,6 +286,7 @@
     border-color: rgba(59,157,248,0.4);
     color: var(--primary-blue);
 }
+
 .btn-action.btn-detail-view:hover {
     background: var(--light-blue);
     border-color: var(--primary-blue);
@@ -338,41 +296,10 @@
    EMPTY STATE PATTERN
    ============================================== */
 .empty-state-cell { background: var(--white) !important; }
-.no-results-inner-new {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 50px 20px;
-}
-
-.empty-icon-wrap {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    background: rgba(59,157,248,0.08);
-    color: var(--primary-blue);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 26px;
-    margin-bottom: 12px;
-}
-
-.no-results-title-new {
-    font-size: 15px;
-    font-weight: 700;
-    color: var(--dark-text);
-    margin: 0 0 4px 0;
-}
-
-.no-results-desc-new {
-    font-size: 13px;
-    color: var(--gray-text);
-    margin: 0;
-    max-width: 360px;
-    text-align: center;
-}
+.no-results-inner-new { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 50px 20px; }
+.empty-icon-wrap { width: 60px; height: 60px; border-radius: 50%; background: rgba(59,157,248,0.08); color: var(--primary-blue); display: flex; align-items: center; justify-content: center; font-size: 26px; margin-bottom: 12px; }
+.no-results-title-new { font-size: 15px; font-weight: 700; color: var(--dark-text); margin: 0 0 4px 0; }
+.no-results-desc-new { font-size: 13px; color: var(--gray-text); margin: 0; max-width: 360px; text-align: center; }
 
 /* ==============================================
    MODAL PLATFORM SYSTEM STYLE
@@ -399,8 +326,6 @@
     box-shadow: 0 20px 50px rgba(36,52,71,0.15);
     animation: slideUpModal 0.2s cubic-bezier(0.16, 1, 0.3, 1) both;
     overflow: hidden;
-    
-    /* PERBAIKAN: Batasi tinggi modal dan aktifkan flex agar konten di dalamnya bisa di-scroll */
     max-height: 85vh; 
     display: flex;
     flex-direction: column;
@@ -417,27 +342,13 @@
     justify-content: space-between;
     padding: 18px 24px;
     border-bottom: 1px solid var(--border-gray);
-    /* PERBAIKAN: Mencegah header mengecil saat konten di bawahnya kepanjangan */
     flex-shrink: 0; 
 }
 
 .modal-title-custom { font-size: 15px; font-weight: 700; color: var(--dark-text); margin: 0; }
-.modal-close-btn {
-    width: 30px;
-    height: 30px;
-    background: var(--light-gray);
-    border: none;
-    border-radius: 6px;
-    color: var(--gray-text);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.15s;
-}
+.modal-close-btn { width: 30px; height: 30px; background: var(--light-gray); border: none; border-radius: 6px; color: var(--gray-text); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
 .modal-close-btn:hover { background: #FEE2E2; color: #DC2626; }
 
-/* PERBAIKAN: Mengaktifkan Scrollbar vertical yang rapi di area body */
 .modal-body-simple { 
     padding: 24px; 
     overflow-y: auto; 
@@ -445,14 +356,8 @@
     scroll-behavior: smooth;
 }
 
-/* PERBAIKAN: Kustomisasi Tampilan Scrollbar Internal Modal agar minimalis */
-.modal-body-simple::-webkit-scrollbar {
-    width: 6px;
-}
-.modal-body-simple::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0.15);
-    border-radius: 10px;
-}
+.modal-body-simple::-webkit-scrollbar { width: 6px; }
+.modal-body-simple::-webkit-scrollbar-thumb { background-color: rgba(0, 0, 0, 0.15); border-radius: 10px; }
 
 .text-left-align { text-align: left; }
 
@@ -466,67 +371,36 @@
     margin-bottom: 20px;
 }
 
-.modal-label-id { font-family: monospace; font-weight: 700; font-size: 13.5px; color: var(--dark-text); }
+.modal-label-id { font-weight: 700; font-size: 13.5px; color: var(--dark-text); }
 .detail-info-list { display: flex; flex-direction: column; }
 .info-item { padding: 12px 0; border-bottom: 1px solid var(--border-gray); }
 .info-item:first-child { padding-top: 0; }
 .info-item.no-border { border-bottom: none; padding-bottom: 0; }
 
-.info-item label {
-    display: block;
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--gray-text);
-    text-transform: uppercase;
-    letter-spacing: 0.3px;
-    margin-bottom: 4px;
-}
-
+.info-item label { display: block; font-size: 11px; font-weight: 600; color: var(--gray-text); text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 4px; }
 .info-value { font-size: 13.5px; color: var(--dark-text); margin: 0; font-weight: 500; }
 .info-value.text-bold { font-weight: 700; }
 .info-value.price-highlight { font-size: 16px; font-weight: 700; color: var(--primary-blue); }
 
-.note-box-container {
-    background: var(--light-gray);
-    padding: 10px 14px;
-    border-radius: 8px;
-    margin-top: 4px;
-    border-left: 3px solid var(--secondary-blue);
-}
-
+.note-box-container { background: var(--light-gray); padding: 10px 14px; border-radius: 8px; margin-top: 4px; border-left: 3px solid var(--secondary-blue); }
 .note-text-value { margin: 0; font-size: 12.5px; color: var(--dark-text); line-height: 1.5; font-style: italic; }
 
-/* ==============================================
-   BUKTI PEMBAYARAN
-   ============================================== */
-
-/* Pembungkus Gambar Bukti Pembayaran */
+/* BUKTI PEMBAYARAN */
 .payment-proof-wrapper {
     margin-top: 8px;
     border-radius: 8px;
     overflow: hidden;
     border: 1px solid var(--border-gray);
     background: var(--light-gray);
-    
-    /* PERBAIKAN: Tinggi dibatasi 160px agar lebih proporsional dengan modal */
     height: 160px; 
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.payment-proof-image {
-    width: 100%;
-    height: 100%;
-    object-fit: contain; /* Contain agar gambar bukti transfer tidak terpotong (proporsional) */
-    cursor: pointer;
-    transition: transform 0.2s ease;
-}
-.payment-proof-image:hover {
-    transform: scale(1.02); /* Efek membesar sedikit saat di-hover */
-}
+.payment-proof-image { width: 100%; height: 100%; object-fit: contain; cursor: pointer; transition: transform 0.2s ease; }
+.payment-proof-image:hover { transform: scale(1.02); }
 
-/* Bagian Bawah Modal & Tombol Aksi */
 .modal-footer-custom {
     padding: 16px 24px;
     background: var(--soft-bg);
@@ -534,7 +408,6 @@
     display: flex;
     justify-content: flex-end;
     gap: 12px;
-     
 }
 
 .btn-modal-cancel {
@@ -548,279 +421,89 @@
     cursor: pointer;
     transition: background 0.15s;
 }
-.btn-modal-cancel:hover { 
-    background: var(--light-gray); 
-}
+.btn-modal-cancel:hover { background: var(--light-gray); }
 
-.btn-modal-submit {
-    padding: 9px 16px;
-    border: none;
-    color: var(--white);
-    border-radius: 8px;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.15s;
-}
-
+.btn-modal-submit { padding: 9px 16px; border: none; color: var(--white); border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: background 0.15s; }
 .btn-modal-submit.bg-success { background: #10B981; }
 .btn-modal-submit.bg-success:hover { background: #059669; }
 
-/* Icon Konfirmasi di Modal Tutup Sales */
-.modal-icon-wrap {
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-    margin: 0 auto 16px auto;
-}
-
-.modal-confirm-text {
-    text-align: center;
-    font-size: 14px;
-    color: var(--dark-text);
-    line-height: 1.5;
-    margin: 0;
-}
-
-/* ==============================================
-   LIGHTBOX IMAGE VIEWER (GLOBAL)
-   ============================================== */
+/* LIGHTBOX IMAGE VIEWER (GLOBAL) */
 .lightbox-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(36, 52, 71, 0.9); /* Latar gelap pekat */
-    z-index: 3000; /* Di atas modal detail */
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 30px;
-    backdrop-filter: blur(8px); /* Blur lebih kuat */
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.25s ease;
+    position: fixed; inset: 0; background: rgba(36, 52, 71, 0.9); z-index: 3000;
+    display: none; align-items: center; justify-content: center; padding: 30px;
+    backdrop-filter: blur(8px); opacity: 0; visibility: hidden; transition: all 0.25s ease;
 }
 
-.lightbox-overlay.open {
-    display: flex;
-    opacity: 1;
-    visibility: visible;
-}
-
-.lightbox-content {
-    position: relative;
-    max-width: 90vw;
-    max-height: 90vh;
-}
-
-.lightbox-image {
-    width: 100%;
-    height: 100%;
-    max-width: 100%;
-    max-height: 90vh;
-    object-fit: contain; /* Contain agar gambar bukti transfer tidak terpotong (proporsional) */
-    display: block;
-    border-radius: 8px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-}
-
-.lightbox-close {
-    position: absolute;
-    top: -40px;
-    right: 0;
-    background: none;
-    border: none;
-    font-size: 36px;
-    color: var(--white);
-    cursor: pointer;
-    line-height: 1;
-}
-
-/* Tombol Tutup Transaksi dan Ulasan*/
-.btn-action.btn-close-sale {
-    background: var(--primary-blue);
-    border-color: var(--primary-blue);
-    color: var(--white);
-}
-.btn-action.btn-close-sale:hover {
-    background: var(--hover-blue);
-    border-color: var(--hover-blue);
-    box-shadow: 0 2px 8px rgba(59, 157, 248, 0.25);
-}
-
-.btn-action.btn-review-write {
-    background: var(--primary-blue);
-    border-color: var(--primary-blue);
-    color: var(--white);
-}
-.btn-action.btn-review-write:hover {
-    background: var(--hover-blue);
-    border-color: var(--hover-blue);
-    box-shadow: 0 2px 8px rgba(59, 157, 248, 0.25);
-}
+.lightbox-overlay.open { display: flex; opacity: 1; visibility: visible; }
+.lightbox-content { position: relative; max-width: 90vw; max-height: 90vh; }
+.lightbox-image { width: 100%; height: 100%; max-width: 100%; max-height: 90vh; object-fit: contain; display: block; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+.lightbox-close { position: absolute; top: -40px; right: 0; background: none; border: none; font-size: 36px; color: var(--white); cursor: pointer; line-height: 1; }
 
 /* ==============================================
-   ULASAN FORM GRAPHICS STYLES
+   RESPONSIVE DESIGN SYSTEM
    ============================================== */
 
-.product-review-header {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    background: var(--soft-bg);
-    padding: 12px;
-    border-radius: 12px;
-    margin-bottom: 20px;
-    border: 1px dashed rgba(59, 157, 248, 0.3);
+/* LARGE DESKTOP */
+@media (min-width: 1400px) {
+    .page-header-section { margin-top: 32px; margin-bottom: 28px; }
+    .page-title { font-size: 26px; }
+    .search-box { width: 360px; }
+    .purchase-table th, .sales-table th { font-size: 13px; padding: 16px 20px; }
+    .purchase-table tbody td, .sales-table tbody td { padding: 18px 20px; }
+    .modal-card { max-width: 520px; }
 }
 
-.review-avatar-wrap {
-    width: 50px;
-    height: 50px;
-    border-radius: 8px;
-    overflow: hidden;
-    border: 1px solid var(--border-gray);
-    flex-shrink: 0;
+/* STANDARD DESKTOP */
+@media (max-width: 1399px) and (min-width: 1200px) {
+    .page-title { font-size: 24px; }
+    .search-box { width: 300px; }
 }
 
-.review-avatar { 
-    width: 100%; 
-    height: 100%; 
-    object-fit: cover; 
+/* LAPTOP */
+@media (max-width: 1199px) and (min-width: 992px) {
+    .search-box { width: 260px; }
+    .purchase-table th, .sales-table th { font-size: 11.5px; padding: 12px 14px; }
+    .purchase-table tbody td, .sales-table tbody td { padding: 14px; }
 }
 
-.review-meta-wrap { 
-    display: flex; 
-    flex-direction: column; 
-    gap: 2px; 
+/* SMALL LAPTOP / TABLET LANDSCAPE */
+@media (max-width: 991px) {
+    .toolbar-section { flex-direction: column-reverse; align-items: stretch; gap: 14px; }
+    .toolbar-left-group { width: 100%; justify-content: space-between; }
+    .search-box { flex: 1; width: auto; }
+    
+    .table-wrapper { overflow-x: auto; }
+    .purchase-table, .sales-table { min-width: 800px; }
 }
 
-.review-product-title { 
-    font-size: 13.5px; 
-    font-weight: 700; 
-    color: var(--dark-text); 
-    margin: 0; 
-    line-height: 1.4; 
+/* TABLET / LARGE MOBILE */
+@media (max-width: 767px) {
+    .page-header-section { margin-top: 16px; margin-bottom: 16px; }
+    .page-title { font-size: 20px; }
+    
+    .toolbar-left-group { flex-direction: column; align-items: stretch; }
+    .filter-dropdown { flex: 1; justify-content: center; }
+    
+    .modal-header-custom { padding: 16px 20px; }
+    .modal-body-simple { padding: 20px 20px 16px; }
+    .modal-footer-custom { padding: 14px 20px; justify-content: stretch; }
+    .btn-modal-cancel, .btn-modal-submit { flex: 1; text-align: center; }
 }
 
-.review-product-seller { 
-    font-size: 12px; 
-    color: var(--gray-text); 
-    margin: 0; 
+/* SMALL MOBILE */
+@media (max-width: 576px) {
+    .product-avatar-wrap { width: 40px; height: 40px; }
+    .product-name-text { font-size: 12.5px; }
+    .seller-info-text { font-size: 11px; }
+    .price-text-new { font-size: 13px; }
+    .status-badge { padding: 4px 8px; font-size: 10.5px; }
+    
+    .modal-trx-badge-wrapper {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    .info-value { font-size: 13px; }
+    .info-value.price-highlight { font-size: 15px; }
+    .payment-proof-wrapper { height: 130px; }
 }
-
-.rating-input-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 16px 0;
-    background: var(--white);
-    border-radius: 12px;
-    border: 1px solid var(--border-gray);
-    margin-bottom: 20px;
-}
-
-.rating-field-label {
-    align-self: flex-start;
-    padding-left: 16px;
-    font-size: 12px;
-    font-weight: 700;
-    color: var(--dark-text);
-    margin-bottom: 10px;
-}
-
-.review-textarea-container .rating-field-label {
-    padding-left: 0;
-}
-
-.star-rating-row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    font-size: 32px;
-    color: var(--border-gray);
-    cursor: pointer;
-    margin-bottom: 8px;
-}
-
-.review-star-item {
-    transition: transform 0.1s ease, color 0.15s ease;
-}
-.review-star-item:hover {
-    transform: scale(1.15);
-}
-.review-star-item.active {
-    color: var(--primary-blue);
-}
-
-.rating-hint-text {
-    font-size: 11.5px;
-    color: var(--gray-text);
-    margin: 0;
-    font-weight: 500;
-}
-
-.review-textarea-container {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    margin-bottom: 8px;
-}
-
-.review-custom-textarea {
-    width: 100%;
-    border: 1.5px solid var(--border-gray);
-    border-radius: 10px;
-    padding: 12px;
-    font-family: inherit;
-    font-size: 13px;
-    color: var(--dark-text);
-    outline: none;
-    resize: none;
-    transition: border-color 0.2s;
-    line-height: 1.5;
-}
-
-.review-custom-textarea:focus {
-    border-color: var(--primary-blue);
-    box-shadow: 0 0 0 3px rgba(59,157,248,0.12);
-}
-
-.modal-footer-custom {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    padding: 14px 24px 18px;
-    border-top: 1px solid var(--border-gray);
-    background: #FAFAFA;
-}
-
-.btn-modal-cancel {
-    padding: 9px 20px;
-    background: var(--white);
-    border: 1.5px solid var(--border-gray);
-    border-radius: 10px;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--gray-text);
-    cursor: pointer;
-    transition: all 0.15s;
-}
-.btn-modal-cancel:hover { background: var(--light-gray); color: var(--dark-text); }
-
-.btn-modal-submit-primary {
-    padding: 9px 22px;
-    background: var(--primary-blue);
-    border: none;
-    border-radius: 10px;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--white);
-    cursor: pointer;
-    transition: background 0.15s;
-}
-.btn-modal-submit-primary:hover { background: var(--hover-blue); }

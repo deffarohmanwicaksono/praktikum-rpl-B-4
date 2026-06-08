@@ -15,9 +15,13 @@ return new class extends Migration
             $table->id();
             $table->foreignId('product_id')-> constrained('products');
             $table->foreignId('buyer_id')-> constrained('users');
+            $table->foreignId('purchase_link_id')->constrained('purchase_links')->cascadeOnDelete();
+
             $table->integer('quantity')-> default(1);
             $table->decimal('total_price', 18, 2);
             $table->enum('status', ['menunggu_pembayaran', 'dibayar', 'selesai', 'gagal'])->default('menunggu_pembayaran');
+            $table->string('payment_method')->nullable();
+            $table->string('payment_proof')->nullable();
             $table->timestamps();
         });
     }
