@@ -1,0 +1,682 @@
+/* ==============================================
+   SeMart Daftar Transaksi
+   ============================================== */
+
+/* ==============================================
+   PAGE HEADER & TOOLBAR
+   ============================================== */
+.page-header-section {
+    margin-bottom: 24px;
+    margin-top: 24px;
+}
+
+.page-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--dark-text);
+    letter-spacing: -0.3px;
+    margin-bottom: 4px;
+}
+
+.page-subtitle {
+    font-size: 13.5px;
+    color: var(--gray-text);
+    font-weight: 400;
+    margin: 0;
+}
+
+/* Toolbar (Search & Filters) */
+.toolbar-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.search-box {
+    position: relative;
+    width: 320px;
+    max-width: 100%;
+}
+
+.search-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--gray-text);
+    font-size: 14px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 10px 14px 10px 36px;
+    border: 1.5px solid var(--border-gray);
+    border-radius: 10px;
+    font-family: var(--font-main);
+    font-size: 13px;
+    color: var(--dark-text);
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    background: var(--white);
+}
+
+.search-input:focus {
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 3px rgba(59, 157, 248, 0.12);
+}
+
+.filter-box {
+    display: flex;
+    gap: 12px;
+}
+
+.filter-dropdown {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: var(--white);
+    border: 1.5px solid var(--border-gray);
+    border-radius: 10px;
+    padding: 0 14px;
+    height: 40px;
+    cursor: pointer;
+}
+
+.filter-icon {
+    color: var(--gray-text);
+    font-size: 14px;
+    margin-right: 8px;
+}
+
+.filter-select {
+    border: none;
+    background: transparent;
+    font-family: var(--font-main);
+    font-size: 13px;
+    color: var(--dark-text);
+    font-weight: 500;
+    outline: none;
+    cursor: pointer;
+    padding-right: 8px;
+}
+
+/* ==============================================
+   TWO-PANEL LAYOUT
+   ============================================== */
+.transaction-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 340px;
+    gap: 20px;
+    align-items: start;
+}
+
+/* =============================================
+   LEFT PANEL (Tabel Transaksi)
+   ============================================= */
+.panel-left {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-width: 0;
+}
+
+.table-wrapper {
+    background: var(--white);
+    border-radius: 14px;
+    border: 1px solid var(--border-gray);
+    box-shadow: var(--shadow-card);
+}
+
+.transactions-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-main);
+    font-size: 13px;
+    table-layout: fixed;
+}
+
+/* Table Head */
+.transactions-table thead tr {
+    background: var(--soft-bg);
+    border-bottom: 1.5px solid var(--border-gray);
+}
+
+.transactions-table thead th {
+    padding: 12px 6px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--gray-text);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: normal;
+    text-align: center;
+}
+
+.transactions-table th:first-child,
+.transactions-table td:first-child {
+    padding-left: 16px !important;
+}
+
+.transactions-table th:last-child,
+.transactions-table td:last-child {
+    padding-right: 16px !important;
+}
+
+/* Distribusi Lebar Kolom yang Baru (Total Pas 100%) */
+.col-produk {
+    width: 33%;
+}
+
+.col-buyer {
+    width: 20%;
+}
+
+.col-harga {
+    width: 17%;
+}
+
+.col-tanggal {
+    width: 15%;
+}
+
+.col-aksi {
+    width: 15%;
+}
+
+/* Atur perataan teks HANYA untuk isi tabel (tbody td) */
+.transactions-table tbody td.col-produk,
+.transactions-table tbody td.col-buyer {
+    text-align: left;
+}
+
+.transactions-table tbody td.col-harga,
+.transactions-table tbody td.col-tanggal,
+.transactions-table tbody td.col-aksi {
+    text-align: center;
+}
+
+/* Table Body */
+.transaction-row {
+    border-bottom: 1px solid var(--border-gray);
+    transition: background 0.15s;
+    cursor: pointer;
+}
+
+.transaction-row:last-child {
+    border-bottom: none;
+}
+
+.transaction-row:hover {
+    background: var(--soft-bg);
+}
+
+.transaction-row.active-row {
+    background: var(--light-blue) !important;
+}
+
+.transactions-table tbody td {
+    padding: 12px 6px;
+    vertical-align: middle;
+    word-wrap: break-word;
+}
+
+/* Product Info & Status Stack Layout */
+.product-cell {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+}
+
+.product-thumb {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: var(--light-gray);
+    border: 1px solid var(--border-gray);
+}
+
+.product-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.product-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+}
+
+.product-name {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--dark-text);
+    line-height: 1.3;
+    white-space: normal;
+}
+
+.product-cat-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 10.5px;
+    font-weight: 600;
+    background: var(--light-blue);
+    color: var(--primary-blue);
+    width: fit-content;
+}
+
+.product-trx-id {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--gray-text);
+    letter-spacing: 0.3px;
+}
+
+/* Seller info */
+.seller-name {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--dark-text);
+    line-height: 1.3;
+}
+
+.seller-handle {
+    display: block;
+    font-size: 11.5px;
+    color: var(--gray-text);
+    font-weight: 400;
+}
+
+/* Price */
+.price-text {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--dark-text);
+    white-space: nowrap;
+}
+
+/* Status Badges Berbentuk Tag Mini Kategori */
+.status-badge {
+    display: inline-block;
+    padding: 2.5px 8px;
+    border-radius: 12px;
+    font-size: 10.5px;
+    font-weight: 600;
+    width: fit-content;
+}
+
+.status-menunggu {
+    background: var(--status-menunggu-bg);
+    border-color: var(--status-menunggu-border);
+    color: var(--status-menunggu-text);
+}
+
+.status-selesai {
+    background: var(--status-selesai-bg);
+    border-color: var(--status-selesai-border);
+    color: var(--status-selesai-text);
+}
+
+.status-gagal {
+    background: var(--status-gagal-bg);
+    border-color: var(--status-gagal-border);
+    color: var(--status-gagal-text);
+}
+
+/* Buyer Cell */
+.person-cell {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.person-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.person-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--dark-text);
+    line-height: 1.2;
+}
+
+.person-handle {
+    font-size: 11.5px;
+    color: var(--gray-text);
+}
+
+/* Harga & Tanggal */
+.price-text {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--dark-text);
+}
+
+.date-cell {
+    text-align: center;
+}
+
+.date-text {
+    display: block;
+    font-weight: 600;
+    color: var(--dark-text);
+}
+
+.time-text {
+    display: block;
+    font-size: 11px;
+    color: var(--gray-text);
+    margin-top: 1px;
+}
+
+/* Detail Button (Tabel Kiri) */
+.btn-detail {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 6px 10px;
+    background: var(--white);
+    color: var(--primary-blue);
+    border: 1.5px solid rgba(59, 157, 248, 0.4);
+    border-radius: 8px;
+    font-family: var(--font-main);
+    font-size: 12px;
+    font-weight: 600;
+    transition: all 0.16s;
+    width: 100%;
+    cursor: pointer;
+}
+
+.btn-detail i {
+    font-size: 12px;
+}
+
+.btn-detail:hover {
+    background: var(--light-blue);
+    border-color: var(--primary-blue);
+}
+
+.btn-detail.active {
+    background: var(--primary-blue);
+    color: white;
+    border-color: var(--primary-blue);
+    box-shadow: 0 2px 8px rgba(59, 157, 248, 0.28);
+}
+
+/* ==============================================
+   TABLE FOOTER & PAGINATION
+   ============================================== */
+.table-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px;
+    background: var(--white);
+    border-radius: 12px;
+    border: 1px solid var(--border-gray);
+    box-shadow: var(--shadow-card);
+}
+
+.table-info {
+    font-size: 12.5px;
+    color: var(--gray-text);
+    font-weight: 500;
+}
+
+.pagination-wrap {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.page-btn {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    background: var(--white);
+    border: 1.5px solid var(--border-gray);
+    font-family: var(--font-main);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gray-text);
+    transition: all 0.15s;
+    cursor: pointer;
+}
+
+.page-btn:hover:not(:disabled) {
+    background: var(--soft-bg);
+    border-color: var(--primary-blue);
+    color: var(--primary-blue);
+}
+
+.page-btn.active {
+    background: var(--primary-blue);
+    border-color: var(--primary-blue);
+    color: white;
+    box-shadow: 0 2px 8px rgba(59, 157, 248, 0.28);
+}
+
+.page-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+/* ==============================================
+   RIGHT PANEL: Detail Transaksi
+   ============================================== */
+.panel-right {
+    position: sticky;
+    top: calc(var(--topbar-height) + 28px);
+    max-height: calc(100vh - var(--topbar-height) - 56px);
+    overflow-y: auto;
+}
+
+.detail-card {
+    background: var(--white);
+    border-radius: 14px;
+    border: 1px solid var(--border-gray);
+    box-shadow: var(--shadow-card);
+    padding: 20px;
+    animation: cardFadeIn 0.38s ease both;
+}
+
+@keyframes cardFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.detail-section-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--dark-text);
+    letter-spacing: -0.2px;
+    margin-bottom: 14px;
+}
+
+.detail-gallery {
+    margin-bottom: 16px;
+}
+
+.detail-main-img-wrap {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--light-gray);
+    border: 1px solid var(--border-gray);
+    aspect-ratio: 4 / 3;
+    width: 100%;
+    max-width: 360px;      
+    margin: 0 auto 16px auto;
+}
+
+.detail-main-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Informasi Produk */
+.detail-product-name {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--dark-text);
+    letter-spacing: -0.3px;
+    margin-bottom: 4px;
+    line-height: 1.3;
+}
+
+.detail-trx-id-inline {
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    color: var(--primary-blue);
+}
+
+.detail-trx-id {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--gray-text);
+    letter-spacing: 0.4px;
+    margin-bottom: 10px;
+}
+
+.detail-product-price {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--primary-blue);
+    letter-spacing: -0.4px;
+    margin-bottom: 16px;
+}
+
+/* Meta List Transaksi */
+.detail-meta-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.detail-meta-row {
+    display: grid;
+    grid-template-columns: 18px 80px 1fr;
+    align-items: start;
+    gap: 8px;
+    font-size: 12.5px;
+}
+
+.detail-meta-icon {
+    font-size: 14px;
+    color: var(--primary-blue);
+    margin-top: 1px;
+}
+
+.detail-meta-label {
+    font-weight: 500;
+    color: var(--gray-text);
+    line-height: 1.4;
+    white-space: nowrap;
+}
+
+.detail-meta-value {
+    font-weight: 600;
+    color: var(--dark-text);
+    line-height: 1.4;
+}
+
+.dv-name {
+    display: block;
+    font-weight: 600;
+    color: var(--dark-text);
+    line-height: 1.3;
+}
+
+.dv-handle {
+    display: block;
+    font-size: 11.5px;
+    color: var(--gray-text);
+    font-weight: 400;
+}
+
+/* ==============================================
+   RESPONSIVE — LARGE DESKTOP (min-width: 1400px)
+   ============================================== */
+@media (min-width: 1400px) {
+    .page-title { font-size: 24px; }
+    .trx-layout { grid-template-columns: minmax(0, 1fr) 400px; gap: 24px; }
+}
+
+/* ==============================================
+   RESPONSIVE — STANDARD DESKTOP (1200px - 1399px)
+   ============================================== */
+@media (max-width: 1399px) and (min-width: 1200px) {
+
+}
+
+/* ==============================================
+   RESPONSIVE — LAPTOP (992px - 1199px)
+   ============================================== */
+@media (max-width: 1199px) and (min-width: 992px) {
+    .trx-layout { grid-template-columns: minmax(0, 1fr) 320px; gap: 16px; }
+    .detail-card { padding: 20px 16px; }
+    .col-id { width: 28%; }
+    .col-user { width: 28%; }
+    .col-status { width: 20%; }
+    .col-total { display: none; } 
+    .col-aksi { width: 24%; }
+}
+
+/* ==============================================
+   RESPONSIVE — SMALL LAPTOP (max-width: 991px)
+   ============================================== */
+@media (max-width: 991px) {
+    .toolbar-section { flex-direction: column; align-items: stretch; gap: 12px; }
+    .search-box { width: 100%; }
+    .filter-box { width: 100%; justify-content: space-between; }
+    .filter-dropdown { flex: 1; justify-content: center; }
+    
+    .trx-layout { grid-template-columns: 1fr; }
+    .table-wrapper { overflow-x: auto; }
+    .trx-table { table-layout: auto; min-width: 700px; } 
+    
+    .panel-right { position: static; max-height: none; margin-top: 20px; }
+}
+
+/* ==============================================
+   RESPONSIVE — TABLET / LARGE MOBILE (max-width: 767px)
+   ============================================== */
+@media (max-width: 767px) {
+    .page-header-section { margin-top: 16px; margin-bottom: 16px; }
+    .page-title { font-size: 20px; }
+    .toolbar-section { gap: 10px; }
+    
+    .filter-box { flex-direction: column; gap: 8px; }
+    .table-footer { flex-direction: column; gap: 12px; text-align: center; }
+    .pagination-wrap { justify-content: center; }
+    
+    .detail-card { padding: 20px 16px; }
+    .detail-user-grid { grid-template-columns: 1fr; gap: 16px; }
+    
+    .trx-ref-id { font-size: 16px; }
+    .header-trx-top { flex-direction: column; align-items: flex-start; gap: 8px; }
+}

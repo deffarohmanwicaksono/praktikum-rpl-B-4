@@ -21,8 +21,9 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'phone_number',
         'password',
-        'role',
+        'roles',
     ];
 
     /**
@@ -45,10 +46,28 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'roles' => 'array',
         ];
     }
 
-        public function products()
+    // Helper method untuk cek role User
+    public function isAdmin(): bool
+    {
+        return in_array('admin', $this->roles ?? []);
+    }
+
+    public function isSeller(): bool
+    {
+        return in_array('seller', $this->roles ?? []);
+    }
+
+    public function isBuyer(): bool
+    {
+        return in_array('buyer', $this->roles ?? []);
+    }
+
+    // Relasi dengan model lain
+    public function products()
     {
         return $this->hasMany(Product::class);
     }
@@ -61,5 +80,10 @@ class User extends Authenticatable
     public function sellerChats()
     {
         return $this->hasMany(Chat::class, 'seller_id');
+    }
+
+    public function messages()
+    {
+        return $this->hasMany(Message::class, 'sender_id');
     }
 }

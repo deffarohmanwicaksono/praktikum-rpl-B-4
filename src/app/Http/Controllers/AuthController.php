@@ -29,14 +29,20 @@ class AuthController extends Controller
         ]);
 
         if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
-            return redirect()->route('home');
-        }
+                $request->session()->regenerate();
+                $user = Auth::user();
 
-        return back()->withErrors([
-            'login' => 'Email atau password salah.'
-        ]);
-    }
+            if ($user->isAdmin()) {
+                return redirect()->route('admin.dashboard-admin');
+            }
+
+                return redirect()->route('home');
+            }
+
+            return back()->withErrors([
+                'login' => 'Email atau password salah.'
+            ]);
+        }
 
     public function logout(Request $request)
     {

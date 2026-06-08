@@ -34,4 +34,14 @@ class Product extends Model
     {
         return $this->hasMany(Chat::class);
     }
+
+    public function purchaseLinks()
+    {
+        return $this->hasMany(PurchaseLink::class);
+    }
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
 }
