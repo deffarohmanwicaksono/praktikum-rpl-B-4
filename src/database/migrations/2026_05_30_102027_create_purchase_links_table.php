@@ -16,7 +16,9 @@ return new class extends Migration
             $table->foreignId('chat_id') ->constrained('chats') ->cascadeOnDelete();
             $table->string('token') ->unique();
             $table->decimal('deal_price', 18, 2);
-            $table->dateTime('expired_at');
+            $table->dateTime('expired_at');                          
+            $table->text('note')->nullable();
+            $table->json('payment_methods');
             $table->boolean('is_used')->default(false);
             $table->timestamps();
         });

@@ -21,6 +21,7 @@ class PurchaseLinkSeeder extends Seeder
                 'token' => 'SEMART-LINK-001',
                 'deal_price' => 200000,
                 'expired_at' => now()->addDays(3),
+                'payment_methods' => ['BCA', 'Dana'],
                 'is_used' => false
             ],
             [
@@ -28,6 +29,7 @@ class PurchaseLinkSeeder extends Seeder
                 'token' => 'SEMART-LINK-002',
                 'deal_price' => 3500000,
                 'expired_at' => now()->addDays(2),
+                'payment_methods' => ['BCA', 'Dana'],
                 'is_used' => true
             ],
             [
@@ -35,6 +37,7 @@ class PurchaseLinkSeeder extends Seeder
                 'token' => 'SEMART-LINK-003',
                 'deal_price' => 75000,
                 'expired_at' => now()->addDays(2),
+                'payment_methods' => ['ShopeePay'],
                 'is_used' => true
             ],
 
@@ -43,6 +46,7 @@ class PurchaseLinkSeeder extends Seeder
                 'token' => 'SEMART-LINK-004',
                 'deal_price' => 78000,
                 'expired_at' => now()->subDays(2),
+                'payment_methods' => ['ShopeePay'],
                 'is_used' => true
             ],
 
@@ -51,6 +55,7 @@ class PurchaseLinkSeeder extends Seeder
                 'token' => 'SEMART-LINK-005',
                 'deal_price' => 80000,
                 'expired_at' => now()->addDays(5),
+                'payment_methods' => ['ShopeePay'],
                 'is_used' => false
             ],
 
@@ -59,6 +64,7 @@ class PurchaseLinkSeeder extends Seeder
                 'token' => 'SEMART-LINK-006',
                 'deal_price' => 110000,
                 'expired_at' => now()->addDays(4),
+                'payment_methods' => ['BCA', 'BRI', 'Dana'],
                 'is_used' => false
             ],
 
@@ -67,6 +73,7 @@ class PurchaseLinkSeeder extends Seeder
                 'token' => 'SEMART-LINK-007',
                 'deal_price' => 1150000,
                 'expired_at' => now()->addDays(2),
+                'payment_methods' => ['BCA', 'Dana'],
                 'is_used' => false
             ],
 
@@ -75,6 +82,7 @@ class PurchaseLinkSeeder extends Seeder
                 'token' => 'SEMART-LINK-008',
                 'deal_price' => 75000,
                 'expired_at' => now()->subDay(),
+                'payment_methods' => ['BCA', 'Dana'],
                 'is_used' => false
             ],
 
@@ -83,6 +91,7 @@ class PurchaseLinkSeeder extends Seeder
                 'token' => 'SEMART-LINK-009',
                 'deal_price' => 60000,
                 'expired_at' => now()->addDay(),
+                'payment_methods' => ['BCA', 'BRI', 'Dana', 'ShopeePay'],
                 'is_used' => true
             ],
 
@@ -91,6 +100,7 @@ class PurchaseLinkSeeder extends Seeder
                 'token' => 'SEMART-LINK-010',
                 'deal_price' => 90000,
                 'expired_at' => now()->addDays(3),
+                'payment_methods' => ['BCA', 'Dana', 'ShopeePay'],
                 'is_used' => false
             ],
 
@@ -99,6 +109,7 @@ class PurchaseLinkSeeder extends Seeder
                 'token' => 'SEMART-LINK-011',
                 'deal_price' => 325000,
                 'expired_at' => now()->subDays(3),
+                'payment_methods' => ['BCA', 'BRI', 'Dana'],
                 'is_used' => true
             ],
 
@@ -107,6 +118,7 @@ class PurchaseLinkSeeder extends Seeder
                 'token' => 'SEMART-LINK-012',
                 'deal_price' => 170000,
                 'expired_at' => now()->addDays(7),
+                'payment_methods' => ['BCA', 'Dana'],
                 'is_used' => false
             ],
 
@@ -115,6 +127,7 @@ class PurchaseLinkSeeder extends Seeder
                 'token' => 'SEMART-LINK-013',
                 'deal_price' => 620000,
                 'expired_at' => now()->addDays(2),
+                'payment_methods' => ['BCA', 'Dana'],
                 'is_used' => true
             ],
         ];
@@ -122,7 +135,6 @@ class PurchaseLinkSeeder extends Seeder
         foreach ($dataPurchaseLinks as $link) {
             $chat = Chat::findOrFail( $link['chat_id']);
             $lastMessage = $chat->messages()->latest('created_at')->first();
-
             $linkDate = $lastMessage->created_at->copy()->addSeconds(rand(30, 600));
 
             PurchaseLink::create([

@@ -36,18 +36,18 @@ class PurchaseLink extends Model
         return $this->belongsTo(Chat::class);
     }
 
-    public function product()
-    {
-        return $this->belongsTo(Product::class);
-    }
-
-    public function seller()
-    {
-        return $this->belongsTo(User::class, 'seller_id');
-    }
-
     public function transaction()
     {
         return $this->hasOne(Transaction::class);
+    }
+
+    public function getProductAttribute()
+    {
+        return $this->chat->product;
+    }
+
+    public function getSellerAttribute()
+    {
+        return $this->chat->seller;
     }
 }
