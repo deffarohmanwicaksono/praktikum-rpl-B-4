@@ -11,4 +11,9 @@ class Review extends Model
         'rating',
         'comment',
     ];
+
+    public function transaction()
+    {
+        return $this->belongsTo(Transaction::class);
+    }
 }

@@ -87,7 +87,7 @@
                         <div class="seller-name-row">
 
                             <span class="seller-name">
-                                Andi Pratama
+                                {{ $product->user->name ?? 'Seller SeMart' }}
                             </span>
 
                             <span
