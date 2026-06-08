@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Chat;
+use App\Models\Product;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -13,7 +14,7 @@ class ChatSeeder extends Seeder
      */
     public function run(): void
     {
-        Chat::insert([
+        $chatData =[
             // Seller 4
             [
                 'buyer_id' => 2,
@@ -136,7 +137,24 @@ class ChatSeeder extends Seeder
                 'seller_id' => 31,
                 'product_id' => 25, // Gitar
             ],
+        ];
 
-        ]);
+        foreach ($chatData as $chat){
+            $product = Product::findOrFail(
+                $chat['product_id']
+            );
+
+            Chat::factory()->forProduct($product)->create([
+                'buyer_id' => $chat['buyer_id'],
+            ]);
+        }
+        
+
+        // Factory
+        $products = Product::all();
+        for ($i = 0; $i < 20; $i++) {
+            $product = $products->random();
+            Chat::factory()->forProduct($product)->create();
+        }
     }
 }
