@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\Message;
+use App\Models\Chat;
+use Carbon\Carbon;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -13,7 +15,7 @@ class MessageSeeder extends Seeder
      */
     public function run(): void
     {
-        Message::insert([
+        $messageData = [
             // CHAT 1
             [
                 'chat_id' => 1,
@@ -248,6 +250,54 @@ class MessageSeeder extends Seeder
                 'sender_id' => 31,
                 'message' => 'Masih tersedia dan senarnya baru diganti.'
             ],
-        ]);
+        ];
+
+        $currentChatId = null;
+        $currentTime = null;
+        foreach ($messageData as $message) {
+            if ($currentChatId !== $message['chat_id']) {
+                $chat = Chat::findOrFail($message['chat_id']);
+                $currentChatId = $message['chat_id'];
+                $currentTime = Carbon::parse(
+                    $chat->created_at
+                );
+            }
+
+            Message::create([
+                'chat_id' => $message['chat_id'],
+                'sender_id' => $message['sender_id'],
+                'message' => $message['message'],
+                'created_at' => $currentTime,
+                'updated_at' => $currentTime,
+            ]);
+
+            $currentTime = $currentTime->copy()
+                ->addSeconds(rand(30, 300));
+        }
+
+        // Factory - untuk generate message di chat yang sudah ada, tapi belum memiliki message sama sekali
+        $emptyChats = Chat::doesntHave('messages')->get();
+
+        foreach ($emptyChats as $chat) {
+            $messageCount = rand(2, 5);
+            $currentTime = $chat->created_at;
+
+            for ($i = 1; $i <= $messageCount; $i++) {
+
+                $senderId = ($i % 2)
+                    ? $chat->buyer_id
+                    : $chat->seller_id;
+
+                Message::factory()->create([
+                    'chat_id' => $chat->id,
+                    'sender_id' => $senderId,
+                    'created_at' => $currentTime,
+                    'updated_at' => $currentTime,
+                ]);
+
+                $currentTime = Carbon::parse($currentTime)
+                    ->addSeconds(rand(30, 300));
+            }
+        }
     }
 }

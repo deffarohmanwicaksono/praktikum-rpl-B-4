@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\PurchaseLink;
+use App\Models\Chat;
+use App\Models\Message;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -13,7 +15,7 @@ class PurchaseLinkSeeder extends Seeder
      */
     public function run(): void
     {
-        PurchaseLink::insert([
+        $dataPurchaseLinks = [
             [
                 'chat_id' => 1,  // Buyer 2 - Seller 4
                 'token' => 'SEMART-LINK-001',
@@ -115,6 +117,31 @@ class PurchaseLinkSeeder extends Seeder
                 'expired_at' => now()->addDays(2),
                 'is_used' => true
             ],
-        ]);
+        ];
+
+        foreach ($dataPurchaseLinks as $link) {
+            $chat = Chat::findOrFail( $link['chat_id']);
+            $lastMessage = $chat->messages()->latest('created_at')->first();
+
+            $linkDate = $lastMessage->created_at->copy()->addSeconds(rand(30, 600));
+
+            PurchaseLink::create([
+                ...$link,
+
+                'created_at' => $linkDate,
+                'updated_at' => $linkDate,
+            ]);
+        }
+
+        // Factory untuk generate purchase link 
+        $eligibleChats = Chat::whereHas(
+            'product',
+            fn ($q) => $q->where('status', 'dijual')
+        )->doesntHave('purchaseLinks')->get();
+        foreach ($eligibleChats as $chat) {
+            if (fake()->boolean(50)) {
+                PurchaseLink::factory()->forChat($chat)->create();
+            }
+        }
     }
 }
