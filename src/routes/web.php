@@ -35,9 +35,9 @@ Route::middleware('auth')->group(function () {
         Route::get('/admin/dashboard-admin', [\App\Http\Controllers\AdminController::class, 'dashboardIndex'])->name('admin.dashboard-admin');
 
         // Verifikasi Barang
-        Route::get('/admin/verification', function () {
-            return view('admin.verification');
-        })->name('admin.verification');
+        Route::get('/admin/verification', [\App\Http\Controllers\AdminController::class, 'verificationIndex'])->name('admin.verification');
+        Route::post('/admin/verification/{product}/approve', [\App\Http\Controllers\AdminController::class, 'approveProduct'])->name('admin.approveProduct');
+        Route::post('/admin/verification/{product}/reject', [\App\Http\Controllers\AdminController::class, 'rejectProduct'])->name('admin.rejectProduct');
 
         // Daftar Laporan
         Route::get('/admin/reports', [\App\Http\Controllers\AdminController::class, 'reportsIndex'])->name('admin.reports');
