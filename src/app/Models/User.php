@@ -92,4 +92,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(PaymentAccount::class);
     }
+
+    public function productVerifications()
+    {
+        return $this->hasMany(ProductVerification::class, 'admin_id');
+    }
 }
