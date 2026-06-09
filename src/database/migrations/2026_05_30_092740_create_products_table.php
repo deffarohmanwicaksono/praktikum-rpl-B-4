@@ -20,6 +20,11 @@ return new class extends Migration
             $table->string('description') ->nullable();
             $table->decimal('price', 18, 2);
             $table->integer('stock')->default(1);
+            $table->enum('condition', [
+                'bekas_seperti_baru',
+                'bekas_baik',
+                'bekas_layak_pakai'
+            ]) ->default('bekas_baik');
             $table->enum('status', [ 'menunggu_verifikasi', 'dijual', 'sold_out', 'ditolak' ])->default('menunggu_verifikasi');
             $table->timestamps();
         });
