@@ -13,7 +13,96 @@
 @section('content')
 
 @php
-$defaultProduct = count($products) > 0 ? $products[0] : null;
+// Mockup data lengkap disesuaikan dengan kriteria pencarian, filter kategori, dan status
+$products = [
+    [
+        'id' => 1,
+        'image' => 'https://images.unsplash.com/photo-1551537482-f2075a1d41f2?w=80&q=80',
+        'detail_image' => 'https://images.unsplash.com/photo-1551537482-f2075a1d41f2?w=600&q=80',
+        'name' => 'Jaket Denim Pria',
+        'badge' => 'Pakaian',
+        'category_class' => '',
+        'seller_name' => 'Andi Pratama',
+        'seller_handle' => '@andi.pratama',
+        'price' => 'Rp120.000',
+        'category' => 'Pakaian',
+        'status' => 'Dijual',
+        'status_class' => 'status-dijual',
+        'condition' => 'Bekas Seperti Baru',
+        'description' => 'Jaket denim warna biru dongker. Kondisi masih sangat baik, bahan tebal dan nyaman dipakai tanpa ada cacat robek.',
+        'date' => '12 Mei 2024'
+    ],
+    [
+        'id' => 2,
+        'image' => 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=80&q=80',
+        'detail_image' => 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=600&q=80',
+        'name' => 'Tas Ransel Eiger Original',
+        'badge' => 'Sepatu & Tas',
+        'category_class' => '',
+        'seller_name' => 'Siti Aisyah',
+        'seller_handle' => '@siti.aisyah',
+        'price' => 'Rp175.000',
+        'category' => 'Sepatu & Tas',
+        'status' => 'Sold Out',
+        'status_class' => 'status-sold-out',
+        'condition' => 'Bekas Baik',
+        'description' => 'Tas ransel merk Eiger original kapasitas 25L. Cocok untuk kuliah atau hiking ringan. Slot laptop aman dan busa tebal.',
+        'date' => '12 Mei 2024'
+    ],
+    [
+        'id' => 3,
+        'image' => 'https://images.unsplash.com/photo-1564466809058-bf4114d55352?w=80&q=80',
+        'detail_image' => 'https://images.unsplash.com/photo-1564466809058-bf4114d55352?w=600&q=80',
+        'name' => 'Kalkulator Casio fx-991EX',
+        'badge' => 'Elektronik',
+        'category_class' => 'cat-elektronik',
+        'seller_name' => 'Budi Santoso',
+        'seller_handle' => '@budi.santoso',
+        'price' => 'Rp85.000',
+        'category' => 'Elektronik',
+        'status' => 'Ditolak',
+        'status_class' => 'status-ditolak',
+        'condition' => 'Bekas Seperti Baru',
+        'description' => 'Kalkulator scientific Casio fx-991EX Classwiz LCD beresolusi tinggi. Sangat berguna untuk kebutuhan pengerjaan kalkulus tingkat lanjut.',
+        'date' => '11 Mei 2024'
+    ],
+    [
+        'id' => 4,
+        'image' => 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=80&q=80',
+        'detail_image' => 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=600&q=80',
+        'name' => 'Buku Atomic Habits',
+        'badge' => 'Buku',
+        'category_class' => 'cat-buku',
+        'seller_name' => 'Dewi Lestari',
+        'seller_handle' => '@dewi.lestari',
+        'price' => 'Rp90.000',
+        'category' => 'Buku',
+        'status' => 'Menunggu',
+        'status_class' => 'status-menunggu',
+        'condition' => 'Bekas Baik',
+        'description' => 'Buku Atomic Habits terjemahan Indonesia penerbit Gramedia. Halaman lengkap tidak ada yang robek, bersih bebas coretan stabilo.',
+        'date' => '10 Mei 2024'
+    ],
+    [
+        'id' => 5,
+        'image' => 'https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?w=80&q=80',
+        'detail_image' => 'https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?w=600&q=80',
+        'name' => 'Sepatu Converse All Star',
+        'badge' => 'Sepatu & Tas',
+        'category_class' => '',
+        'seller_name' => 'Rizky Maulana',
+        'seller_handle' => '@rizky.maulana',
+        'price' => 'Rp250.000',
+        'category' => 'Sepatu & Tas',
+        'status' => 'Dijual',
+        'status_class' => 'status-dijual',
+        'condition' => 'Bekas Baik',
+        'description' => 'Sepatu Converse All Star warna hitam original, ukuran 42. Minus pemakaian wajar, sol sepatu bagian bawah masih sangat tebal.',
+        'date' => '09 Mei 2024'
+    ]
+];
+
+$defaultProduct = $products[0];
 @endphp
 
 {{-- =============================================
@@ -142,7 +231,6 @@ $defaultProduct = count($products) > 0 ? $products[0] : null;
          RIGHT PANEL: Komponen Detail Produk
          ========================================= --}}
     <div class="panel-right" id="panelRight">
-        @if($defaultProduct)
         <div class="detail-card" id="detailCard">
             <h3 class="detail-section-title">Detail Produk</h3>
 
@@ -216,18 +304,8 @@ $defaultProduct = count($products) > 0 ? $products[0] : null;
                 </button>
             </div>
         </div>
-        @else
-        <div class="detail-card" style="display: flex; align-items: center; justify-content: center; height: 100%; color: var(--gray-text);">
-            Tidak ada detail produk untuk ditampilkan.
-        </div>
-        @endif
     </div>
 </div>
-
-<form id="formDeleteProduct" action="" method="POST" style="display: none;">
-    @csrf
-    @method('DELETE')
-</form>
 
 {{-- =============================================
      MODAL OVERLAY: KONFIRMASI HAPUS PRODUK
@@ -245,7 +323,7 @@ $defaultProduct = count($products) > 0 ? $products[0] : null;
                 <i class="bi bi-trash3-fill"></i>
             </div>
             <p class="modal-confirm-text">
-                Apakah Anda yakin ingin menghapus produk <br><strong id="modalHapusName">{{ $defaultProduct ? $defaultProduct['name'] : '' }}</strong>? <br>Data yang dihapus tidak dapat dikembalikan.
+                Apakah Anda yakin ingin menghapus produk <br><strong id="modalHapusName">{{ $defaultProduct['name'] }}</strong>? <br>Data yang dihapus tidak dapat dikembalikan.
             </p>
         </div>
         <div class="modal-footer-custom">

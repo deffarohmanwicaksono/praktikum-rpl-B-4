@@ -153,12 +153,27 @@ if (btnHapusDetail) {
 
 confirmHapusBtn.addEventListener('click', () => {
     if (rowToDelete) {
-        const productData = JSON.parse(rowToDelete.dataset.product);
-        const form = document.getElementById('formDeleteProduct');
-        if (form && productData && productData.id) {
-            form.action = `/admin/products/${productData.id}`;
-            form.submit();
-        }
+        rowToDelete.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+        rowToDelete.style.opacity = '0';
+        rowToDelete.style.transform = 'translateX(-12px)';
+        
+        setTimeout(() => {
+            rowToDelete.remove();
+            
+            // Hitung ulang teks jumlah produk setelah baris dihapus dari DOM
+            updateTableInfo();
+
+            if (activeRow === rowToDelete) {
+                activeRow = null;
+                const firstAvailableRow = document.querySelector('.product-row:not([style*="display: none"])');
+                if (firstAvailableRow) {
+                    firstAvailableRow.click();
+                } else {
+                    if (detailCard) detailCard.style.display = 'none';
+                }
+            }
+            rowToDelete = null;
+        }, 300);
     }
     closeAllModals();
 });
