@@ -95,7 +95,7 @@ new class extends Component
     </div>
 
     {{-- MESSAGES --}}
-    <div class="chat-messages" 
+    <div class="chat-messages"
          id="chatMessages"
          x-data
          x-init="$el.scrollTop = $el.scrollHeight; new MutationObserver(() => $el.scrollTop = $el.scrollHeight).observe($el, { childList: true })">
@@ -104,7 +104,7 @@ new class extends Component
                 @php
                     $token = str_replace(['[PURCHASE_LINK:', ']'], '', $msg->message);
                     $link = $chat->purchaseLinks->where('token', $token)->first();
-                    $imgSrc = $chat->product->productImages->first() 
+                    $imgSrc = $chat->product->productImages->first()
                         ? asset('storage/' . $chat->product->productImages->first()->image_path)
                         : asset('images/Elemen-1.png');
                     $isExpired = !$link || $link->expired_at->isPast() || $link->is_used;
@@ -156,11 +156,11 @@ new class extends Component
 
                         @if ($isMe)
                             <div class="msg-out-meta">
-                                <span class="msg-time msg-time--out">{{ $msg->created_at->format('H:i') }}</span>
+                                <span class="msg-time msg-time--out">{{ $msg->created_at?->format('H:i') ?? '-' }}</span>
                                 <span class="msg-tick"><i class="bi bi-check2-all"></i></span>
                             </div>
                         @else
-                            <span class="msg-time">{{ $msg->created_at->format('H:i') }}</span>
+                            <span class="msg-time">{{ $msg->created_at?->format('H:i') ?? '-' }}</span>
                         @endif
                     </div>
 
