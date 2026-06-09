@@ -75,6 +75,10 @@ class TransactionFactory extends Factory
 
             if ($status === 'selesai') {
                 $completedAt = Carbon::parse( $paidAt )->addMinutes( rand(10, 720) );
+
+                if ($completedAt->gt(now())) {
+                    $completedAt = now();
+                }
             }
 
             return [
