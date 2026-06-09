@@ -105,6 +105,15 @@ class ChatController extends Controller
             'message'   => $validated['message'],
         ]);
 
+        // Create notification for the recipient
+        $recipientId = ($chat->buyer_id === $userId) ? $chat->seller_id : $chat->buyer_id;
+        \App\Models\Notification::create([
+            'user_id' => $recipientId,
+            'type'    => 'message',
+            'content' => 'Anda menerima pesan baru dari ' . auth()->user()->name,
+            'is_read' => false,
+        ]);
+
         // Update timestamp chat agar muncul paling atas di list
         $chat->touch();
 
@@ -176,11 +185,18 @@ class ChatController extends Controller
             'payment_methods' => $paymentMethodsArray,
         ]);
 
-        // Kirim pesan otomatis berisi token khusus agar di-render sebagai kartu real-time
         $message = Message::create([
             'chat_id'   => $chat->id,
             'sender_id' => $userId,
             'message'   => '[PURCHASE_LINK:' . $token . ']',
+        ]);
+
+        // Kirim Notifikasi Link Pembelian ke buyer
+        \App\Models\Notification::create([
+            'user_id' => $chat->buyer_id,
+            'type'    => 'purchase_link',
+            'content' => 'Seller mengirimkan link pembelian untuk Anda.',
+            'is_read' => false,
         ]);
 
         $chat->touch();
