@@ -13,108 +13,7 @@
 @section('content')
 
 @php
-$users = [
-    [
-        'id' => 1,
-        'name' => 'Andi Pratama',
-        'email' => 'andi.pratama@student.uns.ac.id',
-        'roles' => ['Seller', 'Buyer'],
-        'status' => 'Aktif',
-        'status_class' => 'status-aktif',
-        'joined' => '12 Jan 2024',
-        'phone' => '081234567890',
-        'products_sold' => 24,
-        'transactions' => 156,
-        'rating' => 4.2,
-        'reviews' => 12
-    ],
-    [
-        'id' => 2,
-        'name' => 'Siti Aisyah',
-        'email' => 'siti.aisyah@student.uns.ac.id',
-        'roles' => ['Buyer'],
-        'status' => 'Aktif',
-        'status_class' => 'status-aktif',
-        'joined' => '15 Feb 2024',
-        'phone' => '085712345678',
-        'products_sold' => 0,
-        'transactions' => 45,
-        'rating' => 0,
-        'reviews' => 0
-    ],
-    [
-        'id' => 3,
-        'name' => 'Budi Santoso',
-        'email' => 'budi.santoso@student.uns.ac.id',
-        'roles' => ['Seller'],
-        'status' => 'Diblokir',
-        'status_class' => 'status-diblokir',
-        'joined' => '03 Mar 2024',
-        'phone' => '089987654321',
-        'products_sold' => 89,
-        'transactions' => 310,
-        'rating' => 4.8,
-        'reviews' => 215
-    ],
-    [
-        'id' => 4,
-        'name' => 'Dewi Lestari',
-        'email' => 'dewi.lestari@student.uns.ac.id',
-        'roles' => ['Buyer', 'Seller'],
-        'status' => 'Aktif',
-        'status_class' => 'status-aktif',
-        'joined' => '20 Mar 2024',
-        'phone' => '082134567891',
-        'products_sold' => 5,
-        'transactions' => 22,
-        'rating' => 5.0,
-        'reviews' => 8
-    ],
-    [
-        'id' => 5,
-        'name' => 'Fajar Ramadhan',
-        'email' => 'fajar.ramadhan@student.uns.ac.id',
-        'roles' => ['Seller'],
-        'status' => 'Aktif',
-        'status_class' => 'status-aktif',
-        'joined' => '28 Mar 2024',
-        'phone' => '081398765432',
-        'products_sold' => 112,
-        'transactions' => 540,
-        'rating' => 4.9,
-        'reviews' => 320
-    ],
-    [
-        'id' => 6,
-        'name' => 'Nabila Putri',
-        'email' => 'nabila.putri@student.uns.ac.id',
-        'roles' => ['Buyer'],
-        'status' => 'Aktif',
-        'status_class' => 'status-aktif',
-        'joined' => '05 Apr 2024',
-        'phone' => '087812345678',
-        'products_sold' => 0,
-        'transactions' => 15,
-        'rating' => 0,
-        'reviews' => 0
-    ],
-    [
-        'id' => 7,
-        'name' => 'Rizky Maulana',
-        'email' => 'rizky.maulana@student.uns.ac.id',
-        'roles' => ['Seller'],
-        'status' => 'Diblokir',
-        'status_class' => 'status-diblokir',
-        'joined' => '18 Apr 2024',
-        'phone' => '085212345678',
-        'products_sold' => 12,
-        'transactions' => 40,
-        'rating' => 3.5,
-        'reviews' => 10
-    ]
-];
-
-$activeUser = $users[0];
+$activeUser = count($users) > 0 ? $users[0] : null;
 @endphp
 
 {{-- =============================================
@@ -241,8 +140,8 @@ $activeUser = $users[0];
         </div>
     </div>
 
-    {{-- RIGHT PANEL: DETAIL PROFIL USER --}}
     <div class="panel-right" id="userDetailPanel">
+        @if($activeUser)
         <div class="detail-card" id="detailCard">
             <h3 class="detail-section-title">Detail Profil User</h3>
             
@@ -324,9 +223,18 @@ $activeUser = $users[0];
                 </div>
             </div>
         </div>
+        @else
+        <div class="detail-card" style="display: flex; align-items: center; justify-content: center; height: 100%; color: var(--gray-text);">
+            Tidak ada detail user untuk ditampilkan.
+        </div>
+        @endif
     </div>
 
 </div>
+
+<form id="formStatusUser" action="" method="POST" style="display: none;">
+    @csrf
+</form>
 
 {{-- MODAL KONFIRMASI --}}
 <div class="modal-overlay" id="modalStatusUser">

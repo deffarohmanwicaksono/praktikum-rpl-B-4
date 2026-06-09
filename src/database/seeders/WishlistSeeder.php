@@ -3,17 +3,17 @@
 namespace Database\Seeders;
 
 use App\Models\Wishlist;
+use App\Models\Product;
+use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class WishlistSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
+
     public function run(): void
     {
-        Wishlist::insert([
+        $dataWishlist = ([
             // User 2
             [
                 'user_id' => 2,
@@ -158,5 +158,19 @@ class WishlistSeeder extends Seeder
                 'product_id' => 27
             ],
         ]);
+
+        foreach ($dataWishlist as $wishlist) {
+            $product = Product::findOrFail($wishlist['product_id']);
+
+            $startDate = $product->created_at->gt(now()) ? now() : $product->created_at;
+
+            $wishlistDate = fake()->dateTimeBetween($startDate, now());
+
+            Wishlist::create([
+                ...$wishlist,
+                'created_at' => $wishlistDate,
+                'updated_at' => $wishlistDate,
+            ]);
+        }
     }
 }
