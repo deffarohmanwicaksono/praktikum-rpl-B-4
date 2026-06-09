@@ -49,20 +49,26 @@ document.addEventListener('DOMContentLoaded', () => {
             const btn = e.target.closest('.btn-hapus-produk');
             const row = btn.closest('.product-row');
             const name = row.querySelector('.product-name-text').textContent;
+            const url = btn.dataset.url;
 
-            const isConfirmed = confirm(`Hapus "${name}" dari daftar barang Anda?`);
+            const isConfirmed = confirm(`Hapus "${name}" dari daftar barang Anda?\nTindakan ini tidak dapat dibatalkan.`);
 
             if (!isConfirmed) return;
 
-            row.style.opacity = '0';
-            row.style.transform = 'translateX(20px)';
-            row.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+            // Submit the actual form
+            const form = document.getElementById('formDeleteProduct');
+            if (form && url) {
+                // Tampilkan efek loading pada tombol hapus
+                btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
+                btn.disabled = true;
 
-            setTimeout(() => {
+                form.action = url;
+                form.submit();
+            } else {
+                // Fallback (seharusnya tidak terjadi)
                 row.remove();
-                // Opsional: Cek lagi apakah setelah dihapus tabel jadi kosong
                 filterTable(); 
-            }, 300);
+            }
         }
     });
 });
