@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use App\Models\Report;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Product extends Model
 {
@@ -47,5 +49,9 @@ class Product extends Model
     public function transactions()
     {
         return $this->hasMany(Transaction::class);
+    }
+    public function reports(): HasMany
+    {
+        return $this->hasMany(Report::class);
     }
 }
