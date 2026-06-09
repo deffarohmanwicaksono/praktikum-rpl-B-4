@@ -260,10 +260,12 @@ class AdminController extends Controller
             $rating = $totalReviews > 0 ? round($totalRating / $totalReviews, 1) : 0;
             
             // Calculate transactions (simplified: as seller vs buyer)
-            $transactions = Transaction::where('buyer_id', $user->id)
-                ->orWhereHas('product', function($q) use ($user) {
-                    $q->where('user_id', $user->id);
-                })->where('status', 'selesai')->count();
+            $transactions = Transaction::where(function($q) use ($user) {
+                $q->where('buyer_id', $user->id)
+                  ->orWhereHas('product', function($q2) use ($user) {
+                      $q2->where('user_id', $user->id);
+                  });
+            })->where('status', 'selesai')->count();
 
             $productsSold = Transaction::whereHas('product', function($q) use ($user) {
                 $q->where('user_id', $user->id);

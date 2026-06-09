@@ -51,6 +51,11 @@ class Product extends Model
         return $this->hasMany(Transaction::class);
     }
 
+    public function reviews()
+    {
+        return $this->hasManyThrough(Review::class, Transaction::class);
+    }
+
     public function reports(): HasMany
     {
         return $this->hasMany(Report::class);
