@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Wishlist;
+use App\Models\User;     
+use App\Models\Transaction; 
+use App\Models\Review;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -64,16 +67,56 @@ class ProductController extends Controller
 
     public function show(string $id)
     {
-        $product = Product::with(['productImages', 'user', 'category'])
-            ->findOrFail($id);
+        $product = Product::with(['productImages', 'user', 'category'])->findOrFail($id);
+
+        $reviewsQuery = Review::whereHas('transaction.product', function ($q) use ($product) {
+            $q->where('user_id', $product->user_id);
+        });
+
+        $sellerReviewsCount = $reviewsQuery->count();
+        $sellerRating = $sellerReviewsCount > 0 ? round($reviewsQuery->avg('rating'), 1) : null;
 
         $wishlistedIds = Auth::check()
             ? Wishlist::where('user_id', Auth::id())->pluck('product_id')->toArray()
             : [];
 
-        return view('products.detail-product', [
-            'product'       => $product,
-            'wishlistedIds' => $wishlistedIds,
+        return view('products.detail-product', compact(
+            'product', 
+            'wishlistedIds', 
+            'sellerRating', 
+            'sellerReviewsCount'
+        ));
+    }
+
+    public function sellerProfile(string $id)
+    {
+        $sellerUser = User::findOrFail($id);
+
+        $soldCount = Transaction::whereHas('product', function($q) use ($sellerUser) {
+            $q->where('user_id', $sellerUser->id);
+        })->where('status', 'selesai')->count();
+
+        $sellerProductIds = Product::where('user_id', $sellerUser->id)->pluck('id');
+        $reviewsQuery = Review::whereHas('transaction', function($q) use ($sellerProductIds) {
+            $q->whereIn('product_id', $sellerProductIds);
+        });
+
+        $reviewsCount = $reviewsQuery->count();
+        $rating = $reviewsCount > 0 ? round($reviewsQuery->avg('rating'), 1) : 0;
+
+        $seller = [
+            'name'          => $sellerUser->name,
+            'joined'        => $sellerUser->created_at->format('d M Y'),
+            'sold_count'    => $soldCount,
+            'rating'        => $rating,
+            'reviews_count' => $reviewsCount,
+        ];
+
+        $reviewsData = $reviewsQuery->with(['transaction.buyer', 'transaction.product'])->latest()->take(5)->get();
+
+        return view('profile.profile-seller', [
+            'seller'  => $seller,
+            'reviews' => $reviewsData
         ]);
     }
 

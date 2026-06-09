@@ -130,23 +130,31 @@
                         </div>
 
                         <div class="seller-rating">
+                            @if($sellerReviewsCount > 0)
+                                <span class="rating-val">
+                                    {{ $sellerRating }}
+                                </span>
 
-                            <span class="rating-val">
-                                4.9
-                            </span>
+                                <div class="stars">
+                                    @for($i = 1; $i <= 5; $i++)
+                                        @if($sellerRating >= $i)
+                                            <i class="bi bi-star-fill"></i>
+                                        @elseif($sellerRating >= $i - 0.5)
+                                            <i class="bi bi-star-half"></i>
+                                        @else
+                                            <i class="bi bi-star"></i>
+                                        @endif
+                                    @endfor
+                                </div>
 
-                            <div class="stars">
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-half"></i>
-                            </div>
-
-                            <span class="rating-count">
-                                (128 ulasan)
-                            </span>
-
+                                <span class="rating-count">
+                                    ({{ $sellerReviewsCount }} ulasan)
+                                </span>
+                            @else
+                                <span class="no-reviews">
+                                    Belum ada ulasan
+                                </span>
+                            @endif
                         </div>
 
                         <div class="seller-location">

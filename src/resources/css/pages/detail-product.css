@@ -265,6 +265,11 @@
     color: #F59E0B;
 }
 
+.no-reviews {
+    font-size: 12px;
+    color: var(--gray-text);
+}
+
 .rating-count {
     font-size: 12px;
     color: var(--gray-text);
