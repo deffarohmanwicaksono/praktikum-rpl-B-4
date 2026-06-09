@@ -27,8 +27,8 @@ $salesHistory = [
         'time' => '10:15 WIB',
         'status' => 'Menunggu Pembayaran',
         'status_class' => 'status-menunggu',
-        'image' => 'https://images.unsplash.com/photo-1574607383476-f517f260d30b?w=120&q=80',
-        'payment_proof' => 'https://images.unsplash.com/photo-1556740749-887f6717d7e4?w=800',
+        'image' => asset('images/products/kalkulus_steward.jpg'),
+        'payment_proof' => asset('images/products/basis_data.jpg'),
     ],
     [
         'id' => 'TRX-2026-002',
@@ -39,8 +39,8 @@ $salesHistory = [
         'time' => '14:20 WIB',
         'status' => 'Selesai',
         'status_class' => 'status-selesai',
-        'image' => 'https://images.unsplash.com/photo-1598033129183-c4f50c736f10?w=120&q=80',
-        'payment_proof' => 'https://images.unsplash.com/photo-1556740749-887f6717d7e4?w=800',
+        'image' => asset('images/products/almet.jpg'),
+        'payment_proof' => asset('images/products/tas_ransel.jpg'),
     ],
     [
         'id' => 'TRX-2026-003',
@@ -51,8 +51,8 @@ $salesHistory = [
         'time' => '09:00 WIB',
         'status' => 'Selesai',
         'status_class' => 'status-selesai',
-        'image' => 'https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=120&q=80',
-        'payment_proof' => 'https://images.unsplash.com/photo-1556740749-887f6717d7e4?w=800',
+        'image' => asset('images/products/basis_data2.jpg'),
+        'payment_proof' => asset('images/products/struktur_data_java.jpg'),
     ]
 ];
 @endphp

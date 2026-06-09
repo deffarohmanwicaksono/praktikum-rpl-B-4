@@ -29,9 +29,9 @@ $purchaseHistory = [
         'timestamp' => '2026-06-04T19:45:00',
         'status' => 'Menunggu Konfirmasi',
         'status_class' => 'status-menunggu',
-        'image' => 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=120&q=80',
+        'image' => asset('images/products/kalkulus_steward.jpg'),
         'note' => 'Mohon dikirim via COD di depan Perpustakaan Pusat ya kak.',
-        'payment_proof' => 'https://images.unsplash.com/photo-1620714223084-8fcacc6dfd8d?w=400&q=80' // Contoh ada bukti
+        'payment_proof' => asset('images/products/basis_data.jpg') // Contoh ada bukti
     ],
     [
         'id' => 'TRX-2026-002',
@@ -44,9 +44,9 @@ $purchaseHistory = [
         'timestamp' => '2026-06-02T10:15:00',
         'status' => 'Selesai',
         'status_class' => 'status-selesai',
-        'image' => 'https://images.unsplash.com/photo-1598033129183-c4f50c736f10?w=120&q=80',
+        'image' => asset('images/products/almet.jpg'),
         'note' => 'Barang sudah diterima langsung di Gedung Kuliah Bersama.',
-        'payment_proof' => 'https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=400&q=80' // Contoh ada bukti
+        'payment_proof' => asset('images/products/tas_ransel.jpg') // Contoh ada bukti
     ],
     [
         'id' => 'TRX-2026-003',
@@ -59,7 +59,7 @@ $purchaseHistory = [
         'timestamp' => '2026-05-28T14:20:00',
         'status' => 'Selesai',
         'status_class' => 'status-selesai',
-        'image' => 'https://images.unsplash.com/photo-1555538995-7ccc83f60088?w=120&q=80',
+        'image' => asset('images/products/struktur_data_java.jpg'),
         'note' => 'Fungsi fast charging berjalan normal di laptop.',
         'payment_proof' => '' // Contoh tidak ada bukti
     ],
@@ -74,7 +74,7 @@ $purchaseHistory = [
         'timestamp' => '2026-05-20T11:00:00',
         'status' => 'Gagal',
         'status_class' => 'status-gagal',
-        'image' => 'https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=120&q=80',
+        'image' => asset('images/products/tas_ransel.jpg'),
         'note' => 'Transaksi dibatalkan karena stok barang ternyata sudah pecah/rusak fisik.',
         'payment_proof' => '' // Contoh tidak ada bukti
     ]
