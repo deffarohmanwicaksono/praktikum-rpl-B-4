@@ -39,7 +39,7 @@ $salesHistory = [
         'time' => '14:20 WIB',
         'status' => 'Selesai',
         'status_class' => 'status-selesai',
-        'image' => 'https://images.unsplash.com/photo-1596755094514-f87e32f6b717?w=120&q=80',
+        'image' => 'https://images.unsplash.com/photo-1598033129183-c4f50c736f10?w=120&q=80',
         'payment_proof' => 'https://images.unsplash.com/photo-1556740749-887f6717d7e4?w=800',
     ],
     [
