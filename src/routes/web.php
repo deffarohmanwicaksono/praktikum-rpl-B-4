@@ -66,14 +66,9 @@ Route::middleware('auth')->group(function () {
     // ==========================================
 
     // Home & Pencarian
-    // routes/web.php
-Route::get('/home', function () {
-    $products = \App\Models\Product::with('productImages')
-                    ->where('status', 'dijual')
-                    ->latest()
-                    ->get();
-    return view('home.home', compact('products'));
-})->name('home')->middleware(['web', 'auth']);
+    Route::get('/home', [\App\Http\Controllers\ProductController::class, 'index'])
+        ->name('home')
+        ->middleware(['web', 'auth']);
 
     Route::get('/search', [ProductController::class, 'search'])->name('products.search');
     Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.detail-product');

@@ -17,14 +17,14 @@
 
     <script>
         window.SeMartConfig = {
-            dummyImage: '{{ asset("images/Elemen-1.png") }}',
-            appUrl: '{{ url("/") }}',
-            dbProducts: @json($products) 
+            appUrl: '{{ url("/") }}'
         };
     </script>
 @endpush
 
 @section('content')
+
+@if(!request()->has('q') && !request()->has('category') && !request()->has('sort'))
 
 <div id="stateEmpty" class="search-state">
     <div class="empty-state-wrap">
@@ -57,48 +57,36 @@
             <p class="quick-search-label">Coba cari:</p>
 
             <div class="quick-tags">
-                <button class="quick-tag" data-q="laptop">laptop</button>
-                <button class="quick-tag" data-q="buku kuliah">buku kuliah</button>
-                <button class="quick-tag" data-q="jaket">jaket</button>
+                <button class="quick-tag" data-q="ransel">ransel</button>
+                <button class="quick-tag" data-q="buku">buku</button>
                 <button class="quick-tag" data-q="headset">headset</button>
-                <button class="quick-tag" data-q="meja belajar">meja belajar</button>
                 <button class="quick-tag" data-q="sepatu">sepatu</button>
-                <button class="quick-tag" data-q="iPad">iPad</button>
             </div>
         </div>
 
     </div>
 </div>
 
-<div id="stateLoading" class="search-state" style="display:none">
+@else
 
-    <div class="loading-wrap">
-
-        <div class="loading-spinner">
-            <div class="spinner-ring"></div>
-        </div>
-
-        <p class="loading-text">
-            Mencari barang untukmu...
-        </p>
-
-    </div>
-
-</div>
-
-<div id="stateResults" class="search-state" style="display:none">
+{{-- STATE RESULTS --}}
+<div id="stateResults" class="search-state">
 
     <div class="results-header">
         <div class="results-info">
 
             <h2 class="results-title">
-                Hasil Pencarian untuk
-                "<span id="resultKeyword" class="keyword-accent"></span>"
+                Hasil Pencarian untuk 
+                @if(request()->filled('q'))
+                    "<span class="keyword-accent">{{ request('q') }}</span>"
+                @else
+                    "Kategori: <span class="keyword-accent">{{ request('category') === 'semua' ? 'Semua Produk' : ucfirst(request('category')) }}</span>"
+                @endif
             </h2>
 
             <p class="results-count">
                 Menampilkan
-                <span id="resultCount">0</span>
+                <span id="resultCount">{{ $products->count() }}</span>
                 produk
             </p>
 
@@ -109,29 +97,34 @@
         @include('components.filter-bar')
     </div>
 
-    <div class="product-grid" id="productGrid"></div>
+    {{-- PRODUCT GRID --}}
+    <div class="product-grid" id="productGrid">
+        @forelse ($products as $product)
+            @include('components.product-card', ['product' => $product])
+        @empty
+            <div id="stateNoResults" class="no-results-card">
+                <div class="no-results-inner">
 
-    <div id="stateNoResults" class="no-results-card" style="display:none">
+                    <svg viewBox="0 0 120 110" fill="none" xmlns="http://www.w3.org/2000/svg" class="no-results-svg">
+                        <circle cx="60" cy="50" r="40" fill="#DCEEFF" opacity="0.5"/>
+                        <rect x="32" y="42" width="56" height="44" rx="8" fill="#F3F9FF" stroke="#DCEEFF" stroke-width="2"/>
+                    </svg>
 
-        <div class="no-results-inner">
+                    <h3 class="no-results-title">
+                        Barang tidak ditemukan
+                    </h3>
 
-            <svg viewBox="0 0 120 110" fill="none" xmlns="http://www.w3.org/2000/svg" class="no-results-svg">
-                <circle cx="60" cy="50" r="40" fill="#DCEEFF" opacity="0.5"/>
-                <rect x="32" y="42" width="56" height="44" rx="8" fill="#F3F9FF" stroke="#DCEEFF" stroke-width="2"/>
-            </svg>
+                    <p class="no-results-desc">
+                        Coba ubah kata kunci atau filter pencarianmu.
+                    </p>
 
-            <h3 class="no-results-title">
-                Barang tidak ditemukan
-            </h3>
-
-            <p class="no-results-desc">
-                Coba ubah kata kunci atau filter pencarianmu.
-            </p>
-
-        </div>
-
+                </div>
+            </div>
+        @endforelse
     </div>
 
 </div>
+
+@endif
 
 @endsection
