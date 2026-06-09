@@ -1,0 +1,702 @@
+/* ==============================================
+   SeMart — Unggah Barang
+   ============================================== */
+
+/* ==============================================
+   PAGE HEADER
+   ============================================== */
+.page-header {
+    margin-bottom: 28px;
+}
+
+.page-title-group {
+    margin-top: 4px;
+}
+
+.page-title {
+    margin-bottom: 4px;
+    color: var(--dark-text);
+    font-size: 22px;
+    font-weight: 800;
+    line-height: 1.25;
+    letter-spacing: -0.4px;
+}
+
+.page-subtitle {
+    margin: 0;
+    color: var(--gray-text);
+    font-size: 13.5px;
+    font-weight: 400;
+}
+
+/* ==============================================
+   FORM CARDS
+   ============================================== */
+.form-card {
+    overflow: hidden;
+    background: var(--white);
+    border: 1px solid var(--border-gray);
+    border-radius: 16px;
+    box-shadow: var(--shadow-card);
+    transition: box-shadow 0.2s;
+}
+
+.form-card:focus-within {
+    box-shadow: var(--shadow-hover);
+}
+
+.form-card-body {
+    padding: 24px;
+}
+
+/* ==============================================
+   FORM ELEMENTS
+   ============================================== */
+.form-group-custom {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.form-label-custom {
+    color: var(--dark-text);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.1px;
+}
+
+.required-star {
+    margin-left: 1px;
+    color: #EF4444;
+}
+
+/* Text Input / Textarea */
+.form-input-custom {
+    width: 100%;
+    padding: 10px 14px;
+    appearance: none;
+    -webkit-appearance: none;
+    outline: none;
+
+    background: var(--soft-bg);
+    border: 1.5px solid var(--border-gray);
+    border-radius: 10px;
+
+    color: var(--dark-text);
+    font-family: var(--font-main);
+    font-size: 13.5px;
+
+    transition:
+        border-color 0.18s,
+        box-shadow 0.18s,
+        background 0.18s;
+}
+
+.form-input-custom::placeholder {
+    color: #B0B8C4;
+    font-size: 13px;
+}
+
+.form-input-custom:focus {
+    background: var(--white);
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 3px rgba(59, 157, 248, 0.12);
+}
+
+/* Textarea */
+.form-textarea-custom {
+    min-height: 130px;
+    line-height: 1.6;
+    resize: vertical;
+}
+
+/* Char Counter */
+.char-counter {
+    font-size: 11.5px;
+    color: var(--gray-text);
+    text-align: right;
+    margin-top: 3px;
+}
+
+/* Price Input */
+.price-input-wrapper {
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+
+    background: var(--soft-bg);
+    border: 1.5px solid var(--border-gray);
+    border-radius: 10px;
+
+    transition:
+        border-color 0.18s,
+        box-shadow 0.18s;
+}
+
+.price-input-wrapper:focus-within {
+    background: var(--white);
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 3px rgba(59, 157, 248, 0.12);
+}
+
+.price-prefix {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+
+    height: 42px;
+    padding: 0 12px;
+
+    background: var(--light-gray);
+    border-right: 1.5px solid var(--border-gray);
+
+    color: var(--gray-text);
+    font-size: 13.5px;
+    font-weight: 600;
+
+    user-select: none;
+}
+
+.price-input {
+    flex: 1;
+    padding-left: 12px;
+
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}
+
+/* Select Wrapper */
+.select-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.form-select-custom {
+    width: 100%;
+    padding-right: 36px;
+    cursor: pointer;
+}
+
+.select-chevron {
+    position: absolute;
+    right: 12px;
+
+    color: var(--gray-text);
+    font-size: 12px;
+
+    pointer-events: none;
+}
+
+/* Form Hint */
+.form-hint {
+    font-size: 11.5px;
+    color: var(--gray-text);
+    margin: 0;
+    margin-top: -2px;
+}
+
+/* Input Error */
+.input-error {
+    display: block;
+    margin-top: 2px;
+
+    color: #EF4444;
+    font-size: 11.5px;
+}
+
+/* ==============================================
+   UPLOAD DROPZONE
+   ============================================== */
+.upload-dropzone {
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 280px;
+    padding: 20px;
+    overflow: hidden;
+
+    background: var(--soft-bg);
+    border: 2px dashed var(--border-gray);
+    border-radius: 14px;
+
+    cursor: pointer;
+
+    transition:
+        border-color 0.2s,
+        background 0.2s,
+        box-shadow 0.2s;
+}
+
+.upload-dropzone:hover {
+    background: rgba(59, 157, 248, 0.03);
+    border-color: var(--primary-blue);
+}
+
+.upload-dropzone.drag-over {
+    background: var(--light-blue);
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 4px rgba(59, 157, 248, 0.12);
+}
+
+/* Upload Placeholder */
+.upload-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    width: 100%;
+    padding: 12px 0;
+
+    text-align: center;
+}
+
+.upload-icon-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 72px;
+    height: 72px;
+    margin-bottom: 6px;
+
+    background: var(--light-blue);
+    border-radius: 18px;
+
+    transition: transform 0.2s;
+}
+
+.upload-dropzone:hover .upload-icon-wrap {
+    transform: scale(1.06);
+}
+
+.upload-img-icon {
+    color: var(--primary-blue);
+    font-size: 32px;
+}
+
+.upload-title {
+    margin: 0;
+    color: var(--dark-text);
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.upload-subtitle {
+    margin: 0;
+    color: var(--gray-text);
+    font-size: 12.5px;
+}
+
+/* Pilih Foto Button */
+.btn-pilih-foto {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    margin-top: 4px;
+    padding: 9px 20px;
+
+    background: var(--primary-blue);
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(59, 157, 248, 0.25);
+
+    color: white;
+    font-family: var(--font-main);
+    font-size: 13px;
+    font-weight: 600;
+
+    transition:
+        background 0.18s,
+        box-shadow 0.18s,
+        transform 0.13s;
+}
+
+.btn-pilih-foto:hover {
+    background: var(--hover-blue);
+    box-shadow: 0 4px 14px rgba(59, 157, 248, 0.32);
+    transform: translateY(-1px);
+}
+
+/* Upload Hint Text */
+.upload-hint-text {
+    display: flex;
+    align-items: flex-start;
+    gap: 5px;
+
+    margin-top: 8px;
+    margin-bottom: 0;
+
+    color: var(--gray-text);
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.upload-hint-text i {
+    flex-shrink: 0;
+    margin-top: 1px;
+
+    color: var(--primary-blue);
+    font-size: 13px;
+}
+
+/* ==============================================
+   PHOTO PREVIEW GRID
+   ============================================== */
+.upload-preview-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+
+    width: 100%;
+    padding: 4px 0;
+}
+
+/* Individual Preview Thumbnail */
+.preview-thumb {
+    position: relative;
+    overflow: hidden;
+
+    aspect-ratio: 1 / 1;
+
+    background: var(--light-gray);
+    border: 1.5px solid var(--border-gray);
+    border-radius: 10px;
+}
+
+.preview-thumb img {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+}
+
+/* Remove Button */
+.preview-remove {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 22px;
+    height: 22px;
+
+    background: rgba(36, 52, 71, 0.65);
+    border: none;
+    border-radius: 50%;
+
+    color: white;
+    font-size: 10px;
+
+    backdrop-filter: blur(2px);
+
+    transition: background 0.15s;
+}
+
+.preview-remove:hover {
+    background: #DC2626;
+}
+
+/* Add More Button */
+.preview-add-more {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    aspect-ratio: 1 / 1;
+
+    background: var(--soft-bg);
+    border: 2px dashed var(--border-gray);
+    border-radius: 10px;
+
+    color: var(--gray-text);
+    font-size: 22px;
+
+    cursor: pointer;
+
+    transition:
+        border-color 0.18s,
+        color 0.18s,
+        background 0.18s;
+}
+
+.preview-add-more:hover {
+    background: var(--light-blue);
+    border-color: var(--primary-blue);
+    color: var(--primary-blue);
+}
+
+/* ==============================================
+   SUBMIT CARD
+   ============================================== */
+.submit-card .form-card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.submit-card-label {
+    margin: 0;
+
+    color: var(--dark-text);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* Submit Button */
+.btn-submit-unggah {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    padding: 12px 20px;
+
+    background: var(--primary-blue);
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 3px 12px rgba(59, 157, 248, 0.28);
+
+    color: white;
+    font-family: var(--font-main);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+
+    transition:
+        background 0.18s,
+        box-shadow 0.18s,
+        transform 0.13s;
+}
+
+.btn-submit-unggah:hover:not(:disabled) {
+    background: var(--hover-blue);
+    box-shadow: 0 6px 20px rgba(59, 157, 248, 0.36);
+    transform: translateY(-1px);
+}
+
+.btn-submit-unggah:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+    transform: none;
+}
+
+/* Shake Animation */
+@keyframes shake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    20% {
+        transform: translateX(-5px);
+    }
+
+    40% {
+        transform: translateX(5px);
+    }
+
+    60% {
+        transform: translateX(-4px);
+    }
+
+    80% {
+        transform: translateX(4px);
+    }
+}
+
+.btn-submit-unggah.shake {
+    background: #EF4444;
+    box-shadow: 0 3px 12px rgba(239, 68, 68, 0.28);
+    animation: shake 0.4s ease;
+}
+
+/* Submit Hint */
+.submit-hint {
+    margin: 0;
+
+    color: var(--gray-text);
+    font-size: 11.5px;
+    line-height: 1.5;
+    text-align: center;
+}
+
+/* ==============================================
+   INFO BANNER
+   ============================================== */
+.info-banner {
+    margin-bottom: 16px;
+    padding: 14px 18px;
+
+    background: var(--light-blue);
+    border: 1px solid rgba(59, 157, 248, 0.25);
+    border-radius: 12px;
+}
+
+.info-banner-inner {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.info-banner-icon {
+    flex-shrink: 0;
+    margin-top: 1px;
+
+    color: var(--primary-blue);
+    font-size: 16px;
+}
+
+.info-banner-title {
+    margin-right: 6px;
+
+    color: var(--dark-text);
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.info-banner-text {
+    color: var(--gray-text);
+    font-size: 13px;
+}
+
+/* ==============================================
+   RESPONSIVE — LARGE DESKTOP (1400PX+)
+   ============================================== */
+@media (min-width: 1400px) {
+
+    .main-content {
+        padding: 36px 52px 72px;
+    }
+
+    .page-title {
+        font-size: 24px;
+    }
+}
+
+/* ==============================================
+   RESPONSIVE — STANDARD DESKTOP (1200–1399PX)
+   ============================================== */
+@media (max-width: 1399px) and (min-width: 1200px) {
+
+    .main-content {
+        padding: 32px 40px 60px;
+    }
+}
+
+/* ==============================================
+   RESPONSIVE — LAPTOP (992–1199PX)
+   ============================================== */
+@media (max-width: 1199px) and (min-width: 992px) {
+
+    .main-content {
+        padding: 28px 28px 52px;
+    }
+
+    .topbar-actions .action-btn span {
+        display: none;
+    }
+
+    .form-card-body {
+        padding: 20px;
+    }
+}
+
+/* ==============================================
+   RESPONSIVE — SMALL LAPTOP / TABLET (768–991PX)
+   ============================================== */
+@media (max-width: 991px) {
+
+    :root {
+        --sidebar-width: 220px;
+    }
+
+    .sidebar {
+        box-shadow: 4px 0 24px rgba(36, 52, 71, 0.12);
+        transform: translateX(-100%);
+    }
+
+    .sidebar:not(.collapsed) {
+        width: var(--sidebar-width);
+        transform: translateX(0);
+    }
+
+    .sidebar-overlay {
+        display: block;
+    }
+
+    .main-layout.sidebar-collapsed .sidebar-overlay {
+        display: none;
+    }
+
+    .sidebar:not(.collapsed) ~ .sidebar-overlay {
+        display: block;
+    }
+
+    .main-content {
+        margin-left: 0 !important;
+        padding: 24px 20px 52px;
+    }
+
+    .topbar-left {
+        width: auto;
+        min-width: auto;
+    }
+
+    .topbar-actions .action-btn span,
+    .user-name {
+        display: none;
+    }
+
+    .col-lg-7,
+    .col-lg-5 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+}
+
+/* ==============================================
+   RESPONSIVE — MOBILE (UP TO 767PX)
+   ============================================== */
+@media (max-width: 767px) {
+
+    .main-content {
+        padding: 18px 14px 44px;
+    }
+
+    .topbar-inner {
+        gap: 10px;
+        padding: 0 12px;
+    }
+
+    .page-title {
+        font-size: 18px;
+    }
+
+    .form-card-body {
+        padding: 16px;
+    }
+
+    .upload-preview-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .info-banner-text {
+        display: none;
+    }
+}

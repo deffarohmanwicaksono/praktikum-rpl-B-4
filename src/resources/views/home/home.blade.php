@@ -87,7 +87,7 @@ $products = [
             <span class="hero-accent">Jadi Lebih Mudah di SeMart!</span>
         </h1>
         <p class="hero-sub">Aman, terpercaya, dan khusus untuk mahasiswa UNS.</p>
-        <a href="#" class="hero-btn">
+        <a href="{{ route('seller.dashboard-seller') }}" class="hero-btn">
             Jual Sekarang <i class="bi bi-arrow-right"></i>
         </a>
     </div>

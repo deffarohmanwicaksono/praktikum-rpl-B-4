@@ -243,6 +243,14 @@
     background: var(--soft-bg);
 }
 
+.action-btn.active {
+    color: var(--primary-blue);
+}
+
+.action-btn.active i {
+    color: var(--primary-blue);
+}
+
 /* ==============================================
    NOTIFICATION
    ============================================== */

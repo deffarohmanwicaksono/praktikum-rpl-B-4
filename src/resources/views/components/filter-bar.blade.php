@@ -5,7 +5,7 @@
             <button class="pill" data-cat="elektronik">Elektronik</button>
             <button class="pill" data-cat="buku">Buku</button>
             <button class="pill" data-cat="pakaian">Pakaian</button>
-            <button class="pill" data-cat="perabot">Perabot Rumah</button>
+            <button class="pill" data-cat="perabot">Peralatan Kost</button>
             <button class="pill" data-cat="alat-tulis">Alat Tulis</button>
             <button class="pill" data-cat="sepatu">Sepatu & Tas</button>
             <button class="pill" data-cat="olahraga">Olahraga</button>
