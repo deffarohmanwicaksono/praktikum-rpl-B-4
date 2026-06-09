@@ -1,361 +1,37 @@
-// Mengambil konfigurasi dari Blade
-const dummyImage = window.SeMartConfig.dummyImage;
-
 // =============================================
 // DATA MOCK
 // =============================================
-const PRODUCTS = [
-    {
-        id: 1,
-        name: 'Laptop Acer Aspire 5',
-        price: 2300000,
-        cat: 'elektronik',
-        cond: 'bekas-baik',
-        location: 'Kampus UNS',
-        img: dummyImage,
-        tags: ['laptop', 'acer', 'notebook', 'komputer']
-    },
-    {
-        id: 2,
-        name: 'HP Pavilion 14',
-        price: 2750000,
-        cat: 'elektronik',
-        cond: 'like-new',
-        location: 'Kampus UNS',
-        img: dummyImage,
-        tags: ['laptop', 'hp', 'notebook', 'komputer']
-    },
-    {
-        id: 3,
-        name: 'ASUS VivoBook 15',
-        price: 2950000,
-        cat: 'elektronik',
-        cond: 'bekas-baik',
-        location: 'Kampus UNS',
-        img: dummyImage,
-        tags: ['laptop', 'asus', 'notebook', 'komputer']
-    },
-    {
-        id: 4,
-        name: 'MacBook Air M1 2020',
-        price: 7500000,
-        cat: 'elektronik',
-        cond: 'like-new',
-        location: 'Kampus UNS',
-        img: dummyImage,
-        tags: [
-            'laptop',
-            'macbook',
-            'apple',
-            'notebook',
-            'komputer',
-            'mac'
-        ]
-    },
-    {
-        id: 5,
-        name: 'Lenovo ThinkPad E14',
-        price: 2100000,
-        cat: 'elektronik',
-        cond: 'bekas-layak',
-        location: 'Kampus UNS',
-        img: dummyImage,
-        tags: [
-            'laptop',
-            'lenovo',
-            'thinkpad',
-            'notebook',
-            'komputer'
-        ]
-    },
-    {
-        id: 6,
-        name: 'Dell Inspiron 14 5000',
-        price: 2600000,
-        cat: 'elektronik',
-        cond: 'bekas-baik',
-        location: 'Kampus UNS',
-        img: dummyImage,
-        tags: [
-            'laptop',
-            'dell',
-            'notebook',
-            'komputer',
-            'inspiron'
-        ]
-    },
-    {
-        id: 7,
-        name: 'MSI Gaming GF63',
-        price: 6200000,
-        cat: 'elektronik',
-        cond: 'like-new',
-        location: 'Kampus UNS',
-        img: dummyImage,
-        tags: [
-            'laptop',
-            'msi',
-            'gaming',
-            'notebook',
-            'komputer'
-        ]
-    },
-    {
-        id: 8,
-        name: 'iPad Air 4 64GB',
-        price: 4200000,
-        cat: 'elektronik',
-        cond: 'like-new',
-        location: 'Kampus UNS',
-        img: dummyImage,
-        tags: ['ipad', 'tablet', 'apple', 'elektronik']
-    },
-    {
-        id: 9,
-        name: 'Headset Sony WH-CH510',
-        price: 250000,
-        cat: 'elektronik',
-        cond: 'bekas-baik',
-        location: 'Kampus UNS',
-        img: dummyImage,
-        tags: [
-            'headset',
-            'headphone',
-            'sony',
-            'audio',
-            'musik'
-        ]
-    },
-    {
-        id: 10,
-        name: 'Mouse Logitech M235',
-        price: 95000,
-        cat: 'elektronik',
-        cond: 'bekas-baik',
-        location: 'Kampus UNS',
-        img: dummyImage,
-        tags: [
-            'mouse',
-            'logitech',
-            'komputer',
-            'aksesoris'
-        ]
-    },
-    {
-        id: 11,
-        name: 'Buku Kalkulus Purcell',
-        price: 45000,
-        cat: 'buku',
-        cond: 'bekas-baik',
-        location: 'Kampus UNS',
-        img: dummyImage,
-        tags: [
-            'buku',
-            'kalkulus',
-            'kuliah',
-            'matematika',
-            'purcell'
-        ]
-    },
-    {
-        id: 12,
-        name: 'Buku Fisika Dasar Halliday',
-        price: 60000,
-        cat: 'buku',
-        cond: 'bekas-baik',
-        location: 'Kampus UNS',
-        img: dummyImage,
-        tags: [
-            'buku',
-            'fisika',
-            'kuliah',
-            'halliday'
-        ]
-    },
-    {
-        id: 13,
-        name: 'Buku Pengantar Akuntansi',
-        price: 35000,
-        cat: 'buku',
-        cond: 'bekas-layak',
-        location: 'Kampus UNS',
-        img: dummyImage,
-        tags: [
-            'buku',
-            'akuntansi',
-            'kuliah',
-            'ekonomi'
-        ]
-    },
-    {
-        id: 14,
-        name: 'Novel Laskar Pelangi',
-        price: 20000,
-        cat: 'buku',
-        cond: 'bekas-layak',
-        location: 'Kampus UNS',
-        img: dummyImage,
-        tags: [
-            'buku',
-            'novel',
-            'fiksi',
-            'laskar pelangi'
-        ]
-    },
-    {
-        id: 15,
-        name: 'Jaket Hoodie Uniqlo',
-        price: 120000,
-        cat: 'pakaian',
-        cond: 'bekas-baik',
-        location: 'Kampus UNS',
-        img: dummyImage,
-        tags: [
-            'jaket',
-            'hoodie',
-            'uniqlo',
-            'pakaian',
-            'baju'
-        ]
-    },
-    {
-        id: 16,
-        name: 'Kemeja Flanel Oversize',
-        price: 55000,
-        cat: 'pakaian',
-        cond: 'like-new',
-        location: 'Kampus UNS',
-        img: dummyImage,
-        tags: [
-            'kemeja',
-            'flanel',
-            'pakaian',
-            'baju'
-        ]
-    },
-    {
-        id: 17,
-        name: 'Celana Chino Abu',
-        price: 80000,
-        cat: 'pakaian',
-        cond: 'bekas-baik',
-        location: 'Kampus UNS',
-        img: dummyImage,
-        tags: [
-            'celana',
-            'chino',
-            'pakaian',
-            'baju'
-        ]
-    },
-    {
-        id: 18,
-        name: 'Meja Belajar Lipat',
-        price: 150000,
-        cat: 'perabot',
-        cond: 'bekas-baik',
-        location: 'Kampus UNS',
-        img: dummyImage,
-        tags: [
-            'meja',
-            'belajar',
-            'perabot',
-            'furniture',
-            'lipat'
-        ]
-    },
-    {
-        id: 19,
-        name: 'Kursi Lipat Ergonomis',
-        price: 200000,
-        cat: 'perabot',
-        cond: 'bekas-baik',
-        location: 'Kampus UNS',
-        img: dummyImage,
-        tags: [
-            'kursi',
-            'lipat',
-            'perabot',
-            'furniture'
-        ]
-    },
-    {
-        id: 20,
-        name: 'Nike Air Max 270',
-        price: 380000,
-        cat: 'sepatu',
-        cond: 'bekas-baik',
-        location: 'Kampus UNS',
-        img: dummyImage,
-        tags: [
-            'sepatu',
-            'nike',
-            'air max',
-            'sneaker'
-        ]
-    },
-    {
-        id: 21,
-        name: 'Sepatu Running Adidas',
-        price: 290000,
-        cat: 'sepatu',
-        cond: 'bekas-baik',
-        location: 'Kampus UNS',
-        img: dummyImage,
-        tags: [
-            'sepatu',
-            'adidas',
-            'running',
-            'olahraga'
-        ]
-    },
-    {
-        id: 22,
-        name: 'Tas Ransel Laptop Eiger',
-        price: 175000,
-        cat: 'sepatu',
-        cond: 'bekas-baik',
-        location: 'Kampus UNS',
-        img: dummyImage,
-        tags: [
-            'tas',
-            'ransel',
-            'laptop',
-            'eiger',
-            'backpack'
-        ]
-    },
-    {
-        id: 23,
-        name: 'Raket Badminton Yonex',
-        price: 85000,
-        cat: 'olahraga',
-        cond: 'bekas-layak',
-        location: 'Kampus UNS',
-        img: dummyImage,
-        tags: [
-            'raket',
-            'badminton',
-            'yonex',
-            'olahraga'
-        ]
-    },
-    {
-        id: 24,
-        name: 'Matras Yoga Tebal',
-        price: 110000,
-        cat: 'olahraga',
-        cond: 'bekas-baik',
-        location: 'Kampus UNS',
-        img: dummyImage,
-        tags: [
-            'matras',
-            'yoga',
-            'olahraga',
-            'fitness'
-        ]
+const dummyImage = window.SeMartConfig.dummyImage;
+const appUrl = window.SeMartConfig.appUrl;
+const rawDatabaseProducts = window.SeMartConfig.dbProducts || [];
+const PRODUCTS = rawDatabaseProducts.map(dbItem => {
+    
+    let imageUrl = dummyImage;
+    
+    if (dbItem.product_images && dbItem.product_images.length > 0) {
+        const firstImg = dbItem.product_images[0].image_url;
+        
+        if (firstImg.startsWith('http')) {
+            imageUrl = firstImg; 
+        } else if (firstImg.startsWith('images/')) {
+            imageUrl = `${appUrl}/${firstImg}`; 
+        } else {
+            imageUrl = `${appUrl}/storage/${firstImg}`; 
+        }
     }
-];
+
+    return {
+        id: dbItem.id,
+        name: dbItem.name,
+        price: dbItem.price,
+        cat: dbItem.category ? dbItem.category.name.toLowerCase() : 'elektronik',
+        
+        cond: dbItem.kondisi || 'bekas-baik', 
+        
+        img: imageUrl,
+        tags: [dbItem.name.toLowerCase()] 
+    };
+});
 
 let recentSearches = JSON.parse(
     localStorage.getItem('semart_recent') ||
@@ -424,8 +100,10 @@ const condLabel = {
     'bekas-layak': 'Bekas Layak Pakai'
 };
 
-const fmtPrice = n =>
-    'Rp ' + n.toLocaleString('id-ID');
+const fmtPrice = n => {
+    const num = parseInt(n); 
+    return 'Rp ' + num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+};
 
 function showState(name) {
 

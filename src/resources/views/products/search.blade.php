@@ -17,7 +17,9 @@
 
     <script>
         window.SeMartConfig = {
-            dummyImage: '{{ asset("images/Elemen-1.png") }}'
+            dummyImage: '{{ asset("images/Elemen-1.png") }}',
+            appUrl: '{{ url("/") }}',
+            dbProducts: @json($products) 
         };
     </script>
 @endpush
