@@ -70,12 +70,18 @@ document.addEventListener('DOMContentLoaded', () => {
     // INITIAL CHECK
     // =====================================================
 
-    const initialThumbs =
-        thumbStrip.querySelectorAll('.foto-thumb');
-
+    const initialThumbs = thumbStrip.querySelectorAll('.foto-thumb');
+    
     if (initialThumbs.length === 0) {
         showEmptyState();
+    } else {
+        const activeThumb = thumbStrip.querySelector('.foto-thumb.active');
+        if (activeThumb) {
+            updateMainImage(activeThumb.dataset.src);
+        }
     }
+
+    let uploadedFiles = [];
 
     // =====================================================
     // CHAR COUNTER
@@ -197,6 +203,26 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!activeThumb) {
                 closeDeleteModal();
                 return;
+            }
+
+            // If it's an existing image, remove the hidden input
+            const imageId = activeThumb.dataset.imageId;
+            if (imageId) {
+                const hiddenInput = document.querySelector(`input[name="existing_images[]"][value="${imageId}"]`);
+                if (hiddenInput) hiddenInput.remove();
+            } else {
+                // If it's a newly uploaded file, we need to remove it from uploadedFiles
+                // The index in uploadedFiles matches the order of new thumbnails
+                // A reliable way is to recalculate uploadedFiles or just attach a file object to the thumb
+                // For simplicity, we just filter it out based on the data-index if we were storing it,
+                // but since we just append to uploadedFiles, let's keep track:
+                const fileIndex = activeThumb.dataset.fileIndex;
+                if (fileIndex !== undefined) {
+                    uploadedFiles.splice(fileIndex, 1);
+                    // Re-index remaining new thumbs
+                    const newThumbs = thumbStrip.querySelectorAll('.foto-thumb:not([data-image-id])');
+                    newThumbs.forEach((th, idx) => { th.dataset.fileIndex = idx; });
+                }
             }
 
             activeThumb.remove();
@@ -360,7 +386,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            createThumbnail(file);
+            uploadedFiles.push(file);
+            createThumbnail(file, uploadedFiles.length - 1);
         });
     };
 
@@ -368,7 +395,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // CREATE THUMBNAIL
     // =====================================================
 
-    const createThumbnail = (file) => {
+    const createThumbnail = (file, fileIndex) => {
 
         const reader = new FileReader();
 
@@ -383,6 +410,7 @@ document.addEventListener('DOMContentLoaded', () => {
             thumb.className = 'foto-thumb';
 
             thumb.dataset.src = imageSrc;
+            thumb.dataset.fileIndex = fileIndex;
 
             thumb.innerHTML = `
                 <img
@@ -489,6 +517,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 return;
             }
+
+            // Strip non-numeric characters from price before submit
+            document.getElementById('harga').value = harga.replace(/\D/g, '');
+
+            // Sync uploadedFiles array with the actual file input
+            const dataTransfer = new DataTransfer();
+            uploadedFiles.forEach(file => dataTransfer.items.add(file));
+            document.getElementById('fotoInputBaru').files = dataTransfer.files;
 
             formEditBarang.submit();
         });
