@@ -9,10 +9,34 @@
 
 {{-- PAGE JS --}}
 @push('scripts')
+    <script>
+        window.wishlistedProductIds = {!! json_encode($wishlistedIds ?? []) !!};
+    </script>
     @vite('resources/js/products/detail-product.js')
 @endpush
 
 @section('content')
+
+@php
+    $images = $product->productImages->sortBy('order')->values();
+
+    $processedImages = $images->map(function($img) {
+        $url = $img->image_url;
+        if (str_starts_with($url, 'http')) return $url;
+        if (str_starts_with($url, 'images/')) return asset($url);
+        return asset('storage/' . ltrim($url, '/'));
+    });
+
+    $mainImageUrl = $processedImages->first() ?? asset('images/placeholder.png');
+
+    $condLabel = [
+        'bekas_seperti_baru' => 'Bekas Seperti Baru',
+        'bekas_baik'         => 'Bekas Baik',
+        'bekas_layak_pakai'  => 'Bekas Layak Pakai',
+    ];
+    $condDisplay = $condLabel[$product->condition ?? 'bekas_baik'] ?? ucfirst(str_replace('_', ' ', $product->condition));
+    $condClass   = $product->condition ?? 'bekas_baik';
+@endphp
 
 <div class="detail-layout">
 
@@ -23,8 +47,8 @@
         <div class="main-image-wrap" id="mainImageWrap">
 
             <img
-                src="{{ asset('images/Elemen-1.png') }}"
-                alt="MacBook Air M1 2020"
+                src="{{ $mainImageUrl }}"
+                alt="{{ $product->name }}"
                 class="main-image"
                 id="mainImage"
             >
@@ -41,18 +65,24 @@
 
             <div class="thumbnails-wrap" id="thumbnailsWrap">
 
-                @for ($i = 1; $i <= 5; $i++)
+                @forelse ($processedImages as $idx => $imgUrl)
                     <button
-                        class="thumb {{ $i === 1 ? 'active' : '' }}"
-                        data-img="{{ asset('images/Elemen-1.png') }}"
-                        data-idx="{{ $i - 1 }}"
+                        class="thumb {{ $idx === 0 ? 'active' : '' }}"
+                        data-img="{{ $imgUrl }}"
+                        data-idx="{{ $idx }}"
                     >
                         <img
-                            src="{{ asset('images/Elemen-1.png') }}"
-                            alt="Foto {{ $i }}"
+                            src="{{ $imgUrl }}"
+                            alt="Foto {{ $idx + 1 }}"
                         >
                     </button>
-                @endfor
+                @empty
+                    <button class="thumb active"
+                        data-img="{{ asset('images/placeholder.png') }}"
+                        data-idx="0">
+                        <img src="{{ asset('images/placeholder.png') }}" alt="Foto 1">
+                    </button>
+                @endforelse
 
             </div>
 
@@ -87,7 +117,7 @@
                         <div class="seller-name-row">
 
                             <span class="seller-name">
-                                Andi Pratama
+                                {{ $product->user->name ?? 'Seller SeMart' }}
                             </span>
 
                             <span
@@ -145,7 +175,7 @@
         {{-- ACTION BUTTONS --}}
         <div class="action-cards-row">
 
-            <button class="action-card" id="wishlistCardBtn">
+            <button class="action-card" id="wishlistCardBtn" data-product-id="{{ $product->id }}">
 
                 <div class="action-icon-wrap">
                     <i class="bi bi-heart" id="wishlistCardIcon"></i>
@@ -168,7 +198,7 @@
 
             </button>
 
-            {{-- TOMBOL LAPORKAN BARANG SUDAH DITAMBAHKAN ID --}}
+            {{-- TOMBOL LAPORKAN BARANG --}}
             <button class="action-card action-card--report" id="openReportModalBtn">
 
                 <div class="action-icon-wrap action-icon--report">
@@ -199,20 +229,20 @@
     <div class="detail-right">
 
         <span class="category-tag">
-            Elektronik
+            {{ $product->category->name ?? 'Lainnya' }}
         </span>
 
         <h1 class="product-title">
-            Laptop MacBook Air M1 2020
+            {{ $product->name }}
         </h1>
 
         <p class="product-price">
-            Rp 7.500.000
+            Rp {{ number_format($product->price, 0, ',', '.') }}
         </p>
 
         <div class="condition-row">
-            <span class="cond-pill bekas-baik">
-                Bekas Seperti Baru
+            <span class="cond-pill {{ $condClass }}">
+                {{ $condDisplay }}
             </span>
         </div>
 
@@ -224,30 +254,20 @@
             </h3>
 
             <div class="desc-text">
+                @php
+                    $fullDesc   = $product->description ?? 'Tidak ada deskripsi.';
+                    $shortLimit = 200;
+                    $isLong     = mb_strlen($fullDesc) > $shortLimit;
+                    $shortDesc  = $isLong ? mb_substr($fullDesc, 0, $shortLimit) . '...' : $fullDesc;
+                @endphp
 
-                <p>
-                    <strong>MacBook Air M1 2020 (Space Gray)</strong><br>
-                    Laptop andalan dengan performa chip M1 yang masih sangat kencang untuk kebutuhan kuliah, browsing, desain grafis ringan, hingga editing video/foto. Sangat cocok bagi mahasiswa atau pekerja kreatif yang membutuhkan mobilitas tinggi.
-                </p>
+                <p>{!! nl2br(e($isLong ? $shortDesc : $fullDesc)) !!}</p>
 
+                @if ($isLong)
                 <p class="desc-extra" id="descExtra" style="display:none">
-
-                    <strong>Spesifikasi Singkat:</strong><br>
-                    • RAM: 8GB Unified Memory<br>
-                    • SSD: 256GB (Super cepat)<br>
-                    • Layar: Retina Display 13.3 inci yang jernih<br>
-                    • Baterai: Health masih sangat awet (di atas 90%)<br><br>
-
-                    <strong>Kondisi:</strong><br>
-                    • Body mulus 98%, tidak ada dent atau goresan berarti.<br>
-                    • Layar bersih, tidak ada dead pixel.<br>
-                    • Semua fitur (Keyboard, Trackpad, Webcam, Speaker) berjalan normal tanpa kendala.<br>
-                    • Kelengkapan: Unit MacBook dan Charger original (Box sudah tidak ada).<br><br>
-
-                    <strong>Alasan Dijual:</strong><br>
-                    Upgrade ke seri Pro karena kebutuhan project yang lebih berat.
-
+                    {!! nl2br(e($fullDesc)) !!}
                 </p>
+                @endif
 
             </div>
 
@@ -347,19 +367,19 @@
 
                     <div class="report-product-image">
                         <img
-                            src="{{ asset('images/Elemen-1.png') }}"
-                            alt="{{ $product->name ?? 'Produk' }}"
+                            src="{{ $mainImageUrl }}"
+                            alt="{{ $product->name }}"
                         >
                     </div>
 
                     <div class="report-product-info">
 
                         <h4>
-                            {{ $product->name ?? 'Laptop MacBook Air M1 2020' }}
+                            {{ $product->name }}
                         </h4>
 
                         <p class="report-product-price">
-                            Rp {{ number_format($product->price ?? 7500000, 0, ',', '.') }}
+                            Rp {{ number_format($product->price, 0, ',', '.') }}
                         </p>
 
                         <span class="report-product-seller">

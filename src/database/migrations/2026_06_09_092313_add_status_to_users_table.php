@@ -11,9 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('purchase_links', function (Blueprint $table) {
-            $table->text('note')->nullable();
-            $table->json('payment_methods')->nullable();
+        Schema::table('users', function (Blueprint $table) {
+            $table->enum('status', ['aktif', 'diblokir'])->default('aktif')->after('password');
         });
     }
 
@@ -22,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('purchase_links', function (Blueprint $table) {
-            $table->dropColumn(['note', 'payment_methods']);
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('status');
         });
     }
 };

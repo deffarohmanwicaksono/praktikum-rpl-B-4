@@ -11,17 +11,22 @@ class Transaction extends Model
     use HasFactory;
 
     protected $fillable = [
+        'transaction_code',
         'purchase_link_id',
         'buyer_id',
         'product_id',
+        'quantity',
         'total_price',
         'status',
         'payment_method',
         'payment_proof',
+        'paid_at',
+        'completed_at',
     ];
 
     protected $casts = [
         'paid_at' => 'datetime',
+        'completed_at' => 'datetime',
     ];
 
     // Relasi dengan model lain
@@ -43,5 +48,10 @@ class Transaction extends Model
     public function purchaseLink(): BelongsTo
     {
         return $this->belongsTo(PurchaseLink::class);
+    }
+
+    public function review()
+    {
+        return $this->hasOne(Review::class);
     }
 }

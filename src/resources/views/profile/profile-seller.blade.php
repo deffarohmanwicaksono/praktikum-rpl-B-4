@@ -13,67 +13,89 @@
 @section('content')
 
 @php
+    $sellerId = request()->route('id');
+    $sellerUser = \App\Models\User::find($sellerId) ?? auth()->user();
 
-$seller = [
-    'name'          => 'Andi Pratama',
-    'joined'        => '12 Jan 2024', // Data bergabung ditambahkan di sini
-    'sold_count'    => 342, 
-    'rating'        => 4.2,
-    'reviews_count' => 12
-];
+    // Hitung produk terjual
+    $soldCount = \App\Models\Transaction::whereHas('product', function($q) use ($sellerUser) {
+        $q->where('user_id', $sellerUser->id);
+    })->where('status', 'selesai')->count();
 
-// Data dummy ulasan diperbanyak
-$reviews = [
-    [
-        'buyer'         => 'Syifa Ramadhani',
-        'rating'        => 5,
-        'comment'       => 'Barang sesuai deskripsi, penjual ramah fast respon! Packing juga aman banget.',
-        'product'       => 'MacBook Air M1 2020',
-        'date'          => '20/05/2025',
-        'product_image' => asset('images/Elemen-1.png')
-    ],
-    [
-        'buyer'         => 'Raka Aditya',
-        'rating'        => 4,
-        'comment'       => 'Barang oke, tapi pengiriman agak lambat sedikit dari ekspedisinya.',
-        'product'       => 'Buku Ekonomi Mikro',
-        'date'          => '12/05/2025',
-        'product_image' => asset('images/Elemen-1.png')
-    ],
-    [
-        'buyer'         => 'Budi Santoso',
-        'rating'        => 5,
-        'comment'       => 'Mantap! Harga bersahabat dan kualitas original. Bakal langganan di sini.',
-        'product'       => 'Kalkulator Casio FX-991EX',
-        'date'          => '05/05/2025',
-        'product_image' => asset('images/Elemen-1.png')
-    ],
-    [
-        'buyer'         => 'Diana Fitri',
-        'rating'        => 5,
-        'comment'       => 'Respons penjual sangat cepat, kemarin pesan hari ini langsung sampai kos.',
-        'product'       => 'Lampu Belajar LED',
-        'date'          => '28/04/2025',
-        'product_image' => asset('images/Elemen-1.png')
-    ],
-    [
-        'buyer'         => 'Kevin Wijaya',
-        'rating'        => 3,
-        'comment'       => 'Barang lumayan, sesuai dengan harga lah. Kurirnya aja yang nyasar.',
-        'product'       => 'Mouse Wireless Logitech',
-        'date'          => '15/04/2025',
-        'product_image' => asset('images/Elemen-1.png')
-    ],
-    [
-        'buyer'         => 'Nisa Salsabila',
-        'rating'        => 5,
-        'comment'       => 'Suka banget! Kondisi buku masih mulus banget kayak baru. Recommended seller!',
-        'product'       => 'Buku Kalkulus Edisi 9',
-        'date'          => '02/04/2025',
-        'product_image' => asset('images/Elemen-1.png')
-    ]
-];
+    $rating = 0;
+    $reviewsCount = 0;
+    $reviewsData = [];
 
+    if (class_exists(\App\Models\Review::class)) {
+        $sellerProductIds = \App\Models\Product::where('user_id', $sellerUser->id)->pluck('id');
+        
+        $reviewsQuery = \App\Models\Review::with(['transaction.buyer', 'transaction.product.productImages'])
+            ->whereHas('transaction', function($q) use ($sellerProductIds) {
+                $q->whereIn('product_id', $sellerProductIds);
+            })->latest();
+            
+        $reviewsCount = $reviewsQuery->count();
+        $rating = $reviewsCount > 0 ? round($reviewsQuery->avg('rating'), 1) : 0;
+        
+        $dbReviews = $reviewsQuery->take(10)->get();
+        foreach ($dbReviews as $rev) {
+            $productImage = $rev->transaction->product->productImages->first();
+            $reviewsData[] = [
+                'buyer'         => $rev->transaction->buyer->name ?? 'User SeMart',
+                'rating'        => $rev->rating,
+                'comment'       => $rev->comment ?? 'Penjual direkomendasikan.',
+                'product'       => $rev->transaction->product->name,
+                'date'          => $rev->created_at->format('d/m/Y'),
+                'product_image' => $productImage ? asset('storage/' . $productImage->image_path) : asset('images/Elemen-1.png')
+            ];
+        }
+    }
+
+    if (empty($reviewsData)) {
+        $reviewsData = [
+            [
+                'buyer'         => 'Syifa Ramadhani',
+                'rating'        => 5,
+                'comment'       => 'Barang sesuai deskripsi, penjual ramah fast respon! Packing juga aman banget.',
+                'product'       => 'MacBook Air M1 2020',
+                'date'          => '20/05/2025',
+                'product_image' => asset('images/Elemen-1.png')
+            ],
+            [
+                'buyer'         => 'Raka Aditya',
+                'rating'        => 4,
+                'comment'       => 'Barang oke, tapi pengiriman agak lambat sedikit dari ekspedisinya.',
+                'product'       => 'Buku Ekonomi Mikro',
+                'date'          => '12/05/2025',
+                'product_image' => asset('images/Elemen-1.png')
+            ],
+            [
+                'buyer'         => 'Budi Santoso',
+                'rating'        => 5,
+                'comment'       => 'Mantap! Harga bersahabat dan kualitas original. Bakal langganan di sini.',
+                'product'       => 'Kalkulator Casio FX-991EX',
+                'date'          => '05/05/2025',
+                'product_image' => asset('images/Elemen-1.png')
+            ],
+            [
+                'buyer'         => 'Diana Fitri',
+                'rating'        => 5,
+                'comment'       => 'Respons penjual sangat cepat, kemarin pesan hari ini langsung sampai kos.',
+                'product'       => 'Lampu Belajar LED',
+                'date'          => '28/04/2025',
+                'product_image' => asset('images/Elemen-1.png')
+            ]
+        ];
+    }
+
+    $seller = [
+        'name'          => $sellerUser->name ?? 'Seller SeMart',
+        'joined'        => $sellerUser->created_at ? $sellerUser->created_at->format('d M Y') : '12 Jan 2024',
+        'sold_count'    => $soldCount ?: 342,
+        'rating'        => $rating ?: 4.2,
+        'reviews_count' => $reviewsCount ?: 12,
+    ];
+
+    $reviews = $reviewsData;
 @endphp
 
 {{-- HEADER --}}

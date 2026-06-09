@@ -18,6 +18,7 @@ return new class extends Migration
             $table->text('content');
             $table->boolean('is_read')->default(false);
             $table->timestamps();
+            // $table->foreignId('message_id') ->nullable()->constrained('messages')->nullOnDelete();
         });
     }
 

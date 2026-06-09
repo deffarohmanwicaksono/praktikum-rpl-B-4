@@ -15,19 +15,56 @@
 @section('content')
 
 @php
+    $currentUser = auth()->user();
+    
+    $roleLabels = [];
+    if ($currentUser->role === 'admin') {
+        $roleLabels[] = 'Admin';
+    } elseif ($currentUser->role === 'seller') {
+        $roleLabels[] = 'Seller';
+        $roleLabels[] = 'Buyer';
+    } else {
+        $roleLabels[] = 'Buyer';
+    }
+
+    // Hitung produk yang dijual
+    $productsCount = \App\Models\Product::where('user_id', $currentUser->id)->count();
+
+    // Hitung transaksi selesai
+    if ($currentUser->role === 'seller') {
+        $transactionsCount = \App\Models\Transaction::whereHas('product', function($q) use ($currentUser) {
+            $q->where('user_id', $currentUser->id);
+        })->where('status', 'selesai')->count();
+    } else {
+        $transactionsCount = \App\Models\Transaction::where('buyer_id', $currentUser->id)
+            ->where('status', 'selesai')->count();
+    }
+
+    // Hitung ulasan
+    $rating = 0;
+    $reviewsCount = 0;
+    if (class_exists(\App\Models\Review::class)) {
+        $sellerProductIds = \App\Models\Product::where('user_id', $currentUser->id)->pluck('id');
+        $reviewsQuery = \App\Models\Review::whereHas('transaction', function($q) use ($sellerProductIds) {
+            $q->whereIn('product_id', $sellerProductIds);
+        });
+        $reviewsCount = $reviewsQuery->count();
+        $rating = $reviewsCount > 0 ? round($reviewsQuery->avg('rating'), 1) : 0;
+    }
+
     $user = [
-        'name'      => 'Andi Pratama',
-        'email'     => 'andi.pratama@student.uns.ac.id',
-        'phone'     => '081234567890',
-        'role'      => ['Seller', 'Buyer'],
+        'name'      => $currentUser->name ?? 'User SeMart',
+        'email'     => $currentUser->email,
+        'phone'     => $currentUser->phone ?? '081234567890',
+        'role'      => $roleLabels,
         'status'    => 'Aktif',
-        'joined'    => '12 Jan 2024',
+        'joined'    => $currentUser->created_at ? $currentUser->created_at->format('d M Y') : '12 Jan 2024',
         'avatar'    => asset('images/default-avatar.jpg'),
 
-        'products'  => 24,
-        'transactions' => 156,
-        'rating'    => 4.2,
-        'reviews'   => 12
+        'products'  => $productsCount,
+        'transactions' => $transactionsCount,
+        'rating'    => $rating ?: 4.2,
+        'reviews'   => $reviewsCount ?: 12,
     ];
 
     $isSeller = in_array('Seller', $user['role']);
@@ -187,5 +224,16 @@
     </div>
 
 </section>
+
+@if(auth()->user()->role === 'buyer')
+<div class="profile-action-btn-wrap" style="margin-top: 24px; text-align: center;">
+    <form action="{{ route('profile.become-seller') }}" method="POST">
+        @csrf
+        <button type="submit" class="btn btn-primary" style="padding: 10px 24px; font-family: 'Poppins', sans-serif; font-weight: 500; border-radius: 8px; background-color: #0d6efd; border: none; color: #fff; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s;">
+            <i class="bi bi-shop"></i> Aktifkan Fitur Penjual (Seller)
+        </button>
+    </form>
+</div>
+@endif
 
 @endsection
