@@ -16,45 +16,7 @@
 @section('content')
 
 @php
-// Data dummy riwayat penjualan
-$salesHistory = [
-    [
-        'id' => 'TRX-2026-001',
-        'product_name' => 'Buku Kalkulus Stewart',
-        'buyer' => 'Budi Santoso',
-        'income' => 'Rp 250.000',
-        'date' => '05 Juni 2026',
-        'time' => '10:15 WIB',
-        'status' => 'Menunggu Pembayaran',
-        'status_class' => 'status-menunggu',
-        'image' => asset('images/products/kalkulus_steward.jpg'),
-        'payment_proof' => asset('images/products/basis_data.jpg'),
-    ],
-    [
-        'id' => 'TRX-2026-002',
-        'product_name' => 'Jaket Almamater UNS',
-        'buyer' => 'Citra Lestari',
-        'income' => 'Rp 120.000',
-        'date' => '03 Juni 2026',
-        'time' => '14:20 WIB',
-        'status' => 'Selesai',
-        'status_class' => 'status-selesai',
-        'image' => asset('images/products/almet.jpg'),
-        'payment_proof' => asset('images/products/tas_ransel.jpg'),
-    ],
-    [
-        'id' => 'TRX-2026-003',
-        'product_name' => 'Buku Basis Data 2',
-        'buyer' => 'Deni Ramadhan',
-        'income' => 'Rp 110.000',
-        'date' => '01 Juni 2026',
-        'time' => '09:00 WIB',
-        'status' => 'Selesai',
-        'status_class' => 'status-selesai',
-        'image' => asset('images/products/basis_data2.jpg'),
-        'payment_proof' => asset('images/products/struktur_data_java.jpg'),
-    ]
-];
+// Data transaksi sekarang diambil secara dinamis dari HistoryController
 @endphp
 
 <section class="page-header-section">
@@ -92,35 +54,35 @@ $salesHistory = [
             </tr>
         </thead>
             <tbody id="salesHistoryBody">
-                @forelse($salesHistory as $trx)
+                @forelse($transactions as $trx)
                 <tr class="sales-row"
-                    data-id="{{ $trx['id'] }}"
-                    data-status-class="{{ $trx['status_class'] }}"
-                    data-income="{{ $trx['income'] }}"
-                    data-date="{{ $trx['date'] }}"
-                    data-time="{{ $trx['time'] }}">
+                    data-id="TRX-{{ str_pad($trx->id, 4, '0', STR_PAD_LEFT) }}"
+                    data-status-class="{{ $trx->status_class }}"
+                    data-income="{{ $trx->total_price }}"
+                    data-date="{{ $trx->formatted_date }}"
+                    data-time="{{ $trx->formatted_time }}">
 
                     <td class="col-id">
                         <i class="bi bi-receipt"></i>
-                        <span class="id-trx-text">{{ $trx['id'] }}</span>
+                        <span class="id-trx-text">TRX-{{ str_pad($trx->id, 4, '0', STR_PAD_LEFT) }}</span>
                     </td>
 
                     <td class="col-barang">
                         <div class="product-profile-cell">
                             <div class="product-avatar-wrap">
-                                <img src="{{ $trx['image'] }}"
-                                    alt="{{ $trx['product_name'] }}"
+                                <img src="{{ $trx->image_url }}"
+                                    alt="{{ $trx->product->name }}"
                                     class="product-avatar">
                             </div>
 
                             <div class="product-meta-details">
                                 <span class="product-name-text">
-                                    {{ $trx['product_name'] }}
+                                    {{ $trx->product->name }}
                                 </span>
 
                                 <span class="seller-info-text">
                                     Buyer:
-                                    <strong>{{ $trx['buyer'] }}</strong>
+                                    <strong>{{ $trx->buyer->name ?? 'Unknown Buyer' }}</strong>
                                 </span>
                             </div>
                         </div>
@@ -129,23 +91,23 @@ $salesHistory = [
                     <td class="col-tanggal">
                         <div class="date-time-wrapper">
                             <span class="date-text-main">
-                                {{ $trx['date'] }}
+                                {{ $trx->formatted_date }}
                             </span>
                             <span class="time-text-sub">
-                                {{ $trx['time'] }}
+                                {{ $trx->formatted_time }}
                             </span>
                         </div>
                     </td>
 
                     <td class="col-total">
                         <span class="price-text-new">
-                            {{ $trx['income'] }}
+                            {{ $trx->mapped_price }}
                         </span>
                     </td>
 
                     <td class="col-status">
-                        <span class="status-badge {{ $trx['status_class'] }}">
-                            {{ $trx['status'] }}
+                        <span class="status-badge {{ $trx->status_class }}">
+                            {{ $trx->mapped_status }}
                         </span>
                     </td>
 
@@ -153,23 +115,23 @@ $salesHistory = [
                         <div class="action-buttons-group">
                             <button
                                 class="btn-action btn-detail-view"
-                                data-id="{{ $trx['id'] }}"
-                                data-name="{{ $trx['product_name'] }}"
-                                data-buyer="{{ $trx['buyer'] }}"
-                                data-income="{{ $trx['income'] }}"
-                                data-date="{{ $trx['date'] }}, {{ $trx['time'] }}"
-                                data-status="{{ $trx['status'] }}"
-                                data-status-class="{{ $trx['status_class'] }}"
-                                data-payment="{{ $trx['payment_proof'] }}">
+                                data-id="TRX-{{ str_pad($trx->id, 4, '0', STR_PAD_LEFT) }}"
+                                data-name="{{ $trx->product->name }}"
+                                data-buyer="{{ $trx->buyer->name ?? 'Unknown Buyer' }}"
+                                data-income="{{ $trx->mapped_price }}"
+                                data-date="{{ $trx->formatted_date }}, {{ $trx->formatted_time }}"
+                                data-status="{{ $trx->mapped_status }}"
+                                data-status-class="{{ $trx->status_class }}"
+                                data-payment="{{ $trx->payment_proof_url }}">
                                 <i class="bi bi-eye"></i>
                                 Detail
                             </button>
 
-                            @if($trx['status_class'] !== 'status-selesai')
+                            @if($trx->status_class !== 'status-selesai')
                                 <button
                                     class="btn-action btn-close-sale"
-                                    data-id="{{ $trx['id'] }}"
-                                    data-name="{{ $trx['product_name'] }}">
+                                    data-id="TRX-{{ str_pad($trx->id, 4, '0', STR_PAD_LEFT) }}"
+                                    data-name="{{ $trx->product->name }}">
                                     <i class="bi bi-check2-circle"></i>
                                     Tutup
                                 </button>
