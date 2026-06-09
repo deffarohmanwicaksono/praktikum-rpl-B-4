@@ -16,29 +16,18 @@
 
 @php
     $currentUser = auth()->user();
-    
-    $roleLabels = [];
-    if ($currentUser->role === 'admin') {
-        $roleLabels[] = 'Admin';
-    } elseif ($currentUser->role === 'seller') {
-        $roleLabels[] = 'Seller';
-        $roleLabels[] = 'Buyer';
-    } else {
-        $roleLabels[] = 'Buyer';
-    }
+    $roleLabels = array_map('ucfirst', $currentUser->roles ?? ['buyer']);
 
     // Hitung produk yang dijual
     $productsCount = \App\Models\Product::where('user_id', $currentUser->id)->count();
 
-    // Hitung transaksi selesai
-    if ($currentUser->role === 'seller') {
-        $transactionsCount = \App\Models\Transaction::whereHas('product', function($q) use ($currentUser) {
-            $q->where('user_id', $currentUser->id);
-        })->where('status', 'selesai')->count();
-    } else {
-        $transactionsCount = \App\Models\Transaction::where('buyer_id', $currentUser->id)
-            ->where('status', 'selesai')->count();
-    }
+    // Hitung transaksi selesai (sebagai buyer maupun seller)
+    $transactionsCount = \App\Models\Transaction::where(function($q) use ($currentUser) {
+        $q->where('buyer_id', $currentUser->id)
+          ->orWhereHas('product', function($q2) use ($currentUser) {
+              $q2->where('user_id', $currentUser->id);
+          });
+    })->where('status', 'selesai')->count();
 
     // Hitung ulasan
     $rating = 0;
@@ -225,7 +214,7 @@
 
 </section>
 
-@if(auth()->user()->role === 'buyer')
+@if(!$isSeller)
 <div class="profile-action-btn-wrap" style="margin-top: 24px; text-align: center;">
     <form action="{{ route('profile.become-seller') }}" method="POST">
         @csrf
