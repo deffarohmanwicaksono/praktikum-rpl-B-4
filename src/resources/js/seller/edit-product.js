@@ -119,7 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // UPDATE MAIN IMAGE
     // =====================================================
 
-    const updateMainImage = (src) => {
+    function updateMainImage(src) {
 
         if (!src) {
             showEmptyState();
@@ -136,7 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
             fotoMainImg.style.opacity = '1';
 
         }, 150);
-    };
+    }
 
     // =====================================================
     // THUMBNAIL CLICK
