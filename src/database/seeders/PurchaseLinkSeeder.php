@@ -74,7 +74,7 @@ class PurchaseLinkSeeder extends Seeder
                 'deal_price' => 1150000,
                 'expired_at' => now()->addDays(2),
                 'payment_methods' => ['BCA', 'Dana'],
-                'is_used' => false
+                'is_used' => true
             ],
 
             [
@@ -101,7 +101,7 @@ class PurchaseLinkSeeder extends Seeder
                 'deal_price' => 90000,
                 'expired_at' => now()->addDays(3),
                 'payment_methods' => ['BCA', 'Dana', 'ShopeePay'],
-                'is_used' => false
+                'is_used' => true
             ],
 
             [
@@ -151,7 +151,7 @@ class PurchaseLinkSeeder extends Seeder
             fn ($q) => $q->where('status', 'dijual')
         )->doesntHave('purchaseLinks')->get();
         foreach ($eligibleChats as $chat) {
-            if (fake()->boolean(50)) {
+            if (fake()->boolean(60)) {
                 PurchaseLink::factory()->forChat($chat)->create();
             }
         }
