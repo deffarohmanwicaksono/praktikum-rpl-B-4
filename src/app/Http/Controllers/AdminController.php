@@ -239,7 +239,10 @@ class AdminController extends Controller
     {
         $usersQuery = User::withCount(['products'])
             ->with(['products.reviews'])
-            ->get();
+            ->get()
+            ->filter(function ($user) {
+                return !in_array('admin', $user->roles ?? []);
+            });
 
         $users = [];
         foreach ($usersQuery as $user) {
