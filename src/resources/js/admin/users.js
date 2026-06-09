@@ -201,47 +201,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (confirmStatusBtn) {
         confirmStatusBtn.addEventListener('click', () => {
             if (targetUserRow && currentAction) {
-                const statusCell = targetUserRow.querySelector('.col-status');
-                const actionCell = targetUserRow.querySelector('.col-aksi .action-buttons');
                 const userId = confirmStatusBtn.getAttribute('data-id');
-                
-                // Ambil data lama, lalu perbarui objek statusnya agar singkron saat pencarian berikutnya
-                let userData = JSON.parse(targetUserRow.dataset.user);
-
-                if (currentAction === 'blokir') {
-                    userData.status = 'Diblokir';
-                    userData.status_class = 'status-diblokir';
-                    targetUserRow.dataset.user = JSON.stringify(userData);
-
-                    statusCell.innerHTML = '<span class="status-badge status-diblokir">Diblokir</span>';
-                    const detailBtnHtml = actionCell.querySelector('.btn-detail').outerHTML;
-                    actionCell.innerHTML = `
-                        ${detailBtnHtml}
-                        <button class="btn-action btn-status-toggle btn-aktifkan" data-id="${userId}" data-name="${userData.name}" data-action="aktifkan" title="Aktifkan User">
-                            <i class="bi bi-check-circle"></i>
-                        </button>
-                    `;
-                } else {
-                    userData.status = 'Aktif';
-                    userData.status_class = 'status-aktif';
-                    targetUserRow.dataset.user = JSON.stringify(userData);
-
-                    statusCell.innerHTML = '<span class="status-badge status-aktif">Aktif</span>';
-                    const detailBtnHtml = actionCell.querySelector('.btn-detail').outerHTML;
-                    actionCell.innerHTML = `
-                        ${detailBtnHtml}
-                        <button class="btn-action btn-status-toggle btn-blokir" data-id="${userId}" data-name="${userData.name}" data-action="blokir" title="Blokir User">
-                            <i class="bi bi-lock"></i>
-                        </button>
-                    `;
+                const form = document.getElementById('formStatusUser');
+                if (form && userId) {
+                    form.action = `/admin/users/${userId}/toggle-status`;
+                    form.submit();
                 }
-                
-                // Refresh Panel detail kanan supaya ikut sinkron langsung
-                updateDetailPanel(userData);
-
-                // UX Feedback Flash Animation
-                targetUserRow.style.backgroundColor = 'rgba(59, 157, 248, 0.12)';
-                setTimeout(() => { targetUserRow.style.backgroundColor = ''; }, 600);
             }
             closeAllModals();
         });
