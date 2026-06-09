@@ -61,9 +61,11 @@ new class extends Component
     $userId = auth()->id();
     $partner = ($chat->seller_id === $userId) ? $chat->buyer : $chat->seller;
     $productImage = $chat->product->productImages->first();
-    $imageUrl = $productImage
-        ? asset('storage/' . $productImage->image_path)
-        : asset('images/Elemen-1.png');
+    $rawUrl = $productImage ? $productImage->image_url : null;
+    $imageUrl = asset('images/placeholder.png');
+    if ($rawUrl) {
+        $imageUrl = str_starts_with($rawUrl, 'http') ? $rawUrl : (str_starts_with($rawUrl, 'images/') ? asset($rawUrl) : asset('storage/' . ltrim($rawUrl, '/')));
+    }
     $currentPOV = ($chat->seller_id === $userId) ? 'seller' : 'buyer';
 @endphp
 
@@ -104,9 +106,11 @@ new class extends Component
                 @php
                     $token = str_replace(['[PURCHASE_LINK:', ']'], '', $msg->message);
                     $link = $chat->purchaseLinks->where('token', $token)->first();
-                    $imgSrc = $chat->product->productImages->first()
-                        ? asset('storage/' . $chat->product->productImages->first()->image_path)
-                        : asset('images/Elemen-1.png');
+                    $rawUrl = $chat->product->productImages->first() ? $chat->product->productImages->first()->image_url : null;
+                    $imgSrc = asset('images/placeholder.png');
+                    if ($rawUrl) {
+                        $imgSrc = str_starts_with($rawUrl, 'http') ? $rawUrl : (str_starts_with($rawUrl, 'images/') ? asset($rawUrl) : asset('storage/' . ltrim($rawUrl, '/')));
+                    }
                     $isExpired = !$link || $link->expired_at->isPast() || $link->is_used;
                     $cardClass = $isExpired ? 'msg-purchase-card msg-purchase-card--expired' : 'msg-purchase-card';
                     $btnClass = $isExpired ? 'msg-purchase-btn msg-purchase-btn--expired' : 'msg-purchase-btn';

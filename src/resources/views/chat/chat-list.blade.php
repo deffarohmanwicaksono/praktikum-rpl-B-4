@@ -108,9 +108,11 @@
                 $partner = ($chat->seller_id === $userId) ? $chat->buyer : $chat->seller;
                 $pov = ($chat->seller_id === $userId) ? 'seller' : 'buyer';
                 $productImage = $chat->product->productImages->first();
-                $imageUrl = $productImage
-                    ? asset('storage/' . $productImage->image_path)
-                    : asset('images/Elemen-1.png');
+                $rawUrl = $productImage ? $productImage->image_url : null;
+                $imageUrl = asset('images/placeholder.png');
+                if ($rawUrl) {
+                    $imageUrl = str_starts_with($rawUrl, 'http') ? $rawUrl : (str_starts_with($rawUrl, 'images/') ? asset($rawUrl) : asset('storage/' . ltrim($rawUrl, '/')));
+                }
                 $preview = $chat->latestMessage
                     ? $chat->latestMessage->message
                     : 'Belum ada pesan';
