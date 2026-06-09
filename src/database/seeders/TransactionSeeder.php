@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Transaction;
+use App\Models\PurchaseLink;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -13,7 +14,7 @@ class TransactionSeeder extends Seeder
      */
     public function run(): void
     {
-        Transaction::insert([
+        $dataTransaction = [
             // Buyer 3 - Seller 4
             // Laptop Lenovo Thinkpad Bekas
             [
@@ -23,8 +24,8 @@ class TransactionSeeder extends Seeder
                 'quantity' => 1,
                 'total_price' => 3500000,
                 'status' => 'selesai',
-                'payment_method' => 'Transfer Bank',
-                'payment_proof' => 'payments/bukti_transfer_001.jpg',
+                'payment_method' => 'Dana',
+                'payment_proof' => 'images/payments/bukti_transfer_001.jpg',
             ],
 
             // Buyer 2 - Seller 5
@@ -36,8 +37,8 @@ class TransactionSeeder extends Seeder
                 'quantity' => 1,
                 'total_price' => 75000,
                 'status' => 'dibayar',
-                'payment_method' => 'QRIS',
-                'payment_proof' => 'payments/bukti_qris_001.jpg',
+                'payment_method' => 'BCA',
+                'payment_proof' => 'images/payments/bukti_transfer_002.jpg',
             ],
 
             // Buyer 12 - Seller 5
@@ -50,8 +51,8 @@ class TransactionSeeder extends Seeder
                 'quantity' => 1,
                 'total_price' => 78000,
                 'status' => 'selesai',
-                'payment_method' => 'Transfer Bank',
-                'payment_proof' => 'payments/bukti_transfer_002.jpg',
+                'payment_method' => 'ShopeePay',
+                'payment_proof' => 'images/payments/bukti_transfer_003.jpg',
             ],
 
             // Buyer 3 - Seller 23
@@ -77,8 +78,8 @@ class TransactionSeeder extends Seeder
                 'quantity' => 1,
                 'total_price' => 325000,
                 'status' => 'gagal',
-                'payment_method' => 'E-Wallet',
-                'payment_proof' => 'payments/bukti_ewallet_001.jpg',
+                'payment_method' => 'BCA',
+                'payment_proof' => 'images/payments/bukti_transfer_004.jpg',
             ],
 
             // Buyer 3 - Seller 31
@@ -90,9 +91,101 @@ class TransactionSeeder extends Seeder
                 'quantity' => 1,
                 'total_price' => 620000,
                 'status' => 'selesai',
-                'payment_method' => 'Transfer Bank',
-                'payment_proof' => 'payments/bukti_transfer_003.jpg',
+                'payment_method' => 'Dana',
+                'payment_proof' => 'images/payments/bukti_transfer_005.jpg',
             ],
-        ]);
+        ];
+
+        foreach ($dataTransaction as $transaction) {
+            $link = PurchaseLink::findOrFail( $transaction['purchase_link_id'] );
+            $transactionDate = fake()->dateTimeBetween(
+                $link->created_at,
+                min(now(), $link->expired_at)
+            );
+
+            $paidAt = null;
+            $completedAt = null;
+
+            if ( in_array( $transaction['status'], ['dibayar', 'selesai'] )
+            ) {
+                $paidAt = fake()->dateTimeBetween(
+                    $transactionDate,
+                    '+1 day'
+                );
+            }
+
+            if ( $transaction['status'] === 'selesai') {
+                $completedAt = fake()->dateTimeBetween(
+                    $paidAt,
+                    '+2 day'
+                );
+            }
+
+            $trx = Transaction::create([
+                ...$transaction,
+
+                'payment_method' =>
+                    $transaction['payment_method']
+                    ?? fake()->randomElement($link->payment_methods),
+                'created_at' => $transactionDate,
+
+                'updated_at' =>
+                    $completedAt
+                    ?? $paidAt
+                    ?? $transactionDate,
+
+                'paid_at' => $paidAt,
+                'completed_at' => $completedAt,
+            ]);
+
+            $trx->update([
+                'transaction_code' =>
+                    'TRX-' .
+                    $trx->created_at->format('Y') .
+                    '-' .
+                    str_pad($trx->id, 3, '0', STR_PAD_LEFT),
+            ]);
+        }
+
+        // Factory
+        $eligibleLinks = PurchaseLink::where('is_used', true)
+            ->doesntHave('transaction')
+            ->whereHas('chat.product', function ($q) {
+                $q->where('status', 'dijual')
+                ->where('stock', '>', 0);
+            })
+            ->get();
+
+        foreach ($eligibleLinks as $link) {
+            $transaction = Transaction::factory()
+                ->forPurchaseLink($link)
+                ->create();
+
+            $transaction->update([
+                'transaction_code' =>
+                    'TRX-' .
+                    $transaction->created_at->format('Y') .
+                    '-' .
+                    str_pad($transaction->id, 3, '0', STR_PAD_LEFT),
+            ]);
+
+            if ( in_array( $transaction->status, ['dibayar', 'selesai', 'gagal'] ) ) {
+                $link->update([ 'is_used' => true ]);
+            }
+            if ( $transaction->status === 'selesai' ) {
+                $product = $transaction->product;
+                $product->decrement(
+                    'stock',
+                    $transaction->quantity
+                );
+                $product->refresh();
+
+                if ($product->stock <= 0) {
+                    $product->update([
+                        'status' => 'sold_out'
+                    ]);
+                }
+            }
+        }
     }
 }
