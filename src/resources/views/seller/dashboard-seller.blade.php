@@ -97,7 +97,7 @@
                                 <i class="bi bi-pencil"></i> Edit
                             </a>
 
-                            <button class="btn-action btn-status-toggle btn-hapus-produk" data-id="{{ $product['id'] }}" data-name="{{ $product['name'] }}" data-action="hapus" title="Hapus Produk">
+                            <button class="btn-action btn-status-toggle btn-hapus-produk" data-id="{{ $product['id'] }}" data-name="{{ $product['name'] }}" data-url="{{ route('seller.product.destroy', $product['id']) }}" data-action="hapus" title="Hapus Produk">
                                 <i class="bi bi-trash"></i> Hapus
                             </button>
                         </div>
@@ -175,5 +175,11 @@
         </div>
     </div>
 </div>
+
+{{-- HIDDEN DELETE FORM --}}
+<form id="formDeleteProduct" method="POST" style="display: none;">
+    @csrf
+    @method('DELETE')
+</form>
 
 @endsection
