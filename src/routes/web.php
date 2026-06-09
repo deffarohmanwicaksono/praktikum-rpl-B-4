@@ -109,6 +109,7 @@ Route::middleware('auth')->group(function () {
     // Seller
     Route::get('/dashboard-seller', [ProductController::class, 'sellerDashboard'])->name('seller.dashboard-seller');
     Route::view('/seller/upload-product', 'seller.upload-product')->name('seller.product.upload');
+    Route::post('/seller/upload-product', [ProductController::class, 'store'])->name('seller.product.store');
     Route::get('/seller/edit-product/{id}', [ProductController::class, 'edit'])->name('seller.product.edit');
     Route::put('/seller/edit-product/{id}', [ProductController::class, 'update'])->name('seller.product.update');
     Route::delete('/seller/edit-product/{id}', [ProductController::class, 'destroy'])->name('seller.product.destroy');

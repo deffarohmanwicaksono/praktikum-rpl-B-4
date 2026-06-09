@@ -24,7 +24,7 @@
 
 {{-- FORM UNGGAH BARANG --}}
 <section class="form-section">
-    <form action="#" method="POST" enctype="multipart/form-data" id="formUnggahBarang">
+    <form action="{{ route('seller.product.store') }}" method="POST" enctype="multipart/form-data" id="formUnggahBarang">
         @csrf
 
         <div class="row g-4">
@@ -39,14 +39,14 @@
                             </label>
                             <input
                                 type="text"
-                                class="form-input-custom @error('nama_barang') is-invalid @enderror"
+                                class="form-input-custom @error('name') is-invalid @enderror"
                                 id="namaBarang"
-                                name="nama_barang"
-                                value="{{ old('nama_barang') }}"
+                                name="name"
+                                value="{{ old('name') }}"
                                 placeholder="Contoh: Buku Kalkulus Stewart Edisi 8"
                                 autocomplete="off"
                             >
-                            @error('nama_barang')
+                            @error('name')
                                 <span class="input-error">{{ $message }}</span>
                             @enderror
                         </div>
@@ -60,16 +60,16 @@
                                 Deskripsi <span class="required-star">*</span>
                             </label>
                             <textarea
-                                class="form-input-custom form-textarea-custom @error('deskripsi') is-invalid @enderror"
+                                class="form-input-custom form-textarea-custom @error('description') is-invalid @enderror"
                                 id="deskripsi"
-                                name="deskripsi"
+                                name="description"
                                 placeholder="Jelaskan kondisi, kelebihan, dan detail lainnya..."
                                 maxlength="1000"
                                 rows="6"
-                            >{{ old('deskripsi') }}</textarea>
+                            >{{ old('description') }}</textarea>
                             <div class="d-flex justify-content-between align-items-center mt-1">
                                 <div>
-                                    @error('deskripsi')
+                                    @error('description')
                                         <span class="input-error">{{ $message }}</span>
                                     @enderror
                                 </div>
@@ -91,16 +91,16 @@
                                 <span class="price-prefix">Rp</span>
                                 <input
                                     type="text"
-                                    class="form-input-custom price-input @error('harga') is-invalid @enderror"
+                                    class="form-input-custom price-input @error('price') is-invalid @enderror"
                                     id="harga"
-                                    name="harga"
-                                    value="{{ old('harga') }}"
+                                    name="price"
+                                    value="{{ old('price') }}"
                                     placeholder="Masukkan harga jual"
                                     inputmode="numeric"
                                     autocomplete="off"
                                 >
                             </div>
-                            @error('harga')
+                            @error('price')
                                 <span class="input-error">{{ $message }}</span>
                             @enderror
                         </div>
@@ -116,15 +116,15 @@
                                         Kondisi <span class="required-star">*</span>
                                     </label>
                                     <div class="select-wrapper">
-                                        <select class="form-input-custom form-select-custom @error('kondisi') is-invalid @enderror" id="kondisi" name="kondisi">
-                                            <option value="" disabled {{ old('kondisi') ? '' : 'selected' }}>Pilih kondisi</option>
-                                            <option value="like_new" {{ old('kondisi') == 'like_new' ? 'selected' : '' }}>Bekas Seperti Baru</option>
-                                            <option value="baik" {{ old('kondisi') == 'baik' ? 'selected' : '' }}>Bekas Baik</option>
-                                            <option value="layak" {{ old('kondisi') == 'layak' ? 'selected' : '' }}>Bekas Layak Pakai</option>
+                                        <select class="form-input-custom form-select-custom @error('condition') is-invalid @enderror" id="kondisi" name="condition">
+                                            <option value="" disabled {{ old('condition') ? '' : 'selected' }}>Pilih kondisi</option>
+                                            <option value="bekas_seperti_baru" {{ old('condition') == 'bekas_seperti_baru' ? 'selected' : '' }}>Bekas Seperti Baru</option>
+                                            <option value="bekas_baik" {{ old('condition') == 'bekas_baik' ? 'selected' : '' }}>Bekas Baik</option>
+                                            <option value="bekas_layak_pakai" {{ old('condition') == 'bekas_layak_pakai' ? 'selected' : '' }}>Bekas Layak Pakai</option>
                                         </select>
                                         <i class="bi bi-chevron-down select-chevron"></i>
                                     </div>
-                                    @error('kondisi')
+                                    @error('condition')
                                         <span class="input-error">{{ $message }}</span>
                                     @enderror
                                     <p class="form-hint">Pilih kondisi yang paling sesuai</p>
@@ -171,7 +171,7 @@
                                 Foto Barang <span class="required-star">*</span>
                             </label>
 
-                            <div class="upload-dropzone @error('foto_barang') is-invalid-zone @enderror" id="uploadDropzone">
+                            <div class="upload-dropzone @error('images') is-invalid-zone @enderror" id="uploadDropzone">
                                 <div class="upload-preview-grid d-none" id="uploadPreviewGrid"></div>
 
                                 <div class="upload-placeholder" id="uploadPlaceholder">
@@ -188,14 +188,14 @@
                                 <input
                                     type="file"
                                     id="fotoInput"
-                                    name="foto_barang[]"
+                                    name="images[]"
                                     multiple
                                     accept="image/png,image/jpeg,image/webp"
                                     class="d-none"
                                 >
                             </div>
 
-                            @error('foto_barang')
+                            @error('images')
                                 <span class="input-error">{{ $message }}</span>
                             @enderror
                             
