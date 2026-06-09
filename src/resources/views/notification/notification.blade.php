@@ -14,55 +14,6 @@
 
 @section('content')
 
-@php
-// Data dummy notifikasi berdasarkan desain
-$notifications = [
-    [
-        'id' => 1,
-        'type' => 'approval',
-        'title' => 'Pengajuan Penjualan Barang Disetujui',
-        'message' => 'Selamat! Pengajuan penjualan barang "Jaket Denim Pria" kamu telah disetujui.',
-        'time' => '5 menit yang lalu',
-        'icon' => 'bi-clipboard-check',
-        'color_class' => 'icon-blue',
-        'is_unread' => true,
-        'link' => '#'
-    ],
-    [
-        'id' => 2,
-        'type' => 'message',
-        'title' => 'Pesan dari Andi',
-        'message' => 'Andi mengirim pesan terkait barang "Jaket Denim Pria". Yuk balas pesan sekarang!',
-        'time' => '30 menit yang lalu',
-        'icon' => 'bi-chat-dots',
-        'color_class' => 'icon-blue',
-        'is_unread' => true,
-        'link' => '#'
-    ],
-    [
-        'id' => 3,
-        'type' => 'payment',
-        'title' => 'Pembayaran Berhasil',
-        'message' => 'Andi telah melakukan pembayaran untuk "Jaket Denim Pria". Cek pembayaran sekarang!',
-        'time' => '2 jam yang lalu',
-        'icon' => 'bi-wallet2',
-        'color_class' => 'icon-blue',
-        'is_unread' => true,
-        'link' => '#'
-    ],
-    [
-        'id' => 4,
-        'type' => 'sold',
-        'title' => 'Barang Terjual',
-        'message' => 'Selamat! Barang "Jaket Denim Pria" kamu telah terjual.',
-        'time' => '1 hari yang lalu',
-        'icon' => 'bi-bag-check',
-        'color_class' => 'icon-blue',
-        'is_unread' => true,
-        'link' => '#'
-    ],
-];
-@endphp
 
 {{-- =============================================
      PAGE HEADER
