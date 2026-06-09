@@ -4,12 +4,18 @@
 
 {{-- PAGE CSS --}}
 @push('styles')
-    @vite('resources/css/pages/wishlist.css')
+    @vite(['resources/css/pages/wishlist.css'])
 @endpush
 
 {{-- PAGE JS --}}
 @push('scripts')
-    @vite('resources/js/wishlist/wishlist.js')
+    <script>
+        window.wishlistRoutes = {
+            clearAll: "{{ route('wishlist.clear') }}",
+            baseUrl: "{{ url('/wishlist') }}"
+        };
+    </script>
+    @vite(['resources/js/wishlist/wishlist.js'])
 @endpush
 
 @section('content')
@@ -24,19 +30,32 @@
         <p class="wishlist-sub">Produk-produk yang telah diberi tanda suka oleh buyer.</p>
     </div>
 
-    <button class="clear-all-btn" id="clearAllBtn">
-        <i class="bi bi-trash"></i>
-        Hapus Semua (<span id="wishlistCount">0</span>)
-    </button>
+    {{-- Tombol hanya muncul jika ada isi di database --}}
+    @if($wishlists->isNotEmpty())
+        <button class="clear-all-btn" id="clearAllBtn">
+            <i class="bi bi-trash"></i>
+            Hapus Semua (<span id="wishlistCount">{{ $wishlists->count() }}</span>)
+        </button>
+    @endif
 </div>
 
 {{-- PRODUCT GRID --}}
-<section class="product-grid" id="wishlistGrid">
-    {{-- Items rendered dynamically via wishlist.js from localStorage --}}
+<section class="product-grid" id="wishlistGrid" style="{{ $wishlists->isEmpty() ? 'display: none;' : '' }}">
+    @foreach ($wishlists as $wishlist)
+        <div class="wishlist-card-wrapper" data-product-id="{{ $wishlist->product_id }}">
+            {{-- Menggunakan komponen card bawaan yang sudah kamu buat --}}
+            @include('components.product-card', ['product' => $wishlist->product])
+            
+            {{-- Menambahkan tombol hapus manual di bawah card sesuai desain awalmu --}}
+            <button class="card-remove-btn backend-remove-btn">
+                <i class="bi bi-trash"></i> Hapus
+            </button>
+        </div>
+    @endforeach
 </section>
 
-{{-- EMPTY STATE (hidden by default, shown via JS) --}}
-<div class="wishlist-empty-full" id="wishlistEmptyFull" style="display: none;">
+{{-- EMPTY STATE --}}
+<div class="wishlist-empty-full" id="wishlistEmptyFull" style="{{ $wishlists->isEmpty() ? 'display: flex;' : 'display: none;' }}">
     <div class="empty-icon">
         <i class="bi bi-heart"></i>
     </div>

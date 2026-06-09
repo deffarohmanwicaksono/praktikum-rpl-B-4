@@ -1,146 +1,97 @@
 document.addEventListener('DOMContentLoaded', () => {
-
-    /* ==============================================
-       CONSTANTS & STATE
-       ============================================== */
-
-    const STORAGE_KEY = 'seMartWishlist';
-
-    const wishlistGrid      = document.getElementById('wishlistGrid');
-    const wishlistCount     = document.getElementById('wishlistCount');
-    const clearAllBtn       = document.getElementById('clearAllBtn');
+    const wishlistGrid = document.getElementById('wishlistGrid');
     const wishlistEmptyFull = document.getElementById('wishlistEmptyFull');
+    const clearAllBtn = document.getElementById('clearAllBtn');
+    const wishlistCount = document.getElementById('wishlistCount');
 
-    /* ==============================================
-       HELPERS
-       ============================================== */
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
 
-    const getWishlist = () =>
-        JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-
-    const saveWishlist = (items) =>
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
-
-    /* ==============================================
-       RENDER
-       ============================================== */
-
-    const renderWishlist = () => {
-        const items = getWishlist();
-
-        wishlistCount.textContent = items.length;
-        clearAllBtn.disabled      = items.length === 0;
-
-        wishlistGrid.innerHTML = '';
-
-        if (items.length === 0) {
-            wishlistGrid.style.display      = 'none';
-            wishlistEmptyFull.style.display = 'flex';
-            return;
+    const checkEmptyState = () => {
+        const remainingCards = document.querySelectorAll('.wishlist-card-wrapper');
+        if (remainingCards.length === 0) {
+            if (wishlistGrid) wishlistGrid.style.display = 'none';
+            if (clearAllBtn) clearAllBtn.style.display = 'none';
+            if (wishlistEmptyFull) wishlistEmptyFull.style.display = 'flex';
+        } else {
+            if (wishlistCount) wishlistCount.textContent = remainingCards.length;
         }
+    };
 
-        // Grid sudah punya class .product-grid dari blade,
-        // tinggal pastikan display tidak ter-override jadi none
-        wishlistGrid.style.display      = '';
-        wishlistEmptyFull.style.display = 'none';
+    // ==============================================
+    // HAPUS SATU ITEM (SINGLE REMOVE)
+    // ==============================================
+    document.querySelectorAll('.backend-remove-btn').forEach(button => {
+        button.addEventListener('click', async (e) => {
+            e.preventDefault();
+            const wrapper = button.closest('.wishlist-card-wrapper');
+            const productId = wrapper.getAttribute('data-product-id');
 
-        items.forEach((item) => {
-            const card = buildCard(item);
-            wishlistGrid.appendChild(card);
+            if (!productId) return;
+
+            button.disabled = true;
+
+            try {
+                const response = await fetch(`${window.wishlistRoutes.baseUrl}/${productId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    }
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    // Animasi hapus elemen dari layar secara visual
+                    wrapper.style.opacity = '0';
+                    wrapper.style.transform = 'scale(0.9)';
+                    setTimeout(() => {
+                        wrapper.remove();
+                        checkEmptyState();
+                    }, 300);
+                }
+            } catch (error) {
+                console.error('Gagal menghapus item:', error);
+                button.disabled = false;
+            }
         });
-    };
+    });
 
-    const buildCard = (item) => {
-        const { name, price, condition, image } = item;
-
-        const card = document.createElement('div');
-        card.className = 'product-card';
-
-        card.innerHTML = `
-            <div class="card-img-wrap">
-                <img
-                    class="card-img"
-                    src="${escapeAttr(image)}"
-                    alt="${escapeAttr(name)}"
-                    loading="lazy"
-                >
-                <button
-                    class="wishlist-btn active"
-                    data-name="${escapeAttr(name)}"
-                    aria-label="Hapus dari wishlist"
-                >
-                    <i class="bi bi-heart-fill"></i>
-                </button>
-            </div>
-
-            <div class="card-body-custom">
-                <p class="product-name">${escapeHtml(name)}</p>
-                <p class="product-price">${escapeHtml(price)}</p>
-                <span class="condition-badge">${escapeHtml(condition)}</span>
-            </div>
-
-            <button
-                class="card-remove-btn"
-                data-name="${escapeAttr(name)}"
-                aria-label="Hapus produk dari wishlist"
-            >
-                <i class="bi bi-trash"></i>
-                Hapus
-            </button>
-        `;
-
-        // Klik "Hapus" → hapus dari wishlist
-        card
-            .querySelector('.card-remove-btn')
-            .addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                removeItem(name);
-            });
-
-        return card;
-    };
-
-    /* ==============================================
-       REMOVE ITEM
-       ============================================== */
-
-    const removeItem = (name) => {
-        const updated = getWishlist().filter((item) => item.name !== name);
-        saveWishlist(updated);
-        renderWishlist();
-    };
-
-    /* ==============================================
-       CLEAR ALL
-       ============================================== */
-
+    // ==============================================
+    // 2. HAPUS SEMUA (CLEAR ALL)
+    // ==============================================
     if (clearAllBtn) {
-        clearAllBtn.addEventListener('click', () => {
-            if (getWishlist().length === 0) return;
+        clearAllBtn.addEventListener('click', async () => {
+            if (!confirm('Apakah kamu yakin ingin mengosongkan seluruh wishlist?')) return;
 
-            saveWishlist([]);
-            renderWishlist();
+            clearAllBtn.disabled = true;
+
+            try {
+                const response = await fetch(window.wishlistRoutes.clearAll, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    }
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    if (wishlistGrid) {
+                        wishlistGrid.style.opacity = '0';
+                        setTimeout(() => {
+                            wishlistGrid.innerHTML = '';
+                            checkEmptyState();
+                        }, 300);
+                    }
+                }
+            } catch (error) {
+                console.error('Gagal mengosongkan wishlist:', error);
+                clearAllBtn.disabled = false;
+            }
         });
     }
-
-    /* ==============================================
-       ESCAPE UTILITIES
-       ============================================== */
-
-    const escapeHtml = (str = '') =>
-        String(str)
-            .replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;');
-
-    const escapeAttr = (str = '') =>
-        String(str).replace(/"/g, '&quot;');
-
-    /* ==============================================
-       INIT
-       ============================================== */
-
-    renderWishlist();
 });
