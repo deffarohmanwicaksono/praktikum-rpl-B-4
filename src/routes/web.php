@@ -45,19 +45,15 @@ Route::middleware('auth')->group(function () {
         Route::post('/admin/reports/{report}/reject', [\App\Http\Controllers\AdminController::class, 'rejectReport'])->name('admin.rejectReport');
 
         // Daftar User
-        Route::get('/admin/users', function () {
-            return view('admin.users');
-        })->name('admin.users');
+        Route::get('/admin/users', [\App\Http\Controllers\AdminController::class, 'usersIndex'])->name('admin.users');
+        Route::post('/admin/users/{user}/toggle-status', [\App\Http\Controllers\AdminController::class, 'toggleUserStatus'])->name('admin.users.toggle-status');
 
         // Daftar Produk
-        Route::get('/admin/products', function () {
-            return view('admin.products');
-        })->name('admin.products');
+        Route::get('/admin/products', [\App\Http\Controllers\AdminController::class, 'productsIndex'])->name('admin.products');
+        Route::delete('/admin/products/{product}', [\App\Http\Controllers\AdminController::class, 'deleteProduct'])->name('admin.products.delete');
 
         // Daftar Transaksi
-        Route::get('/admin/transactions', function () {
-            return view('admin.transactions');
-        })->name('admin.transactions');
+        Route::get('/admin/transactions', [\App\Http\Controllers\AdminController::class, 'transactionsIndex'])->name('admin.transactions');
 
     });
 
