@@ -34,6 +34,7 @@ class ChatFactory extends Factory
             );
 
             $buyer = User::where('id', '!=', $product->user_id)
+                ->whereJsonContains('roles', 'buyer')
                 ->inRandomOrder()
                 ->first();
 
