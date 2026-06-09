@@ -3,15 +3,18 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Product extends Model
 {
+    use HasFactory;
     protected $fillable = [
         'user_id',
         'category_id',
         'name',
         'description',
         'price',
+        'stock',
         'status'
     ];
 
@@ -33,5 +36,15 @@ class Product extends Model
     public function chats()
     {
         return $this->hasMany(Chat::class);
+    }
+
+    public function purchaseLinks()
+    {
+        return $this->hasMany(PurchaseLink::class);
+    }
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
     }
 }

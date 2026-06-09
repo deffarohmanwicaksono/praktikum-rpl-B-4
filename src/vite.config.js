@@ -13,7 +13,7 @@ export default defineConfig({
                 'resources/css/pages/login.css',
                 'resources/js/auth/login.js',
 
-                // 2. Asset Halaman Dashboard Utama (Home)
+                // 3. Asset Halaman Dashboard Utama (Home)
                 'resources/css/pages/home.css',
                 'resources/js/home/home.js',
 
@@ -40,6 +40,45 @@ export default defineConfig({
                 // 9. Asset Halaman Sesi Chat (Chat Session)
                 'resources/css/pages/chat-session.css',
                 'resources/js/chat/chat-session.js',
+                'resources/css/pages/chat-list.css',
+                'resources/js/chat/chat-list.js',
+
+                // 10. Asset Halaman Checkout & Link Pembelian
+                'resources/css/pages/checkout.css',
+                'resources/js/checkout/checkout.js',
+                'resources/css/pages/purchase-link.css',
+                'resources/js/checkout/purchase-link.js',
+
+                // 11. Asset Halaman Riwayat (History)
+                'resources/css/components/history.css',
+                'resources/css/pages/purchase-history.css',
+                'resources/js/history/purchase-history.js',
+                'resources/css/pages/sales-history.css',
+                'resources/js/history/sales-history.js',
+
+                // 12. Halaman Pendukung (Notification, Wishlist, Profile)
+                'resources/css/pages/notification.css',
+                'resources/js/notification/notification.js',
+                'resources/css/pages/wishlist.css',
+                'resources/js/wishlist/wishlist.js',
+                'resources/css/pages/profile-seller.css',
+                'resources/js/profile/profile-seller.js',
+                'resources/css/pages/profile-user.css',
+                'resources/js/profile/profile-user.js',
+
+                // 13. Asset Halaman Admin
+                'resources/css/pages/dashboard-admin.css',
+                'resources/js/admin/dashboard-admin.js',
+                'resources/css/pages/products.css',
+                'resources/js/admin/products.js',
+                'resources/css/pages/reports.css',
+                'resources/js/admin/reports.js',
+                'resources/css/pages/transactions.css',
+                'resources/js/admin/transactions.js',
+                'resources/css/pages/users.css',
+                'resources/js/admin/users.js',
+                'resources/css/pages/verification.css',
+                'resources/js/admin/verification.js',
             ],
             refresh: true,
         }),

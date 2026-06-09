@@ -15,55 +15,8 @@
 @section('content')
 
 @php
-    $chats = [
-        [
-            'name' => 'Andi Pratama',
-            'pov' => 'seller',
-            'product' => 'Jaket Denim Pria',
-            'preview' => 'Halo kak, masih ada bukunya?',
-            'time' => '14:30',
-            'unread' => 3,
-            'image' => asset('images/Elemen-1.png'),
-        ],
-        [
-            'name' => 'Siti Aisyah',
-            'pov' => 'buyer',
-            'product' => 'Tas Ransel Eiger Original',
-            'preview' => 'Terima kasih kak!',
-            'time' => '10:15',
-            'unread' => 1,
-            'image' => asset('images/Elemen-1.png'),
-        ],
-        [
-            'name' => 'Budi Santoso',
-            'pov' => 'seller',
-            'product' => 'Kalkulator Casio fx-991EX',
-            'preview' => 'Oke, kapan bisa ketemunya?',
-            'time' => '16:45',
-            'unread' => 2,
-            'image' => asset('images/Elemen-1.png'),
-        ],
-        [
-            'name' => 'Dewi Lestari',
-            'pov' => 'buyer',
-            'product' => 'Buku Atomic Habits',
-            'preview' => 'Baik kak, ditunggu ya 😊',
-            'time' => '09:20',
-            'unread' => 0,
-            'image' => asset('images/Elemen-1.png'),
-        ],
-        [
-            'name' => 'Rizky Aditya',
-            'pov' => 'seller',
-            'product' => 'Mouse Logitech MX Master',
-            'preview' => 'Siap kak, noted!',
-            'time' => 'Kemarin',
-            'unread' => 0,
-            'image' => asset('images/Elemen-1.png'),
-        ],
-    ];
-
-    $totalUnread = collect($chats)->sum('unread');
+    $userId = auth()->id();
+    $totalUnread = 0; // Bisa diimplementasi nanti dengan kolom is_read
 @endphp
 
 {{-- PAGE HEADER --}}
@@ -149,74 +102,59 @@
 {{-- CHAT LIST --}}
 <section class="chat-list-section" id="chatListSection">
 
-    @forelse ($chats as $chat)
+        @forelse ($chats as $chat)
+
+            @php
+                $partner = ($chat->seller_id === $userId) ? $chat->buyer : $chat->seller;
+                $pov = ($chat->seller_id === $userId) ? 'seller' : 'buyer';
+                $productImage = $chat->product->productImages->first();
+                $imageUrl = $productImage
+                    ? asset('storage/' . $productImage->image_path)
+                    : asset('images/Elemen-1.png');
+                $preview = $chat->latestMessage
+                    ? $chat->latestMessage->message
+                    : 'Belum ada pesan';
+                $time = $chat->updated_at ? $chat->updated_at->format('H:i') : '-';
+            @endphp
 
             <a
-                href="{{ route('chat.session', [
-                    'pov' => $chat['pov'],
-                    'partner' => $chat['name']
-                ]) }}"
-                class="chat-item {{ $chat['unread'] > 0 ? 'chat-item--unread' : '' }}"
-                data-unread="{{ $chat['unread'] > 0 ? 'true' : 'false' }}"
-                data-name="{{ strtolower($chat['name']) }}"
-                data-barang="{{ strtolower($chat['product']) }}"
+                href="{{ route('chat.session', $chat->id) }}"
+                class="chat-item"
+                data-unread="false"
+                data-name="{{ strtolower($partner->name) }}"
+                data-barang="{{ strtolower($chat->product->name) }}"
             >
 
-            @if ($chat['image'])
-
-                <div class="chat-foto-wrap">
-                    <img
-                        src="{{ $chat['image'] }}"
-                        alt="{{ $chat['product'] }}"
-                        class="chat-foto"
-                        loading="lazy"
-                    >
-                </div>
-
-            @else
-
-                <div class="chat-foto-wrap chat-foto-wrap--placeholder">
-                    <i class="bi bi-image chat-foto-placeholder-icon"></i>
-                </div>
-
-            @endif
+            <div class="chat-foto-wrap">
+                <img
+                    src="{{ $imageUrl }}"
+                    alt="{{ $chat->product->name }}"
+                    class="chat-foto"
+                    loading="lazy"
+                >
+            </div>
 
             <div class="chat-body">
 
                 <div class="chat-row-top">
-
                     <span class="chat-nama">
-                        {{ $chat['name'] }}
+                        {{ $partner->name }}
                     </span>
-
                     <span class="chat-waktu">
-                        {{ $chat['time'] }}
+                        {{ $time }}
                     </span>
-
                 </div>
 
                 <div class="chat-row-mid">
-
                     <span class="chat-barang">
-                        {{ $chat['product'] }}
+                        {{ $chat->product->name }}
                     </span>
-
                 </div>
 
                 <div class="chat-row-bot">
-
-                    <span class="chat-preview {{ $chat['unread'] === 0 ? 'chat-preview--read' : '' }}">
-                        {{ $chat['preview'] }}
+                    <span class="chat-preview chat-preview--read">
+                        {{ Str::limit($preview, 50) }}
                     </span>
-
-                    @if ($chat['unread'] > 0)
-
-                        <span class="chat-badge">
-                            {{ $chat['unread'] }}
-                        </span>
-
-                    @endif
-
                 </div>
 
             </div>
