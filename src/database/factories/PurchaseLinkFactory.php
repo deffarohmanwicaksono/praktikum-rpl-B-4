@@ -26,7 +26,7 @@ class PurchaseLinkFactory extends Factory
         return [
             'token' => 'SEMART-LINK-' . Str::upper(Str::random(10)),
             'deal_price' => 0,
-            'expired_at' => now()->addDays(3),
+            'expired_at' => now()->addDays(1),
             'is_used' => fake()->boolean(40),
         ];
     }
@@ -36,6 +36,7 @@ class PurchaseLinkFactory extends Factory
         return $this->state(function () use ($chat) {
 
             $product = $chat->product;
+            $seller = $product->user;
             $lastMessage = $chat->messages()->latest('created_at')->first();
             $linkDate = Carbon::parse( $lastMessage->created_at)->addSeconds(
                 rand(30, 600)
@@ -46,17 +47,27 @@ class PurchaseLinkFactory extends Factory
                 min(50000, $product->price * 0.1)
             );
 
+            $availableMethods = $seller
+                ->paymentAccounts
+                ->pluck('payment_method')
+                ->toArray();
+
             return [
                 'chat_id' => $chat->id,
 
-                'deal_price' => max(
-                    1000,
-                    $product->price - $discount
-                ),
+                'deal_price' => max( 1000, $product->price - $discount ),
+                'note' => fake()->optional(0.7)->randomElement([
+                    'Silakan transfer maksimal hari ini.',
+                    'Barang akan dikirim setelah pembayaran dikonfirmasi.',
+                    'Mohon konfirmasi setelah melakukan pembayaran.',
+                    'Terima kasih sudah mau bertransaksi dengan saya.',
+                    'Barang akan dikirim lewat ekspedisi.',
+                ]),
+
+                'payment_methods' => $availableMethods,
 
                 'created_at' => $linkDate,
                 'updated_at' => $linkDate,
-
                 'expired_at' => Carbon::parse($linkDate)->addDays(rand(1, 5)),
             ];
         });
