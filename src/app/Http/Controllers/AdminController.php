@@ -82,7 +82,11 @@ class AdminController extends Controller
 
             $transformedImages = [];
             foreach ($images as $url) {
-                $transformedImages[] = str_starts_with($url, 'http') ? $url : asset($url);
+                if (str_starts_with($url, 'http')) {
+                    $transformedImages[] = $url;
+                } else {
+                    $transformedImages[] = str_starts_with($url, 'products/') ? asset('storage/' . $url) : asset($url);
+                }
             }
 
             $productData[$product->id] = [
@@ -163,7 +167,11 @@ class AdminController extends Controller
 
             $transformedImages = [];
             foreach ($images as $url) {
-                $transformedImages[] = str_starts_with($url, 'http') ? $url : asset($url);
+                if (str_starts_with($url, 'http')) {
+                    $transformedImages[] = $url;
+                } else {
+                    $transformedImages[] = str_starts_with($url, 'products/') ? asset('storage/' . $url) : asset($url);
+                }
             }
 
             $peringatan = null;
@@ -317,7 +325,11 @@ class AdminController extends Controller
         $products = [];
         foreach ($productsQuery as $product) {
             $images = $product->productImages->pluck('image_url')->toArray();
-            $mainImage = empty($images) ? asset('images/default-product.jpg') : (str_starts_with($images[0], 'http') ? $images[0] : asset($images[0]));
+            $mainImage = empty($images) ? asset('images/default-product.jpg') : (
+                str_starts_with($images[0], 'http') ? $images[0] : (
+                    str_starts_with($images[0], 'products/') ? asset('storage/' . $images[0]) : asset($images[0])
+                )
+            );
             
             $statusClass = '';
             switch ($product->status) {
@@ -342,7 +354,7 @@ class AdminController extends Controller
                 'id' => $product->id,
                 'image' => $mainImage,
                 'detail_image' => $mainImage,
-                'images' => array_map(fn($url) => str_starts_with($url, 'http') ? $url : asset($url), empty($images) ? ['images/default-product.jpg'] : $images),
+                'images' => array_map(fn($url) => str_starts_with($url, 'http') ? $url : (str_starts_with($url, 'products/') ? asset('storage/' . $url) : asset($url)), empty($images) ? ['images/default-product.jpg'] : $images),
                 'name' => $product->name,
                 'badge' => $product->category->name ?? 'Umum',
                 'category_class' => $catClass,
@@ -392,7 +404,11 @@ class AdminController extends Controller
             $buyer = $trx->buyer;
             
             $images = $product->productImages->pluck('image_url')->toArray();
-            $mainImage = empty($images) ? asset('images/default-product.jpg') : (str_starts_with($images[0], 'http') ? $images[0] : asset($images[0]));
+            $mainImage = empty($images) ? asset('images/default-product.jpg') : (
+                str_starts_with($images[0], 'http') ? $images[0] : (
+                    str_starts_with($images[0], 'products/') ? asset('storage/' . $images[0]) : asset($images[0])
+                )
+            );
             
             $statusClass = '';
             switch ($trx->status) {
@@ -402,7 +418,11 @@ class AdminController extends Controller
                 case 'dibayar': $statusClass = 'status-menunggu'; break;
             }
 
-            $proofUrl = $trx->payment_proof ? (str_starts_with($trx->payment_proof, 'http') ? $trx->payment_proof : asset($trx->payment_proof)) : null;
+            $proofUrl = $trx->payment_proof ? (
+                str_starts_with($trx->payment_proof, 'http') ? $trx->payment_proof : (
+                    str_starts_with($trx->payment_proof, 'payment_proofs/') ? asset('storage/' . $trx->payment_proof) : asset($trx->payment_proof)
+                )
+            ) : null;
 
             $transactions[] = [
                 'id' => $trx->id,
