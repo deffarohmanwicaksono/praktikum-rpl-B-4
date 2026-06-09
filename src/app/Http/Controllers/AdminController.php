@@ -92,7 +92,7 @@ class AdminController extends Controller
                 'handle' => '@' . explode('@', $product->user->email)[0],
                 'kategori' => $product->category->name ?? 'Umum',
                 'kondisi' => 'Bekas', // Default condition as it is not explicitly stored in products table
-                'diajukan' => $product->created_at->format('d M Y, H:i') . ' WIB',
+                'diajukan' => $product->created_at ? $product->created_at->format('d M Y, H:i') . ' WIB' : '-',
                 'deskripsi' => $product->description,
                 'images' => $transformedImages
             ];
@@ -183,7 +183,7 @@ class AdminController extends Controller
                 'sellerName' => $report->product->user->name ?? 'Seller',
                 'sellerHandle' => '@' . explode('@', $report->product->user->email ?? 'seller')[0],
                 'pelapor' => $report->user->name . ', @' . explode('@', $report->user->email)[0],
-                'dilaporkan' => $report->created_at->format('d M Y, H:i') . ' WIB',
+                'dilaporkan' => $report->created_at ? $report->created_at->format('d M Y, H:i') . ' WIB' : '-',
                 'alasan' => $report->reason,
                 'status' => $report->status,
                 'peringatan' => $peringatan,
