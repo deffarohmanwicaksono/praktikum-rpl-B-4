@@ -24,6 +24,7 @@ class User extends Authenticatable
         'phone_number',
         'password',
         'roles',
+        'status',
     ];
 
     /**
@@ -85,5 +86,15 @@ class User extends Authenticatable
     public function messages()
     {
         return $this->hasMany(Message::class, 'sender_id');
+    }
+
+    public function paymentAccounts()
+    {
+        return $this->hasMany(PaymentAccount::class);
+    }
+
+    public function productVerifications()
+    {
+        return $this->hasMany(ProductVerification::class, 'admin_id');
     }
 }

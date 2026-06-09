@@ -1,146 +1,116 @@
 document.addEventListener('DOMContentLoaded', () => {
-
-    /* ==============================================
-       CONSTANTS & STATE
-       ============================================== */
-
-    const STORAGE_KEY = 'seMartWishlist';
-
     const wishlistGrid      = document.getElementById('wishlistGrid');
-    const wishlistCount     = document.getElementById('wishlistCount');
-    const clearAllBtn       = document.getElementById('clearAllBtn');
     const wishlistEmptyFull = document.getElementById('wishlistEmptyFull');
+    const clearAllBtn       = document.getElementById('clearAllBtn');
+    const wishlistCount     = document.getElementById('wishlistCount');
+    const csrfToken         = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
 
-    /* ==============================================
-       HELPERS
-       ============================================== */
-
-    const getWishlist = () =>
-        JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-
-    const saveWishlist = (items) =>
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
-
-    /* ==============================================
-       RENDER
-       ============================================== */
-
-    const renderWishlist = () => {
-        const items = getWishlist();
-
-        wishlistCount.textContent = items.length;
-        clearAllBtn.disabled      = items.length === 0;
-
-        wishlistGrid.innerHTML = '';
-
-        if (items.length === 0) {
-            wishlistGrid.style.display      = 'none';
-            wishlistEmptyFull.style.display = 'flex';
-            return;
+    // ==============================================
+    // CEK EMPTY STATE
+    // ==============================================
+    const checkEmptyState = () => {
+        const remainingItems = document.querySelectorAll('.product-card');
+        if (remainingItems.length === 0) {
+            if (wishlistGrid)      wishlistGrid.style.display      = 'none';
+            if (clearAllBtn)       clearAllBtn.style.display       = 'none';
+            if (wishlistEmptyFull) wishlistEmptyFull.style.display = 'flex';
+        } else {
+            if (wishlistCount) wishlistCount.textContent = remainingItems.length;
         }
+    };
 
-        // Grid sudah punya class .product-grid dari blade,
-        // tinggal pastikan display tidak ter-override jadi none
-        wishlistGrid.style.display      = '';
-        wishlistEmptyFull.style.display = 'none';
+    // ==============================================
+    // SETUP TOMBOL HATI
+    // ==============================================
+    const setupWishlistBtn = (heartBtn) => {
+        const productId = heartBtn.getAttribute('data-product-id');
+        if (!productId) return;
 
-        items.forEach((item) => {
-            const card = buildCard(item);
-            wishlistGrid.appendChild(card);
+        const icon = heartBtn.querySelector('i');
+        if (icon) icon.className = 'bi bi-heart-fill';
+        heartBtn.classList.add('active');
+
+        const newBtn = heartBtn.cloneNode(true);
+        heartBtn.parentNode.replaceChild(newBtn, heartBtn);
+
+        newBtn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const card = newBtn.closest('.product-card');
+            if (card) card.style.opacity = '0.5';
+
+            try {
+                const response = await fetch(`/wishlist/${productId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                    },
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    if (card) {
+                        card.style.transition = 'all 0.3s ease';
+                        card.style.transform  = 'scale(0.9)';
+                        card.style.opacity    = '0';
+                    }
+                    setTimeout(() => {
+                        // Hapus .product-card atau parent terdekat di grid
+                        const wrapper = card?.parentElement ?? card;
+                        wrapper?.remove();
+                        checkEmptyState();
+                    }, 300);
+                } else {
+                    if (card) card.style.opacity = '1';
+                }
+            } catch (err) {
+                console.error('Gagal menghapus item:', err);
+                if (card) card.style.opacity = '1';
+            }
         });
     };
 
-    const buildCard = (item) => {
-        const { name, price, condition, image } = item;
+    document.querySelectorAll('.wishlist-btn').forEach(setupWishlistBtn);
 
-        const card = document.createElement('div');
-        card.className = 'product-card';
-
-        card.innerHTML = `
-            <div class="card-img-wrap">
-                <img
-                    class="card-img"
-                    src="${escapeAttr(image)}"
-                    alt="${escapeAttr(name)}"
-                    loading="lazy"
-                >
-                <button
-                    class="wishlist-btn active"
-                    data-name="${escapeAttr(name)}"
-                    aria-label="Hapus dari wishlist"
-                >
-                    <i class="bi bi-heart-fill"></i>
-                </button>
-            </div>
-
-            <div class="card-body-custom">
-                <p class="product-name">${escapeHtml(name)}</p>
-                <p class="product-price">${escapeHtml(price)}</p>
-                <span class="condition-badge">${escapeHtml(condition)}</span>
-            </div>
-
-            <button
-                class="card-remove-btn"
-                data-name="${escapeAttr(name)}"
-                aria-label="Hapus produk dari wishlist"
-            >
-                <i class="bi bi-trash"></i>
-                Hapus
-            </button>
-        `;
-
-        // Klik "Hapus" → hapus dari wishlist
-        card
-            .querySelector('.card-remove-btn')
-            .addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                removeItem(name);
-            });
-
-        return card;
-    };
-
-    /* ==============================================
-       REMOVE ITEM
-       ============================================== */
-
-    const removeItem = (name) => {
-        const updated = getWishlist().filter((item) => item.name !== name);
-        saveWishlist(updated);
-        renderWishlist();
-    };
-
-    /* ==============================================
-       CLEAR ALL
-       ============================================== */
-
+    // ==============================================
+    // HAPUS SEMUA
+    // ==============================================
     if (clearAllBtn) {
-        clearAllBtn.addEventListener('click', () => {
-            if (getWishlist().length === 0) return;
+        clearAllBtn.addEventListener('click', async () => {
+            if (!confirm('Apakah kamu yakin ingin mengosongkan seluruh wishlist?')) return;
 
-            saveWishlist([]);
-            renderWishlist();
+            clearAllBtn.disabled = true;
+
+            try {
+                const response = await fetch('/wishlist-clear', {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                    },
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    if (wishlistGrid) {
+                        wishlistGrid.style.transition = 'opacity 0.3s ease';
+                        wishlistGrid.style.opacity    = '0';
+                        setTimeout(() => {
+                            wishlistGrid.innerHTML = '';
+                            checkEmptyState();
+                        }, 300);
+                    }
+                }
+            } catch (err) {
+                console.error('Gagal mengosongkan wishlist:', err);
+                clearAllBtn.disabled = false;
+            }
         });
     }
-
-    /* ==============================================
-       ESCAPE UTILITIES
-       ============================================== */
-
-    const escapeHtml = (str = '') =>
-        String(str)
-            .replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;');
-
-    const escapeAttr = (str = '') =>
-        String(str).replace(/"/g, '&quot;');
-
-    /* ==============================================
-       INIT
-       ============================================== */
-
-    renderWishlist();
 });

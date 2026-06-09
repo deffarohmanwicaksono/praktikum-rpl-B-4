@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const startPos = chatInput.selectionStart;
             const endPos = chatInput.selectionEnd;
             chatInput.value = chatInput.value.substring(0, startPos) + emoji + chatInput.value.substring(endPos);
+            chatInput.dispatchEvent(new Event('input'));
             chatInput.focus();
             chatInput.selectionStart = chatInput.selectionEnd = startPos + emoji.length;
         });

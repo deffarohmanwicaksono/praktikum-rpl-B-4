@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\Report;
+use App\Models\Product;
+use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -13,18 +15,12 @@ class ReportSeeder extends Seeder
      */
     public function run(): void
     {
-        Report::insert([
+        $dataReport = ([
             [
                 'user_id' => 2,
                 'product_id' => 5, // Smartphone Samsung A12
                 'reason' => 'Foto produk diduga hasil AI dan tidak menunjukkan kondisi barang yang sebenarnya.',
-                'status' => 'menunggu',
-            ],
-            [
-                'user_id' => 3,
-                'product_id' => 8, // Buku Struktur Data Java
-                'reason' => 'Produk terindikasi menggunakan foto yang diambil dari internet tanpa menunjukkan barang asli yang dijual.',
-                'status' => 'ditindaklanjuti',
+                'status' => 'ditolak',
             ],
             [
                 'user_id' => 4,
@@ -39,16 +35,10 @@ class ReportSeeder extends Seeder
                 'status' => 'ditolak',
             ],
             [
-                'user_id' => 3,
-                'product_id' => 26, // Hair Dryer Philips
-                'reason' => 'Foto produk tidak sesuai dengan kategori barang yang dijual.',
-                'status' => 'ditolak',
-            ],
-            [
                 'user_id' => 12,
                 'product_id' => 31, // Power Bank Xiaomi
                 'reason' => 'Produk diduga merupakan barang replika atau tidak mencantumkan informasi keaslian produk.',
-                'status' => 'ditindaklanjuti',
+                'status' => 'menunggu',
             ],
             [
                 'user_id' => 13,
@@ -60,13 +50,7 @@ class ReportSeeder extends Seeder
                 'user_id' => 14,
                 'product_id' => 35, // Dispenser Air Mini
                 'reason' => 'Produk diduga tidak layak pakai berdasarkan kondisi yang terlihat pada foto.',
-                'status' => 'menunggu',
-            ],
-            [
-                'user_id' => 15,
-                'product_id' => 39, // Organizer Kosmetik
-                'reason' => 'Foto produk diindikasi merupakan hasil edit atau manipulasi.',
-                'status' => 'ditindaklanjuti',
+                'status' => 'ditolak',
             ],
             [
                 'user_id' => 16,
@@ -75,5 +59,45 @@ class ReportSeeder extends Seeder
                 'status' => 'menunggu',
             ],
         ]);
+
+        foreach ($dataReport as $report) {
+            $product = Product::findOrFail( $report['product_id']);
+
+            $reportDate = fake()->dateTimeBetween(
+                $product->created_at->addHours(1),
+                now()
+            );
+
+            Report::create([
+                ...$report,
+                'created_at' => $reportDate,
+                'updated_at' => $reportDate,
+            ]);
+        }
+
+        // Factory
+        $eligibleProducts = Product::where('status', 'dijual')
+            ->whereDoesntHave('transactions')
+            ->doesntHave('reports')
+            ->get();
+        
+        foreach ($eligibleProducts->random(2) as $product) {
+            $reportDate = fake()->dateTimeBetween(
+                $product->created_at->addHours(1),
+                now()
+            );
+
+            Report::factory()->create([
+                'user_id' => User::where('id', '!=', $product->user_id)
+                    ->whereJsonContains('roles', 'buyer')
+                    ->inRandomOrder()
+                    ->first()
+                    ->id,
+                'product_id' => $product->id,
+                'status' => 'ditindaklanjuti',
+                'created_at' => $reportDate,
+                'updated_at' => $reportDate,
+            ]);
+        }
     }
 }

@@ -2,10 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\User;
+use App\Models\Chat;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Message extends Model
 {
+    use HasFactory;
     protected $fillable = [
         'chat_id',
         'sender_id',
