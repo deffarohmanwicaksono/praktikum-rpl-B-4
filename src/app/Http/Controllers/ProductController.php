@@ -149,4 +149,36 @@ public function destroy(string $id)
         ->with('success', 'Produk berhasil dihapus!');
 }
 
+    public function sellerDashboard()
+    {
+        $products = Product::with('productImages')->where('user_id', auth()->id())->get();
+
+        $sellerProducts = $products->map(function ($product) {
+            $statusMap = [
+                'menunggu_verifikasi' => ['label' => 'Menunggu', 'class' => 'status-menunggu'],
+                'dijual' => ['label' => 'Dijual', 'class' => 'status-dijual'],
+                'sold_out' => ['label' => 'Sold Out', 'class' => 'status-sold-out'],
+                'ditolak' => ['label' => 'Ditolak', 'class' => 'status-ditolak'],
+            ];
+
+            $statusData = $statusMap[$product->status] ?? ['label' => $product->status, 'class' => ''];
+            
+            $imageUrl = $product->productImages->first()->image_url ?? 'images/default-product.jpg';
+            if (!str_starts_with($imageUrl, 'http')) {
+                $imageUrl = asset($imageUrl);
+            }
+
+            return [
+                'id' => $product->id,
+                'name' => $product->name,
+                'price' => 'Rp ' . number_format($product->price, 0, ',', '.'),
+                'status' => $statusData['label'],
+                'status_class' => $statusData['class'],
+                'image' => $imageUrl,
+            ];
+        });
+
+        return view('seller.dashboard-seller', compact('sellerProducts'));
+    }
+
 }
