@@ -4,22 +4,16 @@
 
 {{-- PAGE CSS --}}
 @push('styles')
-    @vite([
-        'resources/css/pages/search.css'
-    ])
+    @vite('resources/css/pages/search.css')
 @endpush
 
 {{-- PAGE JS --}}
 @push('scripts')
-    @vite([
-        'resources/js/products/search.js'
-    ])
-
     <script>
-        window.SeMartConfig = {
-            appUrl: '{{ url("/") }}'
-        };
+        window.wishlistedProductIds = {!! json_encode($wishlistedIds ?? []) !!};
+        window.SeMartConfig = { appUrl: '{{ url("/") }}'};
     </script>
+    @vite('resources/js/products/search.js')
 @endpush
 
 @section('content')
@@ -57,7 +51,6 @@
             <p class="quick-search-label">Coba cari:</p>
 
             <div class="quick-tags">
-                <button class="quick-tag" data-q="ransel">ransel</button>
                 <button class="quick-tag" data-q="buku">buku</button>
                 <button class="quick-tag" data-q="headset">headset</button>
                 <button class="quick-tag" data-q="sepatu">sepatu</button>

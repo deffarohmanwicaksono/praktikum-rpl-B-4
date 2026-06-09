@@ -4,11 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\Wishlist;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
+
     public function index(Request $request)
     {
         $query = Product::with(['productImages', 'category'])->where('status', 'dijual');
@@ -52,7 +55,11 @@ class ProductController extends Controller
 
         $products = $query->get();
 
-        return view('home.home', compact('products'));
+        $wishlistedIds = Auth::check()
+            ? Wishlist::where('user_id', Auth::id())->pluck('product_id')->toArray()
+            : [];
+
+        return view('home.home', compact('products', 'wishlistedIds'));
     }
 
     public function show(string $id)
@@ -60,15 +67,20 @@ class ProductController extends Controller
         $product = Product::with(['productImages', 'user', 'category'])
             ->findOrFail($id);
 
+        $wishlistedIds = Auth::check()
+            ? Wishlist::where('user_id', Auth::id())->pluck('product_id')->toArray()
+            : [];
+
         return view('products.detail-product', [
-            'product' => $product
+            'product'       => $product,
+            'wishlistedIds' => $wishlistedIds,
         ]);
     }
 
     public function search(Request $request)
     {
         $keyword = $request->input('q');
-        $query = Product::with(['productImages', 'category'])->where('status', 'dijual');
+        $query   = Product::with(['productImages', 'category'])->where('status', 'dijual');
 
         if ($request->filled('category') && $request->category !== 'semua') {
             $catMap = [
@@ -85,18 +97,17 @@ class ProductController extends Controller
             if (isset($catMap[$request->category])) {
                 $query->where('category_id', $catMap[$request->category]);
             }
-            
-            $keyword = null; 
-        } 
-        else {
+
+            $keyword = null;
+        } else {
             if ($request->filled('q')) {
-                $query->where(function($q) use ($keyword) {
+                $query->where(function ($q) use ($keyword) {
                     $q->where('name', 'like', "%{$keyword}%")
                       ->orWhere('description', 'like', "%{$keyword}%");
                 });
             }
         }
-        
+
         if ($request->filled('sort')) {
             switch ($request->sort) {
                 case 'terlama':
@@ -119,15 +130,20 @@ class ProductController extends Controller
 
         $products = $query->get();
 
+        $wishlistedIds = Auth::check()
+            ? Wishlist::where('user_id', Auth::id())->pluck('product_id')->toArray()
+            : [];
+
         return view('products.search', [
-            'keyword' => $keyword,
-            'products' => $products
+            'keyword'       => $keyword,
+            'products'      => $products,
+            'wishlistedIds' => $wishlistedIds,
         ]);
     }
 
     public function create()
     {
-        $categories = \App\Models\Category::all();
+        $categories = Category::all();
         return view('seller.upload-product', ['categories' => $categories]);
     }
 
@@ -138,7 +154,7 @@ class ProductController extends Controller
             'description' => 'nullable|string',
             'price'       => 'required|numeric|min:0',
             'category_id' => 'nullable|exists:categories,id',
-            'condition'   => 'required|in:bekas_seperti_baru,bekas_baik,bekas_layak_pakai', // 1. Tambah validasi
+            'condition'   => 'required|in:bekas_seperti_baru,bekas_baik,bekas_layak_pakai',
             'images'      => 'required|array|min:1',
             'images.*'    => 'image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
@@ -187,7 +203,7 @@ class ProductController extends Controller
             'description' => 'nullable|string',
             'price'       => 'required|numeric|min:0',
             'category_id' => 'nullable|exists:categories,id',
-            'condition'   => 'required|in:bekas_seperti_baru,bekas_baik,bekas_layak_pakai', // 1. Tambah validasi
+            'condition'   => 'required|in:bekas_seperti_baru,bekas_baik,bekas_layak_pakai',
             'images'      => 'nullable|array',
             'images.*'    => 'image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
