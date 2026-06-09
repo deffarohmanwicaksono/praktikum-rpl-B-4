@@ -230,6 +230,8 @@ class AdminController extends Controller
         $report->update(['status' => 'ditolak']);
 
         return back()->with('success', 'Laporan berhasil ditolak.');
+    }
+    
     /**
      * Display the list of users.
      */
