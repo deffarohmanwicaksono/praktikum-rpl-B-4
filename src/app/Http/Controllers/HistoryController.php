@@ -74,4 +74,26 @@ class HistoryController extends Controller
 
         return view('history.sales-history', compact('transactions'));
     }
+
+    /**
+     * Selesaikan transaksi (Ubah status menjadi 'selesai')
+     */
+    public function closeTransaction(Transaction $transaction)
+    {
+        // Pastikan hanya seller yang bisa menutup transaksi
+        if ($transaction->product->user_id !== auth()->id()) {
+            return response()->json(['message' => 'Anda tidak memiliki akses untuk menutup transaksi ini.'], 403);
+        }
+
+        $transaction->update([
+            'status' => 'selesai',
+            'completed_at' => now(),
+        ]);
+
+        return response()->json([
+            'message' => 'Transaksi berhasil diselesaikan.',
+            'status' => 'Selesai',
+            'status_class' => 'status-selesai'
+        ]);
+    }
 }
