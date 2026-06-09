@@ -128,20 +128,51 @@ document.addEventListener('click', (e) => {
     // 3. KONFIRMASI TUTUP PENJUALAN (SUBMIT)
     if (e.target.id === 'btnSubmitCloseSale') {
         if (currentRowToClose) {
-            const statusCell = currentRowToClose.querySelector('.col-status');
-            statusCell.innerHTML = `<span class="status-badge status-selesai">Selesai</span>`;
-            currentRowToClose.dataset.statusClass = 'status-selesai';
-            
-            const detailButton = currentRowToClose.querySelector('.btn-detail-view');
-            if (detailButton) {
-                detailButton.dataset.status = 'Selesai';
-                detailButton.dataset.statusClass = 'status-selesai';
-            }
+            const btnSubmit = e.target;
+            const originalText = btnSubmit.innerHTML;
+            btnSubmit.innerHTML = '<i class="bi bi-hourglass-split"></i> Memproses...';
+            btnSubmit.disabled = true;
 
-            const btnClose = currentRowToClose.querySelector('.btn-close-sale');
-            if (btnClose) btnClose.remove();
+            const trxIdString = currentRowToClose.dataset.id; // e.g. TRX-0001
+            const rawId = parseInt(trxIdString.replace('TRX-', ''), 10);
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+            fetch(`/transactions/${rawId}/close`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status) {
+                    const statusCell = currentRowToClose.querySelector('.col-status');
+                    statusCell.innerHTML = `<span class="status-badge status-selesai">Selesai</span>`;
+                    currentRowToClose.dataset.statusClass = 'status-selesai';
+                    
+                    const detailButton = currentRowToClose.querySelector('.btn-detail-view');
+                    if (detailButton) {
+                        detailButton.dataset.status = 'Selesai';
+                        detailButton.dataset.statusClass = 'status-selesai';
+                    }
+
+                    const btnClose = currentRowToClose.querySelector('.btn-close-sale');
+                    if (btnClose) btnClose.remove();
+                } else {
+                    alert(data.message || 'Gagal menutup transaksi.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Terjadi kesalahan sistem.');
+            })
+            .finally(() => {
+                btnSubmit.innerHTML = originalText;
+                btnSubmit.disabled = false;
+                closeAllActiveModals();
+            });
         }
-        closeAllActiveModals();
         return;
     }
 
