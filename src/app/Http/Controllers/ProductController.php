@@ -151,7 +151,7 @@ class ProductController extends Controller
     {
         $validated = $request->validate([
             'name'        => 'required|string|max:200',
-            'description' => 'nullable|string',
+            'description' => 'nullable|string|max:1000',
             'price'       => 'required|numeric|min:0',
             'category_id' => 'nullable|exists:categories,id',
             'condition'   => 'required|in:bekas_seperti_baru,bekas_baik,bekas_layak_pakai',
@@ -200,7 +200,7 @@ class ProductController extends Controller
 
         $validated = $request->validate([
             'name'        => 'required|string|max:200',
-            'description' => 'nullable|string',
+            'description' => 'nullable|string|max:1000',
             'price'       => 'required|numeric|min:0',
             'category_id' => 'nullable|exists:categories,id',
             'condition'   => 'required|in:bekas_seperti_baru,bekas_baik,bekas_layak_pakai',
