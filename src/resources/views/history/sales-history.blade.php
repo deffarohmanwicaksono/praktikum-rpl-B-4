@@ -20,7 +20,7 @@
 $salesHistory = [
     [
         'id' => 'TRX-2026-001',
-        'product_name' => 'Kalkulator Scientific Casio FX-991EX',
+        'product_name' => 'Buku Kalkulus Stewart',
         'buyer' => 'Budi Santoso',
         'income' => 'Rp 250.000',
         'date' => '05 Juni 2026',
@@ -32,7 +32,7 @@ $salesHistory = [
     ],
     [
         'id' => 'TRX-2026-002',
-        'product_name' => 'Kemeja Flanel Uniqlo Size M',
+        'product_name' => 'Jaket Almamater UNS',
         'buyer' => 'Citra Lestari',
         'income' => 'Rp 120.000',
         'date' => '03 Juni 2026',
@@ -44,7 +44,7 @@ $salesHistory = [
     ],
     [
         'id' => 'TRX-2026-003',
-        'product_name' => 'Mouse Wireless Logitech M221',
+        'product_name' => 'Buku Basis Data 2',
         'buyer' => 'Deni Ramadhan',
         'income' => 'Rp 110.000',
         'date' => '01 Juni 2026',

@@ -20,7 +20,7 @@
 $purchaseHistory = [
     [
         'id' => 'TRX-2026-001',
-        'product_name' => 'Buku Cetak Kalkulus Purcell Edisi 9',
+        'product_name' => 'Buku Cetak Kalkulus Stewart',
         'seller' => 'Andi Pratama',
         'price' => 'Rp 85.000',
         'price_raw' => 85000,
@@ -35,7 +35,7 @@ $purchaseHistory = [
     ],
     [
         'id' => 'TRX-2026-002',
-        'product_name' => 'Kemeja Flanel Uniqlo Size L',
+        'product_name' => 'Jaket Almamater UNS',
         'seller' => 'Siti Aisyah',
         'price' => 'Rp 120.000',
         'price_raw' => 120000,
@@ -50,7 +50,7 @@ $purchaseHistory = [
     ],
     [
         'id' => 'TRX-2026-003',
-        'product_name' => 'Kabel Charger Baseus USB-C to C 100W',
+        'product_name' => 'Buku Struktur Data Java',
         'seller' => 'Budi Santoso',
         'price' => 'Rp 45.000',
         'price_raw' => 45000,
@@ -65,7 +65,7 @@ $purchaseHistory = [
     ],
     [
         'id' => 'TRX-2026-004',
-        'product_name' => 'Headset Gaming Rexus Thundervox',
+        'product_name' => 'Tas Ransel Eiger',
         'seller' => 'Rizky Maulana',
         'price' => 'Rp 175.000',
         'price_raw' => 175000,
