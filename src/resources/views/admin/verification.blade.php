@@ -82,8 +82,8 @@ $firstProductData = $firstProduct ? $productData[$firstProduct->id] : null;
                             <span class="price-text">Rp{{ number_format($product->price, 0, ',', '.') }}</span>
                         </td>
                         <td class="col-tanggal">
-                            <span class="date-text">{{ $product->created_at->format('d M Y') }}</span>
-                            <span class="time-text">{{ $product->created_at->format('H:i') }} WIB</span>
+                            <span class="date-text">{{ $product->created_at ? $product->created_at->format('d M Y') : '-' }}</span>
+                            <span class="time-text">{{ $product->created_at ? $product->created_at->format('H:i') . ' WIB' : '' }}</span>
                         </td>
                         <td class="col-aksi">
                             <button class="btn-detail {{ $index === 0 ? 'active' : '' }}" data-id="{{ $product->id }}">
