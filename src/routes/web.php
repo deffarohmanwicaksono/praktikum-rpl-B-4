@@ -100,7 +100,7 @@ Route::get('/home', function () {
     Route::post('/checkout/{transaction}/upload-proof', [CheckoutController::class, 'uploadProof'])->name('checkout.uploadProof');
 
     // Notifikasi & Profil
-    Route::view('/notification', 'notification.notification')->name('notification');
+    Route::get('/notification', [\App\Http\Controllers\NotificationController::class, 'index'])->name('notification');
     Route::view('/profile', 'profile.profile-user')->name('profile.profile-user');
     Route::post('/profile/become-seller', function () {
         $user = auth()->user();
