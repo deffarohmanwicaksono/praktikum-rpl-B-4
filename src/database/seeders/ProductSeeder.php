@@ -353,19 +353,7 @@ class ProductSeeder extends Seeder
                 ]);
         }
 
-        foreach ($dataProducts as $product) {
-            $seller = User::findOrFail( $product['user_id']);
-
-            Product::factory()->forSeller($seller)->create([
-                    'category_id' => $product['category_id'],
-                    'name' => $product['name'],
-                    'description' => $product['description'],
-                    'price' => $product['price'],
-                    'status' => $product['status'],
-                ]);
-        }
-
-        //Factory
+        //Factory untuk produk tambahan namun belum memiliki image
         // for ($i = 0; $i < 30; $i++) {
         //     $seller = $sellers->random();
         //     $category = $categories->random();

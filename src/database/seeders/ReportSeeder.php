@@ -89,6 +89,7 @@ class ReportSeeder extends Seeder
 
             Report::factory()->create([
                 'user_id' => User::where('id', '!=', $product->user_id)
+                    ->whereJsonContains('roles', 'buyer')
                     ->inRandomOrder()
                     ->first()
                     ->id,

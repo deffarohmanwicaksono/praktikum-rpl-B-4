@@ -160,14 +160,6 @@ class NotificationSeeder extends Seeder
                 'created_at' => $notificationTime,
                 'updated_at' => $notificationTime,
             ]);
-
-            //atau
-            // Notification::create([
-            //     'user_id' => $receiverId,
-            //     'message_id' => $message->id,
-            //     'type' => 'new_message',
-            //     'content' => 'Anda menerima pesan baru.',
-            // ]);
         }
 
         // Report
