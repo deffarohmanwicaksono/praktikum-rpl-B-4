@@ -25,13 +25,14 @@
 {{-- FORM EDIT BARANG --}}
 <section class="form-section">
     <form
-        action="#"
+        action="{{ route('seller.product.update', $product->id) }}"
         method="POST"
         enctype="multipart/form-data"
         id="formEditBarang"
         novalidate
     >
         @csrf
+        @method('PUT')
 
         <div class="row g-4">
 
@@ -54,16 +55,18 @@
 
                             <input
                                 type="text"
-                                class="form-input-custom"
+                                class="form-input-custom @error('name') is-invalid @enderror"
                                 id="namaBarang"
-                                name="nama_barang"
-                                value="Buku Kalkulus Stewart Edisi 8"
+                                name="name"
+                                value="{{ old('name', $product->name) }}"
                                 placeholder="Masukkan nama barang"
                                 autocomplete="off"
                                 maxlength="100"
                                 required
                             >
-
+                            @error('name')
+                                <span class="input-error">{{ $message }}</span>
+                            @enderror
                         </div>
 
                     </div>
@@ -84,18 +87,19 @@
                             </label>
 
                             <textarea
-                                class="form-input-custom form-textarea-custom"
+                                class="form-input-custom form-textarea-custom @error('description') is-invalid @enderror"
                                 id="deskripsi"
-                                name="deskripsi"
+                                name="description"
                                 rows="6"
                                 maxlength="1000"
                                 placeholder="Jelaskan detail barang..."
                                 required
-                            >Buku Kalkulus karya James Stewart edisi 8.
-Kondisi masih bagus, tidak ada coretan.
-Cocok untuk mahasiswa semester awal.</textarea>
+                            >{{ old('description', $product->description) }}</textarea>
+                            @error('description')
+                                <span class="input-error">{{ $message }}</span>
+                            @enderror
 
-                            <div class="char-counter">
+                            <div class="char-counter mt-1">
                                 <span id="charCount">0</span> / 1000
                             </div>
 
@@ -125,10 +129,10 @@ Cocok untuk mahasiswa semester awal.</textarea>
 
                                 <input
                                     type="text"
-                                    class="form-input-custom price-input"
+                                    class="form-input-custom price-input @error('price') is-invalid @enderror"
                                     id="harga"
-                                    name="harga"
-                                    value="120.000"
+                                    name="price"
+                                    value="{{ old('price', $product->price) }}"
                                     placeholder="0"
                                     inputmode="numeric"
                                     autocomplete="off"
@@ -136,6 +140,9 @@ Cocok untuk mahasiswa semester awal.</textarea>
                                 >
 
                             </div>
+                            @error('price')
+                                <span class="input-error">{{ $message }}</span>
+                            @enderror
 
                         </div>
 
@@ -164,26 +171,15 @@ Cocok untuk mahasiswa semester awal.</textarea>
                                     <div class="select-wrapper">
 
                                         <select
-                                            class="form-input-custom form-select-custom"
+                                            class="form-input-custom form-select-custom @error('condition') is-invalid @enderror"
                                             id="kondisi"
-                                            name="kondisi"
+                                            name="condition"
                                             required
                                         >
-                                            <option value="" disabled>
-                                                Pilih kondisi
-                                            </option>
-
-                                            <option value="like_new" selected>
-                                                Bekas Seperti Baru
-                                            </option>
-
-                                            <option value="baik">
-                                                Bekas Baik
-                                            </option>
-
-                                            <option value="layak">
-                                                Bekas Layak Pakai
-                                            </option>
+                                            <option value="" disabled {{ old('condition', $product->condition) ? '' : 'selected' }}>Pilih kondisi</option>
+                                            <option value="bekas_seperti_baru" {{ old('condition', $product->condition) == 'bekas_seperti_baru' ? 'selected' : '' }}>Bekas Seperti Baru</option>
+                                            <option value="bekas_baik" {{ old('condition', $product->condition) == 'bekas_baik' ? 'selected' : '' }}>Bekas Baik</option>
+                                            <option value="bekas_layak_pakai" {{ old('condition', $product->condition) == 'bekas_layak_pakai' ? 'selected' : '' }}>Bekas Layak Pakai</option>
 
                                         </select>
 
@@ -215,22 +211,15 @@ Cocok untuk mahasiswa semester awal.</textarea>
                                     <div class="select-wrapper">
 
                                         <select
-                                            class="form-input-custom form-select-custom"
+                                            class="form-input-custom form-select-custom @error('category_id') is-invalid @enderror"
                                             id="kategori"
-                                            name="kategori_id"
+                                            name="category_id"
                                             required
                                         >
-                                            <option value="" disabled>Pilih kategori</option>
-                                            <option value="1">Elektronik</option>
-                                            <option value="2" selected>Buku</option>
-                                            <option value="3">Pakaian</option>
-                                            <option value="4">Peralatan Kost</option>
-                                            <option value="5">Alat Tulis</option>
-                                            <option value="6">Sepatu & Tas</option>
-                                            <option value="7">Olahraga</option>
-                                            <option value="8">Kecantikan</option>
-                                            <option value="9">Lainnya</option>
-
+                                            <option value="" disabled {{ old('category_id', $product->category_id) ? '' : 'selected' }}>Pilih kategori</option>
+                                            @foreach ($categories as $cat)
+                                                <option value="{{ $cat->id }}" {{ old('category_id', $product->category_id) == $cat->id ? 'selected' : '' }}>{{ $cat->name }}</option>
+                                            @endforeach
                                         </select>
 
                                         <i class="bi bi-chevron-down select-chevron"></i>
@@ -321,41 +310,25 @@ Cocok untuk mahasiswa semester awal.</textarea>
                                 id="fotoThumbStrip"
                             >
 
-                                {{-- THUMB 1 --}}
-                                <div
-                                    class="foto-thumb active"
-                                    data-index="0"
-                                    data-src="{{ asset('images/Elemen-1.png') }}"
-                                >
-                                    <img
-                                        src="{{ asset('images/Elemen-1.png') }}"
-                                        alt="Foto Barang"
+                                @foreach ($product->productImages as $index => $image)
+                                    @php
+                                        $imgUrl = str_starts_with($image->image_url, 'http') 
+                                            ? $image->image_url 
+                                            : (str_starts_with($image->image_url, 'products/') ? asset('storage/' . $image->image_url) : asset($image->image_url));
+                                    @endphp
+                                    <div
+                                        class="foto-thumb {{ $index === 0 ? 'active' : '' }}"
+                                        data-index="{{ $index }}"
+                                        data-src="{{ $imgUrl }}"
+                                        data-image-id="{{ $image->id }}"
                                     >
-                                </div>
-
-                                {{-- THUMB 2 --}}
-                                <div
-                                    class="foto-thumb"
-                                    data-index="1"
-                                    data-src="{{ asset('images/Elemen-1.png') }}"
-                                >
-                                    <img
-                                        src="{{ asset('images/Elemen-1.png') }}"
-                                        alt="Foto Barang"
-                                    >
-                                </div>
-
-                                {{-- THUMB 3 --}}
-                                <div
-                                    class="foto-thumb"
-                                    data-index="2"
-                                    data-src="{{ asset('images/Elemen-1.png') }}"
-                                >
-                                    <img
-                                        src="{{ asset('images/Elemen-1.png') }}"
-                                        alt="Foto Barang"
-                                    >
-                                </div>
+                                        <img
+                                            src="{{ $imgUrl }}"
+                                            alt="Foto Barang"
+                                        >
+                                    </div>
+                                    <input type="hidden" name="existing_images[]" value="{{ $image->id }}">
+                                @endforeach
 
                                 {{-- BUTTON HAPUS --}}
                                 <button
@@ -389,7 +362,7 @@ Cocok untuk mahasiswa semester awal.</textarea>
                                     <input
                                         type="file"
                                         id="fotoInputBaru"
-                                        name="foto_baru[]"
+                                        name="images[]"
                                         class="d-none"
                                         multiple
                                         accept="image/png,image/jpeg,image/webp"

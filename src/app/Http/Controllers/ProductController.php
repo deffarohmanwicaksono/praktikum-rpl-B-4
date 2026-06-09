@@ -244,14 +244,20 @@ class ProductController extends Controller
         $product = Product::where('user_id', auth()->id())->findOrFail($id);
 
         $validated = $request->validate([
-            'name'        => 'required|string|max:200',
-            'description' => 'nullable|string|max:1000',
-            'price'       => 'required|numeric|min:0',
-            'category_id' => 'nullable|exists:categories,id',
-            'condition'   => 'required|in:bekas_seperti_baru,bekas_baik,bekas_layak_pakai',
-            'images'      => 'nullable|array',
-            'images.*'    => 'image|mimes:jpg,jpeg,png,webp|max:2048',
+            'name'              => 'required|string|max:200',
+            'description'       => 'nullable|string|max:1000',
+            'price'             => 'required|numeric|min:0',
+            'category_id'       => 'nullable|exists:categories,id',
+            'condition'         => 'required|in:bekas_seperti_baru,bekas_baik,bekas_layak_pakai',
+            'existing_images'   => 'nullable|array',
+            'existing_images.*' => 'exists:product_images,id',
+            'images'            => 'nullable|array',
+            'images.*'          => 'image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
+
+        if (empty($validated['existing_images']) && !$request->hasFile('images')) {
+            return back()->withErrors(['images' => 'Produk minimal harus memiliki 1 foto.'])->withInput();
+        }
 
         $product->update([
             'category_id' => $validated['category_id'] ?? null,
@@ -261,6 +267,15 @@ class ProductController extends Controller
             'condition'   => $validated['condition'],
         ]);
 
+        // Delete images that are no longer present
+        $existingImageIds = $validated['existing_images'] ?? [];
+        $imagesToDelete = $product->productImages()->whereNotIn('id', $existingImageIds)->get();
+        foreach ($imagesToDelete as $img) {
+            Storage::disk('public')->delete($img->image_url);
+            $img->delete();
+        }
+
+        // Add new images
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $image) {
                 $path = $image->store('products', 'public');
