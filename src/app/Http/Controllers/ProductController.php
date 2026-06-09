@@ -294,6 +294,16 @@ class ProductController extends Controller
             Storage::disk('public')->delete($image->image_url);
         }
 
+        // Hapus relasi yang tidak memiliki cascadeOnDelete di database untuk mencegah error constraint
+        $product->reports()->delete();
+        \Illuminate\Support\Facades\DB::table('wishlists')->where('product_id', $product->id)->delete();
+        
+        // Hapus chat akan cascade ke purchase_links, yang akan cascade ke transactions
+        $product->chats()->delete();
+        
+        // Pastikan transactions benar-benar bersih (jaga-jaga jika ada orphaned data)
+        $product->transactions()->delete();
+
         $product->delete();
 
         return redirect()->route('seller.dashboard-seller')->with('success', 'Produk berhasil dihapus!');
