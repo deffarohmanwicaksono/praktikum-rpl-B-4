@@ -107,7 +107,7 @@ Route::middleware('auth')->group(function () {
     Route::view('/sales-history', 'history.sales-history')->name('history.sales-history');
 
     // Seller
-    Route::view('/dashboard-seller', 'seller.dashboard-seller')->name('seller.dashboard-seller');
+    Route::get('/dashboard-seller', [ProductController::class, 'sellerDashboard'])->name('seller.dashboard-seller');
     Route::view('/seller/upload-product', 'seller.upload-product')->name('seller.product.upload');
     Route::get('/seller/edit-product/{id}', [ProductController::class, 'edit'])->name('seller.product.edit');
     Route::put('/seller/edit-product/{id}', [ProductController::class, 'update'])->name('seller.product.update');
