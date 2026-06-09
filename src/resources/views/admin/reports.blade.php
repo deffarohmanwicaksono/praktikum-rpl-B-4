@@ -55,7 +55,7 @@ $firstReportData = $firstReport ? $reportData[$firstReport->id] : null;
                     @php
                         $imageUrl = $report->product->productImages->first()->image_url ?? 'images/default-product.jpg';
                         if (!str_starts_with($imageUrl, 'http')) {
-                            $imageUrl = asset($imageUrl);
+                            $imageUrl = str_starts_with($imageUrl, 'products/') ? asset('storage/' . $imageUrl) : asset($imageUrl);
                         }
                     @endphp
                     <tr class="report-row {{ $index === 0 ? 'active-row' : '' }}"
