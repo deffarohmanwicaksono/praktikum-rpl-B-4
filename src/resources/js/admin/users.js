@@ -56,6 +56,27 @@ document.addEventListener('DOMContentLoaded', () => {
             detailUserStatus.innerHTML = `<span class="status-badge ${data.status_class}">${data.status}</span>`;
         }
 
+        // Render Statistics
+        const isOnlyBuyer = data.roles.length === 1 && data.roles[0].toLowerCase() === 'buyer';
+        
+        const detailUserProducts = document.getElementById('detailUserProducts');
+        const detailUserTransactions = document.getElementById('detailUserTransactions');
+        const detailUserRating = document.getElementById('detailUserRating');
+        const detailUserReviews = document.getElementById('detailUserReviews');
+
+        if (detailUserProducts) {
+            detailUserProducts.textContent = isOnlyBuyer ? '0' : (data.products_sold || 0);
+        }
+        if (detailUserTransactions) {
+            detailUserTransactions.textContent = data.transactions || 0;
+        }
+        if (detailUserRating) {
+            detailUserRating.textContent = isOnlyBuyer ? '-' : (data.rating || '0.0');
+        }
+        if (detailUserReviews) {
+            detailUserReviews.textContent = isOnlyBuyer ? 'Tidak ada ulasan' : `${data.reviews || 0} Ulasan`;
+        }
+
         // Animasi Fade-In Panel Kartu Detail
         if (detailCard) {
             detailCard.style.animation = 'none';
