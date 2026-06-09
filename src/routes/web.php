@@ -96,8 +96,10 @@ Route::middleware('auth')->group(function () {
     Route::view('/profile', 'profile.profile-user')->name('profile.profile-user');
     Route::post('/profile/become-seller', function () {
         $user = auth()->user();
-        if ($user->role === 'buyer') {
-            $user->update(['role' => 'seller']);
+        $roles = $user->roles ?? [];
+        if (!in_array('seller', $roles)) {
+            $roles[] = 'seller';
+            $user->update(['roles' => $roles]);
         }
         return back()->with('success', 'Akun Seller Anda berhasil diaktifkan! Silakan mulai mengunggah produk.');
     })->name('profile.become-seller');
