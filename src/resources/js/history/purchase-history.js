@@ -138,6 +138,7 @@ document.addEventListener('click', (e) => {
     const reviewBtn = e.target.closest('.btn-review-write');
     if (reviewBtn) {
         const modalReview = document.getElementById('modalReviewPurchase');
+        document.getElementById('reviewTransactionId').value = reviewBtn.dataset.id;
         document.getElementById('reviewProductName').textContent = reviewBtn.dataset.name;
         document.getElementById('reviewSellerName').textContent = `Seller: ${reviewBtn.dataset.seller}`;
         document.getElementById('reviewProductImage').src = reviewBtn.dataset.image;

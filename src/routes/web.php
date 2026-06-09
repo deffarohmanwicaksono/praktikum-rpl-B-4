@@ -8,6 +8,7 @@ use App\Http\Controllers\ChatController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\WishlistController;
+use App\Http\Controllers\HistoryController;
 use App\Http\Middleware\RoleMiddleware;
 
 /*
@@ -102,9 +103,11 @@ Route::middleware('auth')->group(function () {
         return back()->with('success', 'Akun Seller Anda berhasil diaktifkan! Silakan mulai mengunggah produk.');
     })->name('profile.become-seller');
 
-    // Riwayat (Purchase & Sales)
-    Route::view('/purchase-history', 'history.purchase-history')->name('history.purchase-history');
-    Route::view('/sales-history', 'history.sales-history')->name('history.sales-history');
+    // History
+    Route::get('/purchase-history', [HistoryController::class, 'purchaseHistory'])->name('history.purchase-history');
+    Route::post('/purchase-history/review', [HistoryController::class, 'submitReview'])->name('history.submit-review');
+    Route::get('/sales-history', [HistoryController::class, 'salesHistory'])->name('history.sales-history');
+    Route::post('/sales-history/close', [HistoryController::class, 'closeSale'])->name('history.close-sale');
 
     // Seller
     Route::get('/dashboard-seller', [ProductController::class, 'sellerDashboard'])->name('seller.dashboard-seller');

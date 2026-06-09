@@ -15,71 +15,7 @@
 
 @section('content')
 
-@php
-// Data dummy riwayat pembelian
-$purchaseHistory = [
-    [
-        'id' => 'TRX-2026-001',
-        'product_name' => 'Buku Cetak Kalkulus Purcell Edisi 9',
-        'seller' => 'Andi Pratama',
-        'price' => 'Rp 85.000',
-        'price_raw' => 85000,
-        'date' => '04 Juni 2026',
-        'time' => '19:45 WIB',
-        'timestamp' => '2026-06-04T19:45:00',
-        'status' => 'Menunggu Konfirmasi',
-        'status_class' => 'status-menunggu',
-        'image' => 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=120&q=80',
-        'note' => 'Mohon dikirim via COD di depan Perpustakaan Pusat ya kak.',
-        'payment_proof' => 'https://images.unsplash.com/photo-1620714223084-8fcacc6dfd8d?w=400&q=80' // Contoh ada bukti
-    ],
-    [
-        'id' => 'TRX-2026-002',
-        'product_name' => 'Kemeja Flanel Uniqlo Size L',
-        'seller' => 'Siti Aisyah',
-        'price' => 'Rp 120.000',
-        'price_raw' => 120000,
-        'date' => '02 Juni 2026',
-        'time' => '10:15 WIB',
-        'timestamp' => '2026-06-02T10:15:00',
-        'status' => 'Selesai',
-        'status_class' => 'status-selesai',
-        'image' => 'https://images.unsplash.com/photo-1598033129183-c4f50c736f10?w=120&q=80',
-        'note' => 'Barang sudah diterima langsung di Gedung Kuliah Bersama.',
-        'payment_proof' => 'https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=400&q=80' // Contoh ada bukti
-    ],
-    [
-        'id' => 'TRX-2026-003',
-        'product_name' => 'Kabel Charger Baseus USB-C to C 100W',
-        'seller' => 'Budi Santoso',
-        'price' => 'Rp 45.000',
-        'price_raw' => 45000,
-        'date' => '28 Mei 2026',
-        'time' => '14:20 WIB',
-        'timestamp' => '2026-05-28T14:20:00',
-        'status' => 'Selesai',
-        'status_class' => 'status-selesai',
-        'image' => 'https://images.unsplash.com/photo-1555538995-7ccc83f60088?w=120&q=80',
-        'note' => 'Fungsi fast charging berjalan normal di laptop.',
-        'payment_proof' => '' // Contoh tidak ada bukti
-    ],
-    [
-        'id' => 'TRX-2026-004',
-        'product_name' => 'Headset Gaming Rexus Thundervox',
-        'seller' => 'Rizky Maulana',
-        'price' => 'Rp 175.000',
-        'price_raw' => 175000,
-        'date' => '20 Mei 2026',
-        'time' => '11:00 WIB',
-        'timestamp' => '2026-05-20T11:00:00',
-        'status' => 'Gagal',
-        'status_class' => 'status-gagal',
-        'image' => 'https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=120&q=80',
-        'note' => 'Transaksi dibatalkan karena stok barang ternyata sudah pecah/rusak fisik.',
-        'payment_proof' => '' // Contoh tidak ada bukti
-    ]
-];
-@endphp
+
 
 {{-- =============================================
      PAGE HEADER
@@ -186,13 +122,18 @@ $purchaseHistory = [
                             <i class="bi bi-eye"></i> Detail
                         </button>
 
-                        @if($trx['status_class'] === 'status-selesai')
+                        @if($trx['status_class'] === 'status-selesai' && !$trx['has_reviewed'])
                         <button class="btn-action btn-review-write" 
+                                data-id="{{ $trx['raw_id'] }}"
                                 data-name="{{ $trx['product_name'] }}"
                                 data-seller="{{ $trx['seller'] }}"
                                 data-image="{{ $trx['image'] }}"
                                 title="Berikan Ulasan">
                             <i class="bi bi-star-fill"></i> Ulasan
+                        </button>
+                        @elseif($trx['status_class'] === 'status-selesai' && $trx['has_reviewed'])
+                        <button class="btn-action btn-review-write" disabled style="opacity: 0.5; cursor: not-allowed;" title="Ulasan sudah diberikan">
+                            <i class="bi bi-check-circle-fill"></i> Selesai
                         </button>
                         @endif
                     </div>
@@ -282,7 +223,9 @@ $purchaseHistory = [
                 <i class="bi bi-x-lg"></i>
             </button>
         </div>
-        <form id="formSubmitReview" action="#" method="POST" onsubmit="event.preventDefault(); alert('Ulasan berhasil disimpan!'); document.getElementById('modalReviewPurchase').classList.remove('open');">
+        <form id="formSubmitReview" action="{{ route('history.submit-review') }}" method="POST">
+            @csrf
+            <input type="hidden" name="transaction_id" id="reviewTransactionId" value="">
             <div class="modal-body-simple text-left-align">
                 
                 <div class="product-review-header">

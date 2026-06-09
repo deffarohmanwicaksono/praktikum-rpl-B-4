@@ -15,47 +15,7 @@
 
 @section('content')
 
-@php
-// Data dummy riwayat penjualan
-$salesHistory = [
-    [
-        'id' => 'TRX-2026-001',
-        'product_name' => 'Kalkulator Scientific Casio FX-991EX',
-        'buyer' => 'Budi Santoso',
-        'income' => 'Rp 250.000',
-        'date' => '05 Juni 2026',
-        'time' => '10:15 WIB',
-        'status' => 'Menunggu Pembayaran',
-        'status_class' => 'status-menunggu',
-        'image' => 'https://images.unsplash.com/photo-1574607383476-f517f260d30b?w=120&q=80',
-        'payment_proof' => 'https://images.unsplash.com/photo-1556740749-887f6717d7e4?w=800',
-    ],
-    [
-        'id' => 'TRX-2026-002',
-        'product_name' => 'Kemeja Flanel Uniqlo Size M',
-        'buyer' => 'Citra Lestari',
-        'income' => 'Rp 120.000',
-        'date' => '03 Juni 2026',
-        'time' => '14:20 WIB',
-        'status' => 'Selesai',
-        'status_class' => 'status-selesai',
-        'image' => 'https://images.unsplash.com/photo-1596755094514-f87e32f6b717?w=120&q=80',
-        'payment_proof' => 'https://images.unsplash.com/photo-1556740749-887f6717d7e4?w=800',
-    ],
-    [
-        'id' => 'TRX-2026-003',
-        'product_name' => 'Mouse Wireless Logitech M221',
-        'buyer' => 'Deni Ramadhan',
-        'income' => 'Rp 110.000',
-        'date' => '01 Juni 2026',
-        'time' => '09:00 WIB',
-        'status' => 'Selesai',
-        'status_class' => 'status-selesai',
-        'image' => 'https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=120&q=80',
-        'payment_proof' => 'https://images.unsplash.com/photo-1556740749-887f6717d7e4?w=800',
-    ]
-];
-@endphp
+
 
 <section class="page-header-section">
     <h1 class="page-title">Riwayat Penjualan</h1>
@@ -168,7 +128,7 @@ $salesHistory = [
                             @if($trx['status_class'] !== 'status-selesai')
                                 <button
                                     class="btn-action btn-close-sale"
-                                    data-id="{{ $trx['id'] }}"
+                                    data-id="{{ $trx['raw_id'] }}"
                                     data-name="{{ $trx['product_name'] }}">
                                     <i class="bi bi-check2-circle"></i>
                                     Tutup
@@ -255,19 +215,22 @@ $salesHistory = [
                 <i class="bi bi-x-lg"></i>
             </button>
         </div>
-        <div class="modal-body-simple">
-            <div class="modal-icon-wrap" style="color: #10B981; background: #D1FAE5;">
-                <i class="bi bi-check-circle-fill"></i>
+        <form action="{{ route('history.close-sale') }}" method="POST">
+            @csrf
+            <div class="modal-body-simple">
+                <div class="modal-icon-wrap" style="color: #10B981; background: #D1FAE5;">
+                    <i class="bi bi-check-circle-fill"></i>
+                </div>
+                <p class="modal-confirm-text">
+                    Tandai penjualan <strong id="confirmProductName"></strong> sebagai selesai?
+                </p>
+                <input type="hidden" id="confirmTrxId" name="transaction_id">
             </div>
-            <p class="modal-confirm-text">
-                Tandai penjualan <strong id="confirmProductName"></strong> sebagai selesai?
-            </p>
-            <input type="hidden" id="confirmTrxId">
-        </div>
-        <div class="modal-footer-custom">
-            <button class="btn-modal-cancel" data-modal="modalConfirmClose">Batal</button>
-            <button class="btn-modal-submit bg-success" id="btnSubmitCloseSale">Ya, Selesaikan</button>
-        </div>
+            <div class="modal-footer-custom">
+                <button type="button" class="btn-modal-cancel" data-modal="modalConfirmClose">Batal</button>
+                <button type="submit" class="btn-modal-submit bg-success" id="btnSubmitCloseSale">Ya, Selesaikan</button>
+            </div>
+        </form>
     </div>
 </div>
 

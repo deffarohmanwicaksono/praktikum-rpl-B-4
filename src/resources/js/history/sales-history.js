@@ -125,25 +125,7 @@ document.addEventListener('click', (e) => {
         return;
     }
 
-    // 3. KONFIRMASI TUTUP PENJUALAN (SUBMIT)
-    if (e.target.id === 'btnSubmitCloseSale') {
-        if (currentRowToClose) {
-            const statusCell = currentRowToClose.querySelector('.col-status');
-            statusCell.innerHTML = `<span class="status-badge status-selesai">Selesai</span>`;
-            currentRowToClose.dataset.statusClass = 'status-selesai';
-            
-            const detailButton = currentRowToClose.querySelector('.btn-detail-view');
-            if (detailButton) {
-                detailButton.dataset.status = 'Selesai';
-                detailButton.dataset.statusClass = 'status-selesai';
-            }
 
-            const btnClose = currentRowToClose.querySelector('.btn-close-sale');
-            if (btnClose) btnClose.remove();
-        }
-        closeAllActiveModals();
-        return;
-    }
 
     // 4. TUTUP MODAL GENERAL (Tombol Batal / Klik Overlay / Klik Overlay Lightbox / Tombol Tutup Lightbox)
     if (e.target.closest('.modal-close-btn, .btn-modal-cancel, .lightbox-close') || e.target.classList.contains('modal-overlay') || e.target.classList.contains('lightbox-overlay')) {
