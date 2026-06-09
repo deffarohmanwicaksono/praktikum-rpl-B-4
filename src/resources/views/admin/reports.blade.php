@@ -89,8 +89,8 @@ $firstReportData = $firstReport ? $reportData[$firstReport->id] : null;
 
                         {{-- Tanggal --}}
                         <td class="col-tanggal">
-                            <span class="date-text">{{ $report->created_at->format('d M Y') }}</span>
-                            <span class="time-text">{{ $report->created_at->format('H:i') }} WIB</span>
+                            <span class="date-text">{{ $report->created_at ? $report->created_at->format('d M Y') : '-' }}</span>
+                            <span class="time-text">{{ $report->created_at ? $report->created_at->format('H:i') . ' WIB' : '' }}</span>
                         </td>
 
                         {{-- Aksi --}}

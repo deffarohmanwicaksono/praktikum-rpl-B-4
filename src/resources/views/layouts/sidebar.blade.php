@@ -68,24 +68,20 @@
             </li>
 
             {{-- RIWAYAT PENJUALAN --}}
-            @if(auth()->user()->role === 'seller' || auth()->user()->role === 'admin')
             <li class="nav-item {{ request()->routeIs('history.sales-history') ? 'active' : '' }}">
                 <a href="{{ route('history.sales-history') }}" class="nav-link-custom">
                     <i class="bi bi-receipt"></i>
                     <span>Riwayat Penjualan</span>
                 </a>
             </li>
-            @endif
 
             {{-- DASHBOARD SELLER --}}
-            @if(auth()->user()->role === 'seller' || auth()->user()->role === 'admin')
             <li class="nav-item {{ request()->routeIs('seller.*') ? 'active' : '' }}">
                 <a href="{{ route('seller.dashboard-seller') }}" class="nav-link-custom">
                     <i class="bi bi-speedometer2"></i>
                     <span>Dashboard Seller</span>
                 </a>
             </li>
-            @endif
 
             {{-- PROFIL --}}
             <li class="nav-item {{ request()->routeIs('profile.profile-user') ? 'active' : '' }}">
