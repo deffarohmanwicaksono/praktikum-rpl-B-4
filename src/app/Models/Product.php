@@ -50,8 +50,14 @@ class Product extends Model
     {
         return $this->hasMany(Transaction::class);
     }
+
     public function reports(): HasMany
     {
         return $this->hasMany(Report::class);
+    }
+
+    public function verifications()
+    {
+        return $this->hasOne(ProductVerification::class);
     }
 }

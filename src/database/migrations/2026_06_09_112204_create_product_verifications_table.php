@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('notifications', function (Blueprint $table) {
+        Schema::create('product_verifications', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users');
-            $table->string('type', 50);
-            $table->text('content');
-            $table->boolean('is_read')->default(false);
+            $table->foreignId('product_id')->unique() ->constrained('products') ->cascadeOnDelete();
+            $table->foreignId('admin_id') ->constrained('users');
+
+            $table->enum('status', [ 'disetujui', 'ditolak',]);
+            $table->text('reason')->nullable();
             $table->timestamps();
-            // $table->foreignId('message_id') ->nullable()->constrained('messages')->nullOnDelete();
         });
     }
 
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('notifications');
+        Schema::dropIfExists('product_verifications');
     }
 };
