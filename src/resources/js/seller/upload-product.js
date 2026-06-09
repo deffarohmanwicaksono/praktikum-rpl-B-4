@@ -173,6 +173,14 @@ if (btnSubmit && formElement) {
             return;
         }
 
+        // Strip non-numeric characters from price before submit
+        document.getElementById('harga').value = harga.replace(/\D/g, '');
+
+        // Sync uploadedFiles array with the actual file input
+        const dataTransfer = new DataTransfer();
+        uploadedFiles.forEach(file => dataTransfer.items.add(file));
+        document.getElementById('fotoInput').files = dataTransfer.files;
+
         btnSubmit.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status"></span>Mengirim...';
         btnSubmit.disabled = true;
         

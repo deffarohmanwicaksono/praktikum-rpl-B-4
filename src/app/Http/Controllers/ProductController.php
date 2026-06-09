@@ -213,8 +213,10 @@ class ProductController extends Controller
         ]);
 
         $user = auth()->user();
-        if ($user->role === 'buyer') {
-            $user->update(['role' => 'seller']);
+        $roles = $user->roles ?? [];
+        if (!in_array('seller', $roles)) {
+            $roles[] = 'seller';
+            $user->update(['roles' => $roles]);
         }
 
         if ($request->hasFile('images')) {
