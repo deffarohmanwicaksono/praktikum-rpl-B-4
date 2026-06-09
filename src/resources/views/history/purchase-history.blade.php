@@ -16,69 +16,7 @@
 @section('content')
 
 @php
-// Data dummy riwayat pembelian
-$purchaseHistory = [
-    [
-        'id' => 'TRX-2026-001',
-        'product_name' => 'Buku Cetak Kalkulus Stewart',
-        'seller' => 'Andi Pratama',
-        'price' => 'Rp 85.000',
-        'price_raw' => 85000,
-        'date' => '04 Juni 2026',
-        'time' => '19:45 WIB',
-        'timestamp' => '2026-06-04T19:45:00',
-        'status' => 'Menunggu Konfirmasi',
-        'status_class' => 'status-menunggu',
-        'image' => asset('images/products/kalkulus_steward.jpg'),
-        'note' => 'Mohon dikirim via COD di depan Perpustakaan Pusat ya kak.',
-        'payment_proof' => asset('images/products/basis_data.jpg') // Contoh ada bukti
-    ],
-    [
-        'id' => 'TRX-2026-002',
-        'product_name' => 'Jaket Almamater UNS',
-        'seller' => 'Siti Aisyah',
-        'price' => 'Rp 120.000',
-        'price_raw' => 120000,
-        'date' => '02 Juni 2026',
-        'time' => '10:15 WIB',
-        'timestamp' => '2026-06-02T10:15:00',
-        'status' => 'Selesai',
-        'status_class' => 'status-selesai',
-        'image' => asset('images/products/almet.jpg'),
-        'note' => 'Barang sudah diterima langsung di Gedung Kuliah Bersama.',
-        'payment_proof' => asset('images/products/tas_ransel.jpg') // Contoh ada bukti
-    ],
-    [
-        'id' => 'TRX-2026-003',
-        'product_name' => 'Buku Struktur Data Java',
-        'seller' => 'Budi Santoso',
-        'price' => 'Rp 45.000',
-        'price_raw' => 45000,
-        'date' => '28 Mei 2026',
-        'time' => '14:20 WIB',
-        'timestamp' => '2026-05-28T14:20:00',
-        'status' => 'Selesai',
-        'status_class' => 'status-selesai',
-        'image' => asset('images/products/struktur_data_java.jpg'),
-        'note' => 'Fungsi fast charging berjalan normal di laptop.',
-        'payment_proof' => '' // Contoh tidak ada bukti
-    ],
-    [
-        'id' => 'TRX-2026-004',
-        'product_name' => 'Tas Ransel Eiger',
-        'seller' => 'Rizky Maulana',
-        'price' => 'Rp 175.000',
-        'price_raw' => 175000,
-        'date' => '20 Mei 2026',
-        'time' => '11:00 WIB',
-        'timestamp' => '2026-05-20T11:00:00',
-        'status' => 'Gagal',
-        'status_class' => 'status-gagal',
-        'image' => asset('images/products/tas_ransel.jpg'),
-        'note' => 'Transaksi dibatalkan karena stok barang ternyata sudah pecah/rusak fisik.',
-        'payment_proof' => '' // Contoh tidak ada bukti
-    ]
-];
+// Data transaksi sekarang diambil secara dinamis dari HistoryController
 @endphp
 
 {{-- =============================================
@@ -131,66 +69,66 @@ $purchaseHistory = [
             </tr>
         </thead>
         <tbody id="purchaseHistoryBody">
-            @forelse($purchaseHistory as $trx)
+            @forelse($transactions as $trx)
             <tr class="purchase-row" 
-                data-id="{{ $trx['id'] }}" 
-                data-status-class="{{ $trx['status_class'] }}"
-                data-price="{{ $trx['price_raw'] }}"
-                data-timestamp="{{ $trx['timestamp'] }}">
+                data-id="TRX-{{ str_pad($trx->id, 4, '0', STR_PAD_LEFT) }}" 
+                data-status-class="{{ $trx->status_class }}"
+                data-price="{{ $trx->total_price }}"
+                data-timestamp="{{ $trx->created_at->toIso8601String() }}">
                 
                 <td class="col-id">
                     <i class="bi bi-receipt"></i>
-                    <span class="id-trx-text">{{ $trx['id'] }}</span>
+                    <span class="id-trx-text">TRX-{{ str_pad($trx->id, 4, '0', STR_PAD_LEFT) }}</span>
                 </td>
                 
                 <td class="col-barang">
                     <div class="product-profile-cell">
                         <div class="product-avatar-wrap">
-                            <img src="{{ $trx['image'] }}" alt="{{ $trx['product_name'] }}" class="product-avatar">
+                            <img src="{{ $trx->image_url }}" alt="{{ $trx->product->name }}" class="product-avatar">
                         </div>
                         <div class="product-meta-details">
-                            <span class="product-name-text">{{ $trx['product_name'] }}</span>
-                            <span class="seller-info-text">Seller: <strong>{{ $trx['seller'] }}</strong></span>
+                            <span class="product-name-text">{{ $trx->product->name }}</span>
+                            <span class="seller-info-text">Seller: <strong>{{ $trx->product->user->name ?? 'Unknown Seller' }}</strong></span>
                         </div>
                     </div>
                 </td>
                 
                 <td class="col-tanggal">
                     <div class="date-time-wrapper">
-                        <span class="date-text-main">{{ $trx['date'] }}</span>
-                        <span class="time-text-sub">{{ $trx['time'] }}</span>
+                        <span class="date-text-main">{{ $trx->formatted_date }}</span>
+                        <span class="time-text-sub">{{ $trx->formatted_time }}</span>
                     </div>
                 </td>
                 
                 <td class="col-total">
-                    <span class="price-text-new">{{ $trx['price'] }}</span>
+                    <span class="price-text-new">{{ $trx->mapped_price }}</span>
                 </td>
                 
                 <td class="col-status">
-                    <span class="status-badge {{ $trx['status_class'] }}">{{ $trx['status'] }}</span>
+                    <span class="status-badge {{ $trx->status_class }}">{{ $trx->mapped_status }}</span>
                 </td>
                 
                 <td class="col-aksi">
                     <div class="action-buttons-group">
                         <button class="btn-action btn-detail-view" 
-                                data-id="{{ $trx['id'] }}"
-                                data-name="{{ $trx['product_name'] }}"
-                                data-seller="{{ $trx['seller'] }}"
-                                data-price="{{ $trx['price'] }}"
-                                data-date="{{ $trx['date'] }} @ {{ $trx['time'] }}"
-                                data-status="{{ $trx['status'] }}"
-                                data-status-class="{{ $trx['status_class'] }}"
-                                data-note="{{ $trx['note'] }}"
-                                data-payment="{{ $trx['payment_proof'] ?? '' }}"
+                                data-id="TRX-{{ str_pad($trx->id, 4, '0', STR_PAD_LEFT) }}"
+                                data-name="{{ $trx->product->name }}"
+                                data-seller="{{ $trx->product->user->name ?? 'Unknown Seller' }}"
+                                data-price="{{ $trx->mapped_price }}"
+                                data-date="{{ $trx->formatted_date }} @ {{ $trx->formatted_time }}"
+                                data-status="{{ $trx->mapped_status }}"
+                                data-status-class="{{ $trx->status_class }}"
+                                data-note="{{ $trx->purchaseLink->note ?? '' }}"
+                                data-payment="{{ $trx->payment_proof_url }}"
                                 title="Lihat Ringkasan">
                             <i class="bi bi-eye"></i> Detail
                         </button>
 
-                        @if($trx['status_class'] === 'status-selesai')
+                        @if($trx->status_class === 'status-selesai')
                         <button class="btn-action btn-review-write" 
-                                data-name="{{ $trx['product_name'] }}"
-                                data-seller="{{ $trx['seller'] }}"
-                                data-image="{{ $trx['image'] }}"
+                                data-name="{{ $trx->product->name }}"
+                                data-seller="{{ $trx->product->user->name ?? 'Unknown Seller' }}"
+                                data-image="{{ $trx->image_url }}"
                                 title="Berikan Ulasan">
                             <i class="bi bi-star-fill"></i> Ulasan
                         </button>

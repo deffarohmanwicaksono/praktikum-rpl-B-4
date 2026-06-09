@@ -192,49 +192,42 @@ window.checkoutData = {
                 class="payment-options"
                 id="paymentOptions"
             >
-                <label class="pay-option selected" data-method="transfer_bca">
-                    <input type="radio" name="payment" value="transfer_bca" checked hidden>
-                    <div class="pay-left">
-                        <div class="pm-type-icon pm-icon--bank"><i class="bi bi-bank2"></i></div>
-                        <div class="pm-info">
-                            <span class="pm-type-label">Transfer Bank - BCA</span>
+                @if(!empty($purchaseLink->payment_methods) && is_array($purchaseLink->payment_methods))
+                    @foreach($purchaseLink->payment_methods as $index => $payment)
+                        <label class="pay-option {{ $index === 0 ? 'selected' : '' }}" data-method="{{ $payment['id'] ?? 'payment_' . $index }}">
+                            <input type="radio" name="payment_method" value="{{ $payment['label'] ?? 'Transfer' }} - {{ $payment['number'] ?? '' }}" {{ $index === 0 ? 'checked' : '' }} hidden>
+                            <div class="pay-left">
+                                <div class="pm-type-icon pm-icon--{{ $payment['type'] ?? 'bank' }}">
+                                    <i class="bi bi-{{ $payment['icon'] ?? 'bank2' }}"></i>
+                                </div>
+                                <div class="pm-info">
+                                    <span class="pm-type-label">{{ $payment['label'] ?? 'Metode Pembayaran' }}</span>
+                                    <div class="pm-detail-row" style="font-size:12px; color:var(--text-secondary); margin-top:4px;">
+                                        <span>{{ $payment['key_label'] ?? 'No. Rekening/HP' }}: <strong>{{ $payment['number'] ?? '-' }}</strong></span>
+                                    </div>
+                                    <div class="pm-detail-row" style="font-size:12px; color:var(--text-secondary);">
+                                        <span>a/n: <strong>{{ $payment['owner'] ?? '-' }}</strong></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <i class="bi bi-check-circle-fill po-check-icon"></i>
+                        </label>
+                    @endforeach
+                @else
+                    <label class="pay-option selected" data-method="transfer_bca">
+                        <input type="radio" name="payment_method" value="Transfer Bank - BCA" checked hidden>
+                        <div class="pay-left">
+                            <div class="pm-type-icon pm-icon--bank"><i class="bi bi-bank2"></i></div>
+                            <div class="pm-info">
+                                <span class="pm-type-label">Transfer Bank - BCA</span>
+                                <div class="pm-detail-row" style="font-size:12px; color:var(--text-secondary); margin-top:4px;">
+                                    <span>No. Rekening: <strong>1234567890</strong></span>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <i class="bi bi-check-circle-fill po-check-icon"></i>
-                </label>
-
-                <label class="pay-option" data-method="transfer_mandiri">
-                    <input type="radio" name="payment" value="transfer_mandiri" hidden>
-                    <div class="pay-left">
-                        <div class="pm-type-icon pm-icon--bank"><i class="bi bi-bank2"></i></div>
-                        <div class="pm-info">
-                            <span class="pm-type-label">Transfer Bank - Mandiri</span>
-                        </div>
-                    </div>
-                    <i class="bi bi-check-circle-fill po-check-icon"></i>
-                </label>
-
-                <label class="pay-option" data-method="gopay">
-                    <input type="radio" name="payment" value="gopay" hidden>
-                    <div class="pay-left">
-                        <div class="pm-type-icon pm-icon--ewallet"><i class="bi bi-phone"></i></div>
-                        <div class="pm-info">
-                            <span class="pm-type-label">E-Wallet - GoPay</span>
-                        </div>
-                    </div>
-                    <i class="bi bi-check-circle-fill po-check-icon"></i>
-                </label>
-                
-                <label class="pay-option" data-method="ovo">
-                    <input type="radio" name="payment" value="ovo" hidden>
-                    <div class="pay-left">
-                        <div class="pm-type-icon pm-icon--ewallet"><i class="bi bi-phone"></i></div>
-                        <div class="pm-info">
-                            <span class="pm-type-label">E-Wallet - OVO</span>
-                        </div>
-                    </div>
-                    <i class="bi bi-check-circle-fill po-check-icon"></i>
-                </label>
+                        <i class="bi bi-check-circle-fill po-check-icon"></i>
+                    </label>
+                @endif
             </div>
 
             <div class="pay-info-note">

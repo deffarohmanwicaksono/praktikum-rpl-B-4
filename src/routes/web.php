@@ -105,8 +105,8 @@ Route::middleware('auth')->group(function () {
     })->name('profile.become-seller');
 
     // Riwayat (Purchase & Sales)
-    Route::view('/purchase-history', 'history.purchase-history')->name('history.purchase-history');
-    Route::view('/sales-history', 'history.sales-history')->name('history.sales-history');
+    Route::get('/purchase-history', [\App\Http\Controllers\HistoryController::class, 'purchaseHistory'])->name('history.purchase-history');
+    Route::get('/sales-history', [\App\Http\Controllers\HistoryController::class, 'salesHistory'])->name('history.sales-history');
 
     // Seller
     Route::get('/dashboard-seller', [ProductController::class, 'sellerDashboard'])->name('seller.dashboard-seller');
