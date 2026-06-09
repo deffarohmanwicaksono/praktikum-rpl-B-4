@@ -10,9 +10,7 @@ use Illuminate\Database\Seeder;
 
 class WishlistSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
+
     public function run(): void
     {
         $dataWishlist = ([
@@ -162,14 +160,11 @@ class WishlistSeeder extends Seeder
         ]);
 
         foreach ($dataWishlist as $wishlist) {
-            $product = Product::findOrFail(
-                $wishlist['product_id']
-            );
+            $product = Product::findOrFail($wishlist['product_id']);
 
-            $wishlistDate = fake()->dateTimeBetween(
-                $product->created_at,
-                now()
-            );
+            $startDate = $product->created_at->gt(now()) ? now() : $product->created_at;
+
+            $wishlistDate = fake()->dateTimeBetween($startDate, now());
 
             Wishlist::create([
                 ...$wishlist,

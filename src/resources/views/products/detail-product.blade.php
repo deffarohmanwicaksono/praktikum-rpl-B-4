@@ -9,6 +9,9 @@
 
 {{-- PAGE JS --}}
 @push('scripts')
+    <script>
+        window.wishlistedProductIds = {!! json_encode($wishlistedIds ?? []) !!};
+    </script>
     @vite('resources/js/products/detail-product.js')
 @endpush
 
@@ -145,7 +148,7 @@
         {{-- ACTION BUTTONS --}}
         <div class="action-cards-row">
 
-            <button class="action-card" id="wishlistCardBtn">
+            <button class="action-card" id="wishlistCardBtn" data-product-id="{{ $product->id }}">
 
                 <div class="action-icon-wrap">
                     <i class="bi bi-heart" id="wishlistCardIcon"></i>
@@ -168,7 +171,7 @@
 
             </button>
 
-            {{-- TOMBOL LAPORKAN BARANG SUDAH DITAMBAHKAN ID --}}
+            {{-- TOMBOL LAPORKAN BARANG --}}
             <button class="action-card action-card--report" id="openReportModalBtn">
 
                 <div class="action-icon-wrap action-icon--report">

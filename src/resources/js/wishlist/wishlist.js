@@ -1,65 +1,83 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const wishlistGrid = document.getElementById('wishlistGrid');
+    const wishlistGrid      = document.getElementById('wishlistGrid');
     const wishlistEmptyFull = document.getElementById('wishlistEmptyFull');
-    const clearAllBtn = document.getElementById('clearAllBtn');
-    const wishlistCount = document.getElementById('wishlistCount');
+    const clearAllBtn       = document.getElementById('clearAllBtn');
+    const wishlistCount     = document.getElementById('wishlistCount');
+    const csrfToken         = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
 
-    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-
+    // ==============================================
+    // CEK EMPTY STATE
+    // ==============================================
     const checkEmptyState = () => {
-        const remainingCards = document.querySelectorAll('.wishlist-card-wrapper');
-        if (remainingCards.length === 0) {
-            if (wishlistGrid) wishlistGrid.style.display = 'none';
-            if (clearAllBtn) clearAllBtn.style.display = 'none';
+        const remainingItems = document.querySelectorAll('.product-card');
+        if (remainingItems.length === 0) {
+            if (wishlistGrid)      wishlistGrid.style.display      = 'none';
+            if (clearAllBtn)       clearAllBtn.style.display       = 'none';
             if (wishlistEmptyFull) wishlistEmptyFull.style.display = 'flex';
         } else {
-            if (wishlistCount) wishlistCount.textContent = remainingCards.length;
+            if (wishlistCount) wishlistCount.textContent = remainingItems.length;
         }
     };
 
     // ==============================================
-    // HAPUS SATU ITEM (SINGLE REMOVE)
+    // SETUP TOMBOL HATI
     // ==============================================
-    document.querySelectorAll('.backend-remove-btn').forEach(button => {
-        button.addEventListener('click', async (e) => {
+    const setupWishlistBtn = (heartBtn) => {
+        const productId = heartBtn.getAttribute('data-product-id');
+        if (!productId) return;
+
+        const icon = heartBtn.querySelector('i');
+        if (icon) icon.className = 'bi bi-heart-fill';
+        heartBtn.classList.add('active');
+
+        const newBtn = heartBtn.cloneNode(true);
+        heartBtn.parentNode.replaceChild(newBtn, heartBtn);
+
+        newBtn.addEventListener('click', async (e) => {
             e.preventDefault();
-            const wrapper = button.closest('.wishlist-card-wrapper');
-            const productId = wrapper.getAttribute('data-product-id');
+            e.stopPropagation();
 
-            if (!productId) return;
-
-            button.disabled = true;
+            const card = newBtn.closest('.product-card');
+            if (card) card.style.opacity = '0.5';
 
             try {
-                const response = await fetch(`${window.wishlistRoutes.baseUrl}/${productId}`, {
+                const response = await fetch(`/wishlist/${productId}`, {
                     method: 'DELETE',
                     headers: {
                         'X-CSRF-TOKEN': csrfToken,
                         'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    }
+                        'Accept': 'application/json',
+                    },
                 });
 
                 const result = await response.json();
 
                 if (result.success) {
-                    // Animasi hapus elemen dari layar secara visual
-                    wrapper.style.opacity = '0';
-                    wrapper.style.transform = 'scale(0.9)';
+                    if (card) {
+                        card.style.transition = 'all 0.3s ease';
+                        card.style.transform  = 'scale(0.9)';
+                        card.style.opacity    = '0';
+                    }
                     setTimeout(() => {
-                        wrapper.remove();
+                        // Hapus .product-card atau parent terdekat di grid
+                        const wrapper = card?.parentElement ?? card;
+                        wrapper?.remove();
                         checkEmptyState();
                     }, 300);
+                } else {
+                    if (card) card.style.opacity = '1';
                 }
-            } catch (error) {
-                console.error('Gagal menghapus item:', error);
-                button.disabled = false;
+            } catch (err) {
+                console.error('Gagal menghapus item:', err);
+                if (card) card.style.opacity = '1';
             }
         });
-    });
+    };
+
+    document.querySelectorAll('.wishlist-btn').forEach(setupWishlistBtn);
 
     // ==============================================
-    // 2. HAPUS SEMUA (CLEAR ALL)
+    // HAPUS SEMUA
     // ==============================================
     if (clearAllBtn) {
         clearAllBtn.addEventListener('click', async () => {
@@ -68,28 +86,29 @@ document.addEventListener('DOMContentLoaded', () => {
             clearAllBtn.disabled = true;
 
             try {
-                const response = await fetch(window.wishlistRoutes.clearAll, {
+                const response = await fetch('/wishlist-clear', {
                     method: 'DELETE',
                     headers: {
                         'X-CSRF-TOKEN': csrfToken,
                         'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    }
+                        'Accept': 'application/json',
+                    },
                 });
 
                 const result = await response.json();
 
                 if (result.success) {
                     if (wishlistGrid) {
-                        wishlistGrid.style.opacity = '0';
+                        wishlistGrid.style.transition = 'opacity 0.3s ease';
+                        wishlistGrid.style.opacity    = '0';
                         setTimeout(() => {
                             wishlistGrid.innerHTML = '';
                             checkEmptyState();
                         }, 300);
                     }
                 }
-            } catch (error) {
-                console.error('Gagal mengosongkan wishlist:', error);
+            } catch (err) {
+                console.error('Gagal mengosongkan wishlist:', err);
                 clearAllBtn.disabled = false;
             }
         });

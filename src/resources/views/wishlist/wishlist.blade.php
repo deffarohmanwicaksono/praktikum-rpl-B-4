@@ -30,7 +30,6 @@
         <p class="wishlist-sub">Produk-produk yang telah diberi tanda suka oleh buyer.</p>
     </div>
 
-    {{-- Tombol hanya muncul jika ada isi di database --}}
     @if($wishlists->isNotEmpty())
         <button class="clear-all-btn" id="clearAllBtn">
             <i class="bi bi-trash"></i>
@@ -42,14 +41,8 @@
 {{-- PRODUCT GRID --}}
 <section class="product-grid" id="wishlistGrid" style="{{ $wishlists->isEmpty() ? 'display: none;' : '' }}">
     @foreach ($wishlists as $wishlist)
-        <div class="wishlist-card-wrapper" data-product-id="{{ $wishlist->product_id }}">
-            {{-- Menggunakan komponen card bawaan yang sudah kamu buat --}}
+        <div class="wishlist-item" data-product-id="{{ $wishlist->product_id }}" style="display: contents;">
             @include('components.product-card', ['product' => $wishlist->product])
-            
-            {{-- Menambahkan tombol hapus manual di bawah card sesuai desain awalmu --}}
-            <button class="card-remove-btn backend-remove-btn">
-                <i class="bi bi-trash"></i> Hapus
-            </button>
         </div>
     @endforeach
 </section>

@@ -48,16 +48,15 @@ Route::middleware('auth')->group(function () {
         Route::post('/admin/reports/{report}/reject', [AdminController::class, 'rejectReport'])->name('admin.rejectReport');
 
         // Daftar User
-        Route::get('/admin/users', [\App\Http\Controllers\AdminController::class, 'usersIndex'])->name('admin.users');
-        Route::post('/admin/users/{user}/toggle-status', [\App\Http\Controllers\AdminController::class, 'toggleUserStatus'])->name('admin.users.toggle-status');
+        Route::get('/admin/users', [AdminController::class, 'usersIndex'])->name('admin.users');
+        Route::post('/admin/users/{user}/toggle-status', [AdminController::class, 'toggleUserStatus'])->name('admin.users.toggle-status');
 
         // Daftar Produk
-        Route::get('/admin/products', [\App\Http\Controllers\AdminController::class, 'productsIndex'])->name('admin.products');
-        Route::delete('/admin/products/{product}', [\App\Http\Controllers\AdminController::class, 'deleteProduct'])->name('admin.products.delete');
+        Route::get('/admin/products', [AdminController::class, 'productsIndex'])->name('admin.products');
+        Route::delete('/admin/products/{product}', [AdminController::class, 'deleteProduct'])->name('admin.products.delete');
 
         // Daftar Transaksi
-        Route::get('/admin/transactions', [\App\Http\Controllers\AdminController::class, 'transactionsIndex'])->name('admin.transactions');
-
+        Route::get('/admin/transactions', [AdminController::class, 'transactionsIndex'])->name('admin.transactions');
     });
 
     // ==========================================
@@ -65,18 +64,16 @@ Route::middleware('auth')->group(function () {
     // ==========================================
 
     // Home & Pencarian
-    Route::get('/home', [\App\Http\Controllers\ProductController::class, 'index'])
-        ->name('home')
-        ->middleware(['web', 'auth']);
-
+    Route::get('/home', [ProductController::class, 'index'])->name('home');
     Route::get('/search', [ProductController::class, 'search'])->name('products.search');
     Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.detail-product');
     Route::post('/reports', [ReportController::class, 'store'])->name('report.store');
 
     // Wishlist
     Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist');
-    Route::delete('/wishlist-clear', [WishlistController::class, 'clearAll'])->name('wishlist.clear');
+    Route::post('/wishlist', [WishlistController::class, 'store'])->name('wishlist.store');          // toggle tambah/hapus
     Route::delete('/wishlist/{productId}', [WishlistController::class, 'destroy'])->name('wishlist.destroy');
+    Route::delete('/wishlist-clear', [WishlistController::class, 'clearAll'])->name('wishlist.clear');
 
     // Chat
     Route::get('/chat', [ChatController::class, 'index'])->name('chat.list');
@@ -86,8 +83,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/chat/{chat}/purchase-link', [ChatController::class, 'sendPurchaseLink'])->name('chat.sendPurchaseLink');
 
     // Kirim Link Pembelian
-    Route::get('/chat/{chat}/purchase-link', [ChatController::class, 'showPurchaseLinkForm'])
-        ->name('chat.purchaseLinkForm');
+    Route::get('/chat/{chat}/purchase-link', [ChatController::class, 'showPurchaseLinkForm'])->name('chat.purchaseLinkForm');
 
     // Checkout & Pembayaran
     Route::get('/checkout/{token}', [CheckoutController::class, 'showCheckout'])->name('checkout');
@@ -119,5 +115,4 @@ Route::middleware('auth')->group(function () {
     Route::get('/seller/{id}', function ($id) {
         return view('profile.profile-seller');
     })->name('seller.profile');
-
 });

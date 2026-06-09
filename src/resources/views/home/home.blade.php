@@ -9,6 +9,9 @@
 
 {{-- PAGE JS --}}
 @push('scripts')
+    <script>
+        window.wishlistedProductIds = {!! json_encode($wishlistedIds ?? []) !!};
+    </script>
     @vite('resources/js/home/home.js')
 @endpush
 
