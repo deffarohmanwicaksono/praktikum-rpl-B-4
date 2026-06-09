@@ -285,7 +285,7 @@ class ProductController extends Controller
     }
     public function sellerDashboard()
     {
-        $products = Product::with('productImages')->where('user_id', auth()->id())->get();
+        $products = Product::with('productImages')->where('user_id', auth()->id())->orderBy('created_at', 'desc')->get();
 
         $sellerProducts = $products->map(function ($product) {
             $statusMap = [
@@ -297,9 +297,13 @@ class ProductController extends Controller
 
             $statusData = $statusMap[$product->status] ?? ['label' => $product->status, 'class' => ''];
             
-            $imageUrl = $product->productImages->first()->image_url ?? 'images/default-product.jpg';
+            $imageUrl = $product->productImages->first()?->image_url ?? 'images/default-product.jpg';
             if (!str_starts_with($imageUrl, 'http')) {
-                $imageUrl = asset($imageUrl);
+                if (str_starts_with($imageUrl, 'products/')) {
+                    $imageUrl = asset('storage/' . $imageUrl);
+                } else {
+                    $imageUrl = asset($imageUrl);
+                }
             }
 
             return [
