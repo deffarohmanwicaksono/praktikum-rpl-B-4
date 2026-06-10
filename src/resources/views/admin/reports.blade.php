@@ -69,7 +69,7 @@ $firstReportData = $firstReport ? $reportData[$firstReport->id] : null;
                                 </div>
                                 <div class="product-cell-info">
                                     <span class="product-cell-name">{{ $report->product->name ?? 'Produk dihapus' }}</span>
-                                    <span class="product-cat-badge">{{ $report->product->category->name ?? 'Umum' }}</span>
+                                    <span class="product-cat-badge">{{ $report->product->category->name ?? 'Lainnya' }}</span>
                                 </div>
                             </div>
                         </td>
