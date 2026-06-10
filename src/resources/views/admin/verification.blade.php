@@ -70,7 +70,7 @@ $firstProductData = $firstProduct ? $productData[$firstProduct->id] : null;
                                 </div>
                                 <div class="product-cell-info">
                                     <span class="product-cell-name">{{ $product->name }}</span>
-                                    <span class="product-cat-badge">{{ $product->category->name ?? 'Umum' }}</span>
+                                    <span class="product-cat-badge">{{ $product->category->name ?? 'Lainnya' }}</span>
                                 </div>
                             </div>
                         </td>

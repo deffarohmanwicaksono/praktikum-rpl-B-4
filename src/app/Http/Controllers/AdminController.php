@@ -89,13 +89,19 @@ class AdminController extends Controller
                 }
             }
 
+            $conditionMap = [
+                'bekas_seperti_baru' => 'Bekas Seperti Baru',
+                'bekas_baik' => 'Bekas Baik',
+                'bekas_layak_pakai' => 'Bekas Layak Pakai'
+            ];
+
             $productData[$product->id] = [
                 'name' => $product->name,
                 'price' => 'Rp' . number_format($product->price, 0, ',', '.'),
                 'seller' => $product->user->name,
                 'handle' => '@' . explode('@', $product->user->email)[0],
                 'kategori' => $product->category->name ?? 'Umum',
-                'kondisi' => 'Bekas', // Default condition as it is not explicitly stored in products table
+                'kondisi' => $conditionMap[$product->condition] ?? 'Bekas Baik',
                 'diajukan' => $product->created_at ? $product->created_at->format('d M Y, H:i') . ' WIB' : '-',
                 'deskripsi' => $product->description,
                 'images' => $transformedImages
@@ -182,12 +188,22 @@ class AdminController extends Controller
                     ->value('content');
             }
 
+            $conditionMap = [
+                'bekas_seperti_baru' => 'Bekas Seperti Baru',
+                'bekas_baik' => 'Bekas Baik',
+                'bekas_layak_pakai' => 'Bekas Layak Pakai'
+            ];
+            $kondisi = 'Bekas Baik';
+            if ($report->product) {
+                $kondisi = $conditionMap[$report->product->condition] ?? 'Bekas Baik';
+            }
+
             $reportData[$report->id] = [
                 'id' => $report->id,
                 'productName' => $report->product->name ?? 'Produk dihapus',
                 'category' => $report->product->category->name ?? 'Umum',
                 'price' => 'Rp' . number_format($report->product->price ?? 0, 0, ',', '.'),
-                'condition' => 'Bekas',
+                'condition' => $kondisi,
                 'sellerName' => $report->product->user->name ?? 'Seller',
                 'sellerHandle' => '@' . explode('@', $report->product->user->email ?? 'seller')[0],
                 'pelapor' => $report->user->name . ', @' . explode('@', $report->user->email)[0],
