@@ -16,7 +16,6 @@ Aplikasi marketplace barang bekas untuk mahasiswa Universitas Sebelas Maret seba
 4. **Tutup Penjualan** — Seller menetapkan status sold out setelah mencapai kesepakatan pembelian dengan buyer
 
 
-—
 ## Daftar Fitur yang Telah Diimplementasi
 
 ### Fitur Buyer
@@ -173,7 +172,7 @@ praktikum-rpl-B-4/
 ##  Screenshot MVP
 
 ### Halaman Login
-![Halaman Login](screenshots/login_page.jpg)
+![Halaman Login](screenshots/login_page.png)
 
 ### Halaman Beranda
 ![Halaman Beranda](screenshots/home_page.jpeg)
