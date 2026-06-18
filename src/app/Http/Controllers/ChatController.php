@@ -154,6 +154,18 @@ class ChatController extends Controller
             abort(403, 'Hanya seller yang dapat mengirim link pembelian.');
         }
 
+        // Cek apakah masih ada link aktif yang belum kedaluwarsa untuk chat ini
+        $activeLink = PurchaseLink::where('chat_id', $chat->id)
+            ->where('is_used', false)
+            ->where('expired_at', '>', now())
+            ->first();
+
+        if ($activeLink) {
+            return back()->withErrors([
+                'active_link' => 'Masih ada link pembelian aktif yang belum kedaluwarsa. Tunggu hingga link tersebut digunakan oleh buyer atau habis masa berlakunya.',
+            ]);
+        }
+
         // Bersihkan titik ribuan Rupiah dari input
         if ($request->has('deal_price')) {
             $request->merge([
