@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Chat;
 use App\Models\Message;
+use App\Models\Notification;
 use App\Models\PurchaseLink;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -105,14 +106,9 @@ class ChatController extends Controller
             'message'   => $validated['message'],
         ]);
 
-        // Create notification for the recipient
+        // Kirim notifikasi ke penerima pesan
         $recipientId = ($chat->buyer_id === $userId) ? $chat->seller_id : $chat->buyer_id;
-        \App\Models\Notification::create([
-            'user_id' => $recipientId,
-            'type'    => 'message',
-            'content' => 'Anda menerima pesan baru dari ' . auth()->user()->name,
-            'is_read' => false,
-        ]);
+        $this->sendNotification($recipientId, 'message', 'Anda menerima pesan baru dari ' . auth()->user()->name);
 
         // Update timestamp chat agar muncul paling atas di list
         $chat->touch();
@@ -154,6 +150,13 @@ class ChatController extends Controller
             abort(403, 'Hanya seller yang dapat mengirim link pembelian.');
         }
 
+        // Cek apakah masih ada link aktif yang belum kedaluwarsa untuk chat ini
+        if ($this->hasActivePurchaseLink($chat->id)) {
+            return back()->withErrors([
+                'active_link' => 'Masih ada link pembelian aktif yang belum kedaluwarsa. Tunggu hingga link tersebut digunakan oleh buyer atau habis masa berlakunya.',
+            ]);
+        }
+
         // Bersihkan titik ribuan Rupiah dari input
         if ($request->has('deal_price')) {
             $request->merge([
@@ -168,9 +171,9 @@ class ChatController extends Controller
             'payment_methods' => 'nullable|string', // Berisi JSON array metode pembayaran
         ]);
 
-        $paymentMethodsArray = null;
+        $paymentMethods = null;
         if (!empty($validated['payment_methods'])) {
-            $paymentMethodsArray = json_decode($validated['payment_methods'], true);
+            $paymentMethods = json_decode($validated['payment_methods'], true);
         }
 
         $token = Str::uuid()->toString();
@@ -182,7 +185,7 @@ class ChatController extends Controller
             'expired_at'      => now()->addMinutes((int) $validated['duration']),
             'is_used'         => false,
             'note'            => $validated['note'] ?? null,
-            'payment_methods' => $paymentMethodsArray,
+            'payment_methods' => $paymentMethods,
         ]);
 
         $message = Message::create([
@@ -191,13 +194,8 @@ class ChatController extends Controller
             'message'   => '[PURCHASE_LINK:' . $token . ']',
         ]);
 
-        // Kirim Notifikasi Link Pembelian ke buyer
-        \App\Models\Notification::create([
-            'user_id' => $chat->buyer_id,
-            'type'    => 'purchase_link',
-            'content' => 'Seller mengirimkan link pembelian untuk Anda.',
-            'is_read' => false,
-        ]);
+        // Kirim notifikasi link pembelian ke buyer
+        $this->sendNotification($chat->buyer_id, 'purchase_link', 'Seller mengirimkan link pembelian untuk Anda.');
 
         $chat->touch();
 
@@ -206,5 +204,33 @@ class ChatController extends Controller
 
         return redirect()->route('chat.session', $chat->id)
             ->with('success', 'Link pembelian berhasil dikirim!');
+    }
+
+    // -------------------------------------------------------------------------
+    // Private Helper Methods
+    // -------------------------------------------------------------------------
+
+    /**
+     * Cek apakah chat sudah memiliki link pembelian yang masih aktif (belum dipakai & belum expired).
+     */
+    private function hasActivePurchaseLink(int $chatId): bool
+    {
+        return PurchaseLink::where('chat_id', $chatId)
+            ->where('is_used', false)
+            ->where('expired_at', '>', now())
+            ->exists();
+    }
+
+    /**
+     * Buat notifikasi untuk user tertentu.
+     */
+    private function sendNotification(int $userId, string $type, string $content): void
+    {
+        Notification::create([
+            'user_id' => $userId,
+            'type'    => $type,
+            'content' => $content,
+            'is_read' => false,
+        ]);
     }
 }
