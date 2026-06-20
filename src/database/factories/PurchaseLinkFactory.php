@@ -26,7 +26,7 @@ class PurchaseLinkFactory extends Factory
         return [
             'token' => 'SEMART-LINK-' . Str::upper(Str::random(10)),
             'deal_price' => 0,
-            'expired_at' => now()->addDays(1),
+            'expired_at' => now()->addMinutes(rand(15, 1440)),
             'is_used' => fake()->boolean(40),
         ];
     }
@@ -68,7 +68,7 @@ class PurchaseLinkFactory extends Factory
 
                 'created_at' => $linkDate,
                 'updated_at' => $linkDate,
-                'expired_at' => Carbon::parse($linkDate)->addDays(rand(1, 5)),
+                'expired_at' => Carbon::parse($linkDate)->addMinutes(rand(15, 1440)),
             ];
         });
     }
