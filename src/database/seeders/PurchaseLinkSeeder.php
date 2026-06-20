@@ -20,21 +20,18 @@ class PurchaseLinkSeeder extends Seeder
                 'chat_id' => 1,  // Buyer 2 - Seller 4
                 'token' => 'SEMART-LINK-001',
                 'deal_price' => 200000,
-                'payment_methods' => ['BCA', 'Dana'],
                 'is_used' => false
             ],
             [
                 'chat_id' => 2,  // Buyer 3 - Seller 4
                 'token' => 'SEMART-LINK-002',
                 'deal_price' => 3500000,
-                'payment_methods' => ['BCA', 'Dana'],
                 'is_used' => true
             ],
             [
                 'chat_id' => 4, // Buyer 2 - Seller 5
                 'token' => 'SEMART-LINK-003',
                 'deal_price' => 75000,
-                'payment_methods' => ['ShopeePay'],
                 'is_used' => true
             ],
 
@@ -42,7 +39,6 @@ class PurchaseLinkSeeder extends Seeder
                 'chat_id' => 5, // Buyer 12 - Seller 5
                 'token' => 'SEMART-LINK-004',
                 'deal_price' => 78000,
-                'payment_methods' => ['ShopeePay'],
                 'is_used' => true
             ],
 
@@ -50,7 +46,6 @@ class PurchaseLinkSeeder extends Seeder
                 'chat_id' => 6, // Buyer 20 - Seller 5
                 'token' => 'SEMART-LINK-005',
                 'deal_price' => 80000,
-                'payment_methods' => ['ShopeePay'],
                 'is_used' => false
             ],
 
@@ -58,7 +53,6 @@ class PurchaseLinkSeeder extends Seeder
                 'chat_id' => 7, // Buyer 2 - Seller 21
                 'token' => 'SEMART-LINK-006',
                 'deal_price' => 110000,
-                'payment_methods' => ['BCA', 'BRI', 'Dana'],
                 'is_used' => false
             ],
 
@@ -66,7 +60,6 @@ class PurchaseLinkSeeder extends Seeder
                 'chat_id' => 9,  // Buyer 3 - Seller 22
                 'token' => 'SEMART-LINK-007',
                 'deal_price' => 1150000,
-                'payment_methods' => ['BCA', 'Dana'],
                 'is_used' => true
             ],
 
@@ -74,7 +67,6 @@ class PurchaseLinkSeeder extends Seeder
                 'chat_id' => 10,  // Buyer 2 - Seller 22
                 'token' => 'SEMART-LINK-008',
                 'deal_price' => 75000,
-                'payment_methods' => ['BCA', 'Dana'],
                 'is_used' => false
             ],
 
@@ -82,7 +74,6 @@ class PurchaseLinkSeeder extends Seeder
                 'chat_id' => 11, // Buyer 3 - Seller 23
                 'token' => 'SEMART-LINK-009',
                 'deal_price' => 60000,
-                'payment_methods' => ['BCA', 'BRI', 'Dana', 'ShopeePay'],
                 'is_used' => true
             ],
 
@@ -90,7 +81,6 @@ class PurchaseLinkSeeder extends Seeder
                 'chat_id' => 13,  // Buyer 2 - Seller 25
                 'token' => 'SEMART-LINK-010',
                 'deal_price' => 90000,
-                'payment_methods' => ['BCA', 'Dana', 'ShopeePay'],
                 'is_used' => true
             ],
 
@@ -98,7 +88,6 @@ class PurchaseLinkSeeder extends Seeder
                 'chat_id' => 14, // Buyer 4 - Seller 26
                 'token' => 'SEMART-LINK-011',
                 'deal_price' => 325000,
-                'payment_methods' => ['BCA', 'BRI', 'Dana'],
                 'is_used' => true
             ],
 
@@ -106,7 +95,6 @@ class PurchaseLinkSeeder extends Seeder
                 'chat_id' => 18,  // Buyer 2 - Seller 29
                 'token' => 'SEMART-LINK-012',
                 'deal_price' => 170000,
-                'payment_methods' => ['BCA', 'Dana'],
                 'is_used' => false
             ],
 
@@ -114,7 +102,6 @@ class PurchaseLinkSeeder extends Seeder
                 'chat_id' => 20, // Buyer 3 - Seller 31
                 'token' => 'SEMART-LINK-013',
                 'deal_price' => 620000,
-                'payment_methods' => ['BCA', 'Dana'],
                 'is_used' => true
             ],
         ];
@@ -123,10 +110,32 @@ class PurchaseLinkSeeder extends Seeder
             $chat = Chat::findOrFail( $link['chat_id']);
             $lastMessage = $chat->messages()->latest('created_at')->first();
             $linkDate = $lastMessage->created_at->copy()->addSeconds(rand(30, 600));
+            $sellerMethods = $chat->seller->paymentAccounts
+                ->map(function ($account) {
+
+                    return [
+                        'id' => $account->id,
+                        'label' => $account->payment_method,
+                        'number' => $account->account_number,
+                        'owner' => $account->account_name,
+
+                        'type' => in_array(
+                            $account->payment_method,
+                            ['Dana', 'ShopeePay']
+                        ) ? 'ewallet' : 'bank',
+
+                        'icon' => in_array(
+                            $account->payment_method,
+                            ['Dana', 'ShopeePay']
+                        ) ? 'wallet2' : 'bank2',
+                    ];
+                })
+                ->values()->toArray();
 
             $purchaseLink = PurchaseLink::create([
                 ...$link,
 
+                'payment_methods' => $sellerMethods,
                 'created_at' => $linkDate,
                 'updated_at' => $linkDate,
                 'expired_at' => $linkDate->copy()->addMinutes(rand(15, 1440)),
@@ -153,8 +162,8 @@ class PurchaseLinkSeeder extends Seeder
                     'chat_id'   => $chat->id,
                     'sender_id' => $chat->seller_id,
                     'message'   => '[PURCHASE_LINK:' . $purchaseLink->token . ']',
-                    'created_at'=> $linkDate,
-                    'updated_at'=> $linkDate,
+                    'created_at'=> $purchaseLink->created_at,
+                    'updated_at'=> $purchaseLink->created_at,
                 ]);
             }
         }

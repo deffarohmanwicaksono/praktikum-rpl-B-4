@@ -49,8 +49,26 @@ class PurchaseLinkFactory extends Factory
 
             $availableMethods = $seller
                 ->paymentAccounts
-                ->pluck('payment_method')
-                ->toArray();
+                ->map(function ($account) {
+
+                    return [
+                        'id' => $account->id,
+                        'label' => $account->payment_method,
+                        'number' => $account->account_number,
+                        'owner' => $account->account_name,
+
+                        'type' => in_array(
+                            $account->payment_method,
+                            ['Dana', 'ShopeePay']
+                        ) ? 'ewallet' : 'bank',
+
+                        'icon' => in_array(
+                            $account->payment_method,
+                            ['Dana', 'ShopeePay']
+                        ) ? 'wallet2' : 'bank2',
+                    ];
+                })
+                ->values()->toArray();
 
             return [
                 'chat_id' => $chat->id,

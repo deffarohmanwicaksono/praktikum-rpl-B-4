@@ -23,28 +23,53 @@
     }
 
     // Default payment methods untuk di-fill pertama kali
-    $payments = [
-        [
-            'id' => 'pm_1',
-            'type' => 'bank',
-            'provider' => 'BCA',
-            'label' => 'Transfer Bank – BCA',
-            'key_label' => 'No. Rekening',
-            'number' => '1234567890',
-            'owner' => auth()->user()->name ?? 'Andi Pratama',
-            'icon' => 'bank2'
-        ],
-        [
-            'id' => 'pm_2',
-            'type' => 'ewallet',
-            'provider' => 'DANA',
-            'label' => 'E-Wallet – DANA',
-            'key_label' => 'No. HP',
-            'number' => '081234567890',
-            'owner' => auth()->user()->name ?? 'Andi Pratama',
-            'icon' => 'phone'
-        ]
-    ];
+    $payments = auth()->user()
+        ->paymentAccounts
+        ->map(function ($account) {
+
+            return [
+                'id' => $account->id,
+
+                'type' => in_array(
+                    $account->payment_method,
+                    ['Dana', 'ShopeePay']
+                ) ? 'ewallet' : 'bank',
+
+                'provider' => $account->payment_method,
+
+                'label' =>
+                    (
+                        in_array(
+                            $account->payment_method,
+                            ['Dana', 'ShopeePay']
+                        )
+                        ? 'E-Wallet'
+                        : 'Transfer Bank'
+                    )
+                    . ' – '
+                    . $account->payment_method,
+
+                'key_label' =>
+                    in_array(
+                        $account->payment_method,
+                        ['Dana', 'ShopeePay']
+                    )
+                    ? 'No. HP'
+                    : 'No. Rekening',
+
+                'number' => $account->account_number,
+                'owner' => $account->account_name,
+
+                'icon' =>
+                    in_array(
+                        $account->payment_method,
+                        ['Dana', 'ShopeePay']
+                    )
+                    ? 'wallet2'
+                    : 'bank2',
+            ];
+        })
+        ->values()->toArray();
 
     $purchase = [
         'product_name' => $chat->product->name,

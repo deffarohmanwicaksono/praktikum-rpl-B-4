@@ -102,12 +102,16 @@ class TransactionSeeder extends Seeder
                 $link->created_at,
                 min(now(), $link->expired_at)
             );
+            $selectedPayment = fake()->randomElement($link->payment_methods);
+            $paymentMethod = is_array($selectedPayment) 
+                ? $selectedPayment['label'] 
+                : $selectedPayment;
+                
 
             $paidAt = null;
             $completedAt = null;
 
-            if ( in_array( $transaction['status'], ['dibayar', 'selesai'] )
-            ) {
+            if ( in_array( $transaction['status'], ['dibayar', 'selesai'] )) {
                 $paidAt = fake()->dateTimeBetween(
                     $transactionDate,
                     '+1 day'
@@ -124,11 +128,8 @@ class TransactionSeeder extends Seeder
             $trx = Transaction::create([
                 ...$transaction,
 
-                'payment_method' =>
-                    $transaction['payment_method']
-                    ?? fake()->randomElement($link->payment_methods),
+                'payment_method' => $transaction['payment_method'] ?? $paymentMethod,
                 'created_at' => $transactionDate,
-
                 'updated_at' =>
                     $completedAt
                     ?? $paidAt
