@@ -46,11 +46,19 @@
         ]
     ];
 
+    $rawCondition = $chat->product->condition ?? 'bekas_seperti_baru';
+    $conditionLabels = [
+        'baru' => 'Baru',
+        'bekas_seperti_baru' => 'Bekas Seperti Baru',
+        'bekas' => 'Bekas'
+    ];
+    $formattedCondition = $conditionLabels[$rawCondition] ?? ucwords(str_replace('_', ' ', $rawCondition));
+
     $purchase = [
         'product_name' => $chat->product->name,
         'product_price' => $chat->product->price,
         'agreed_price' => $chat->product->price,
-        'product_condition' => $chat->product->condition ?? 'Bekas Seperti Baru',
+        'product_condition' => $formattedCondition,
         'buyer_name' => $chat->buyer->name,
         'image' => $imageUrl,
         'payments' => $payments

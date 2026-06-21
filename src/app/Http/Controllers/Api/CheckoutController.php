@@ -5,18 +5,18 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\PurchaseLink;
 use App\Models\Transaction;
+use App\Models\PaymentAccount;
 use Illuminate\Http\Request;
 
 class CheckoutController extends Controller
 {
     /**
      * Tampilkan detail checkout berdasarkan token purchase link.
-     * Nama fungsi diubah dari showCheckout ke show agar sesuai dengan route checkout.show
      */
     public function show(string $token)
     {
         $purchaseLink = PurchaseLink::where('token', $token)
-            ->with(['chat.buyer', 'chat.seller', 'chat.product.productImages'])
+            ->with(['chat.buyer', 'chat.seller.paymentAccounts', 'chat.product.productImages'])
             ->firstOrFail();
 
         if (!$purchaseLink->isValid()) {
@@ -33,6 +33,38 @@ class CheckoutController extends Controller
         $imageUrl = $product->productImages->first()?->image_url ?? null;
         if ($imageUrl && !str_starts_with($imageUrl, 'http')) {
             $imageUrl = asset('storage/' . $imageUrl);
+        }
+
+        // Ambil filter metode pembayaran yang dipilih seller saat membuat link
+        $allowedMethods = $purchaseLink->payment_methods;
+        if (!is_array($allowedMethods)) {
+            $allowedMethods = [];
+        }
+
+        $formattedAccounts = collect($allowedMethods)->map(function($m, $index) {
+            return [
+                'id'             => $index + 1,
+                'provider_name'  => $m['provider'] ?? ($m['label'] ?? 'Metode'),
+                'account_number' => $m['number'] ?? '',
+                'account_name'   => $m['owner'] ?? '',
+                'type'           => (isset($m['type']) && $m['type'] === 'ewallet') ? 'E-Wallet' : 'Transfer Bank'
+            ];
+        })->values();
+
+        // FALLBACK: Jika payment_methods kosong, gunakan dari seller
+        if ($formattedAccounts->isEmpty() && $seller->paymentAccounts->isNotEmpty()) {
+            $formattedAccounts = $seller->paymentAccounts->map(function($acc) {
+                $methodLower = strtolower($acc->payment_method);
+                return [
+                    'id'             => $acc->id,
+                    'provider_name'  => $acc->payment_method,
+                    'account_number' => $acc->account_number,
+                    'account_name'   => $acc->account_name,
+                    'type'           => (str_contains($methodLower, 'bca') || str_contains($methodLower, 'mandiri') || str_contains($methodLower, 'bri') || str_contains($methodLower, 'bank'))
+                                        ? 'Transfer Bank'
+                                        : 'E-Wallet'
+                ];
+            })->values();
         }
 
         return response()->json([
@@ -54,6 +86,7 @@ class CheckoutController extends Controller
                 'id'   => $seller->id,
                 'name' => $seller->name,
             ],
+            'payment_accounts' => $formattedAccounts
         ]);
     }
 
