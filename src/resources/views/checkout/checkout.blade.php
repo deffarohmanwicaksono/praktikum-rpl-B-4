@@ -66,7 +66,11 @@ window.checkoutData = {
 
                     <div class="condition-row">
                         <span class="cond-pill">
-                            Bekas
+                            {{ [
+                                'baru' => 'Baru',
+                                'bekas_seperti_baru' => 'Bekas Seperti Baru',
+                                'bekas' => 'Bekas'
+                            ][$product->condition] ?? ucwords(str_replace('_', ' ', $product->condition)) }}
                         </span>
                     </div>
 
@@ -118,7 +122,7 @@ window.checkoutData = {
                     </span>
 
                     <span class="om-val">
-                        Harga telah disepakati. Silakan lakukan pembayaran sebelum batas waktu berakhir.
+                        {{ $purchaseLink->note ?: 'Harga telah disepakati. Silakan lakukan pembayaran sebelum batas waktu berakhir.' }}
                     </span>
 
                 </div>
