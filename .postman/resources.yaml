@@ -2,8 +2,10 @@
 workspace:
   id: f1a5d888-86d4-4be8-82d0-d43bbd30712d
 
-# All resources in the `postman/` folder are automatically registered in Local View.
-# Point to additional files outside the `postman/` folder to register them individually. Example:
-#localResources:
-#  collections:
-#    - ../tests/E2E Test Collection/
+localResources:
+  docs:
+    - ..\src\vendor\laravel\framework\src\Illuminate\Notifications\LICENSE.md
+    - ..\src\vendor\laravel\framework\src\Illuminate\Log\LICENSE.md
+    - ..\src\vendor\sebastian\lines-of-code\README.md
+    - ..\src\vendor\laravel\framework\src\Illuminate\Http\LICENSE.md
+    - ..\src\vendor\laravel\framework\src\Illuminate\Reflection\LICENSE.md

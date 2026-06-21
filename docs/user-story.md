@@ -67,6 +67,14 @@
         - Given buyer menerima link pembelian
         - When buyer membuka link yang sudah digunakan sebelumnya atau sudah melewati batas waktu
         - Then sistem menampilkan pesan "Link tidak valid atau sudah kedaluwarsa" dan buyer diarahkan untuk meminta link baru dari seller
+    - AC-3:
+        - Given masih terdapat link pembelian aktif untuk suatu barang
+        - When seller mencoba mengirim link pembelian baru
+        - Then  sistem menolak pembuatan link baru dan menampilkan pesan bahwa masih terdapat link aktif yang belum kedaluwarsa
+    - AC-4:
+        - Given  link pembelian sebelumnya sudah digunakan atau telah melewati masa berlaku
+        - When seller mengirim link pembelian baru kepada buyer
+        - Then  sistem berhasil membuat dan mengirim link pembelian baru yang dapat diakses oleh buyer
 
 7. Checkout & pembayaran  
     As a buyer, I want melakukan checkout melalui link pembelian, so that saya dapat menyelesaikan transaksi  
@@ -76,9 +84,9 @@
         - When buyer memilih metode pembayaran yang tersedia dan menekan "Bayar Sekarang"
         - Then  transaksi tercatat di sistem, status pesanan berubah menjadi "Menunggu Konfirmasi Seller", dan buyer menerima notifikasi berhasil
     - AC-2:
-        - Given buyer sedang di halaman checkout
-        - When proses pembayaran gagal (timeout, saldo tidak cukup, dll)
-        - Then sistem menampilkan pesan error spesifik, transaksi tidak diproses, dan buyer dapat mencoba ulang tanpa kehilangan data pesanan
+        - Given buyer sedang mengisi proses checkout
+        - When buyer keluar dari halaman checkout sebelum mengirim bukti pembayaran
+        - Then data checkout tidak disimpan dan buyer dapat kembali menggunakan link pembelian yang masih valid
 
 8. Tutup penjualan  
     As a seller, I want mengubah status barang menjadi "Sold Out" setelah transaksi selesai, so that buyer lain tidak lagi dapat memesan barang yang sudah terjual  
