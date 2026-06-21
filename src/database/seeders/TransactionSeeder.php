@@ -24,7 +24,6 @@ class TransactionSeeder extends Seeder
                 'quantity' => 1,
                 'total_price' => 3500000,
                 'status' => 'selesai',
-                'payment_method' => 'Dana',
                 'payment_proof' => 'images/payments/bukti_transfer_001.jpg',
             ],
 
@@ -37,13 +36,11 @@ class TransactionSeeder extends Seeder
                 'quantity' => 1,
                 'total_price' => 75000,
                 'status' => 'dibayar',
-                'payment_method' => 'BCA',
                 'payment_proof' => 'images/payments/bukti_transfer_002.jpg',
             ],
 
             // Buyer 12 - Seller 5
             // Buku Kalkulus Stewart
-            // Link sudah digunakan sebelum expired
             [
                 'product_id' => 3,
                 'buyer_id' => 12,
@@ -51,7 +48,6 @@ class TransactionSeeder extends Seeder
                 'quantity' => 1,
                 'total_price' => 78000,
                 'status' => 'selesai',
-                'payment_method' => 'ShopeePay',
                 'payment_proof' => 'images/payments/bukti_transfer_003.jpg',
             ],
 
@@ -77,8 +73,7 @@ class TransactionSeeder extends Seeder
                 'purchase_link_id' => 11,
                 'quantity' => 1,
                 'total_price' => 325000,
-                'status' => 'gagal',
-                'payment_method' => 'BCA',
+                'status' => 'selesai',
                 'payment_proof' => 'images/payments/bukti_transfer_004.jpg',
             ],
 
@@ -91,7 +86,6 @@ class TransactionSeeder extends Seeder
                 'quantity' => 1,
                 'total_price' => 620000,
                 'status' => 'selesai',
-                'payment_method' => 'Dana',
                 'payment_proof' => 'images/payments/bukti_transfer_005.jpg',
             ],
         ];
