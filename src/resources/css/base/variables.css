@@ -16,12 +16,15 @@
     --gray-text: #6B7280;
     --border-gray: #E5E7EB;
 
-    --status-menunggu-bg:   rgba(245, 158, 11, 0.12);
-    --status-menunggu-text: #D97706;
-    --status-menunggu-border: rgba(245, 158, 11, 0.28);
+    --status-menunggu-bg:   rgba(229, 231, 235, 0.8);
+    --status-menunggu-text: #475569;
+    --status-menunggu-border: rgba(148, 163, 184, 0.6);
     --status-dijual-bg:     rgba(16, 185, 129, 0.11);
     --status-dijual-text:   #059669;
     --status-dijual-border: rgba(16, 185, 129, 0.26);
+    --status-dibayar-bg:   rgba(245, 158, 11, 0.12);
+    --status-dibayar-text: #D97706;
+    --status-dibayar-border: rgba(245, 158, 11, 0.28);
     --status-soldout-bg:    rgba(107, 114, 128, 0.11);
     --status-soldout-text:  #6B7280;
     --status-soldout-border: rgba(107, 114, 128, 0.26);

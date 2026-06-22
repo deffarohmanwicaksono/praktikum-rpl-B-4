@@ -223,6 +223,19 @@ class ChatController extends Controller
             return response()->json(['message' => 'Hanya seller yang dapat mengirim link pembelian.'], 403);
         }
 
+        // Cek apakah masih ada link aktif yang belum kedaluwarsa untuk chat ini
+        $activeLink = PurchaseLink::where('chat_id', $chat->id)
+            ->where('is_used', false)
+            ->where('expired_at', '>', now())
+            ->latest()
+            ->first();
+
+        if ($activeLink) {
+            return back()->withErrors([
+                'active_link' => 'Masih ada link pembelian aktif yang belum kedaluwarsa. Tunggu hingga link tersebut digunakan oleh buyer atau habis masa berlakunya.',
+            ]);
+        }
+
         // Bersihkan titik ribuan dari deal_price
         if ($request->has('deal_price')) {
             $request->merge([
@@ -239,6 +252,13 @@ class ChatController extends Controller
         ]);
 
         $token = Str::uuid()->toString();
+
+        $product = $chat->product;
+        if ($product->status === 'sold_out') {
+            return response()->json([
+                'message' => 'Produk sudah terjual.'
+            ], 422);
+        }
 
         $purchaseLink = PurchaseLink::create([
             'chat_id'         => $chat->id,
