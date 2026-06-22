@@ -98,15 +98,25 @@ class ChatController extends Controller
     /**
      * Daftar semua chat milik user (sebagai buyer atau seller).
      */
-    public function index()
+    public function index(Request $request)
     {
         $userId = auth()->id();
 
-        $chats = Chat::with(['buyer', 'seller', 'product.productImages', 'latestMessage'])
-            ->where('buyer_id', $userId)
-            ->orWhere('seller_id', $userId)
-            ->latest('updated_at')
-            ->get();
+        $query = Chat::with(['buyer', 'seller', 'product.productImages', 'latestMessage']);
+
+        $pov = $request->query('pov');
+        if ($pov === 'buyer') {
+            $query->where('buyer_id', $userId);
+        } elseif ($pov === 'seller') {
+            $query->where('seller_id', $userId);
+        } else {
+            $query->where(function($q) use ($userId) {
+                $q->where('buyer_id', $userId)
+                  ->orWhere('seller_id', $userId);
+            });
+        }
+
+        $chats = $query->latest('updated_at')->get();
 
         return response()->json([
             'data' => $chats->map(fn($c) => $this->formatChat($c, $userId)),

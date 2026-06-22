@@ -17,7 +17,7 @@ class ProductController extends Controller
 
     public function index(Request $request)
     {
-        $query = Product::with(['productImages', 'category'])->where('status', 'dijual');
+        $query = Product::with(['productImages', 'category'])->availableForSale();
 
         if ($request->filled('category') && $request->category !== 'semua') {
             $catMap = [
@@ -112,7 +112,25 @@ class ProductController extends Controller
             'reviews_count' => $reviewsCount,
         ];
 
-        $reviewsData = $reviewsQuery->with(['transaction.buyer', 'transaction.product'])->latest()->take(5)->get();
+        $reviewsData = $reviewsQuery->with(['transaction.buyer', 'transaction.product.productImages'])
+            ->latest()->take(5)->get()
+            ->map(function($r) {
+                $productImage = $r->transaction->product->productImages->first()?->image_url;
+                if ($productImage && !str_starts_with($productImage, 'http')) {
+                    $productImage = asset('storage/' . $productImage);
+                } elseif (!$productImage) {
+                    $productImage = asset('images/placeholder.png');
+                }
+                
+                return [
+                    'buyer' => $r->transaction->buyer->name ?? 'User',
+                    'rating' => $r->rating,
+                    'comment' => $r->comment,
+                    'product' => $r->transaction->product->name ?? 'Produk',
+                    'product_image' => $productImage,
+                    'date' => $r->created_at->format('d M Y')
+                ];
+            });
 
         return view('profile.profile-seller', [
             'seller'  => $seller,
@@ -123,18 +141,20 @@ class ProductController extends Controller
     public function search(Request $request)
     {
         $keyword = $request->input('q');
-        $query   = Product::with(['productImages', 'category'])->where('status', 'dijual');
+        $query   = Product::with(['productImages', 'category'])->availableForSale();
 
         if ($request->filled('category') && $request->category !== 'semua') {
             $catMap = [
-                'elektronik' => 1,
-                'buku'       => 2,
-                'perabot'    => 3,
-                'pakaian'    => 4,
-                'olahraga'   => 5,
-                'hobi'       => 6,
-                'kecantikan' => 7,
-                'lainnya'    => 8,
+                'elektronik'       => 1,
+                'buku'             => 2,
+                'perabot'          => 3,
+                'perlengkapan kos' => 3, // alias for mobile
+                'pakaian'          => 4,
+                'fashion'          => 4, // alias for mobile
+                'olahraga'         => 5,
+                'hobi'             => 6,
+                'kecantikan'       => 7,
+                'lainnya'          => 8,
             ];
 
             if (isset($catMap[$request->category])) {

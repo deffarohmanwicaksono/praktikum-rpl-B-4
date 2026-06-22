@@ -194,6 +194,7 @@ function resetStarsUI() {
     starRatingRow.querySelectorAll('.review-star-item').forEach(s => {
         s.classList.remove('bi-star-fill', 'active');
         s.classList.add('bi-star');
+        s.style.color = '';
     });
 }
 

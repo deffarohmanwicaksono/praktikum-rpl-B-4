@@ -74,6 +74,10 @@ class HistoryController extends Controller
             'date_label'       => $trx->created_at?->translatedFormat('d F Y'),
             'time_label'       => $trx->created_at?->format('H:i') . ' WIB',
             'completed_at'     => $trx->completed_at?->toDateTimeString(),
+            'review'           => $trx->review ? [
+                'rating'  => $trx->review->rating,
+                'comment' => $trx->review->comment,
+            ] : null,
         ];
     }
 
@@ -87,6 +91,7 @@ class HistoryController extends Controller
                 'product.user',
                 'purchaseLink.chat',
                 'buyer',
+                'review',
             ])
             ->where('buyer_id', auth()->id())
             ->orderBy('created_at', 'desc')
@@ -106,6 +111,7 @@ class HistoryController extends Controller
                 'product.productImages',
                 'buyer',
                 'purchaseLink.chat',
+                'review',
             ])
             ->whereHas('product', fn($q) => $q->where('user_id', auth()->id()))
             ->orderBy('created_at', 'desc')

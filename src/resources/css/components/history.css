@@ -283,12 +283,14 @@
     width: 100%;
 }
 
-.btn-action.btn-detail-view {
+.btn-action.btn-detail-view,
+.btn-action.btn-review-view {
     border-color: rgba(59,157,248,0.4);
     color: var(--primary-blue);
 }
 
-.btn-action.btn-detail-view:hover {
+.btn-action.btn-detail-view:hover,
+.btn-action.btn-review-view:hover {
     background: var(--light-blue);
     border-color: var(--primary-blue);
 }

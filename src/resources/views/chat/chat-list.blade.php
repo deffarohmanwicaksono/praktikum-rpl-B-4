@@ -107,30 +107,32 @@
             @php
                 $partner = ($chat->seller_id === $userId) ? $chat->buyer : $chat->seller;
                 $pov = ($chat->seller_id === $userId) ? 'seller' : 'buyer';
-                $productImage = $chat->product->productImages->first();
+                $productImage = $chat->product?->productImages?->first();
                 $rawUrl = $productImage ? $productImage->image_url : null;
                 $imageUrl = asset('images/placeholder.png');
                 if ($rawUrl) {
                     $imageUrl = str_starts_with($rawUrl, 'http') ? $rawUrl : (str_starts_with($rawUrl, 'images/') ? asset($rawUrl) : asset('storage/' . ltrim($rawUrl, '/')));
                 }
-                $preview = $chat->latestMessage
+                $rawPreview = $chat->latestMessage
                     ? $chat->latestMessage->message
-                    : 'Belum ada pesan';
-                $time = $chat->updated_at ? $chat->updated_at->format('H:i') : '-';
+                    : null;
+                $isPurchaseLink = $rawPreview && str_starts_with($rawPreview, '[PURCHASE_LINK:');
+                $preview = $isPurchaseLink ? null : ($rawPreview ? Str::limit($rawPreview, 50) : 'Belum ada pesan');
+                $time = $chat->latestMessage?->created_at?->format('H:i') ?? '';
             @endphp
 
             <a
                 href="{{ route('chat.session', $chat->id) }}"
                 class="chat-item"
                 data-unread="false"
-                data-name="{{ strtolower($partner->name) }}"
-                data-barang="{{ strtolower($chat->product->name) }}"
+                data-name="{{ strtolower($partner?->name ?? '') }}"
+                data-barang="{{ strtolower($chat->product?->name ?? '') }}"
             >
 
             <div class="chat-foto-wrap">
                 <img
                     src="{{ $imageUrl }}"
-                    alt="{{ $chat->product->name }}"
+                    alt="{{ $chat->product?->name ?? 'Produk' }}"
                     class="chat-foto"
                     loading="lazy"
                 >
@@ -140,7 +142,7 @@
 
                 <div class="chat-row-top">
                     <span class="chat-nama">
-                        {{ $partner->name }}
+                        {{ $partner?->name ?? 'Pengguna Tidak Diketahui' }}
                     </span>
                     <span class="chat-waktu">
                         {{ $time }}
@@ -149,14 +151,20 @@
 
                 <div class="chat-row-mid">
                     <span class="chat-barang">
-                        {{ $chat->product->name }}
+                        {{ $chat->product?->name ?? 'Produk Tidak Diketahui' }}
                     </span>
                 </div>
 
                 <div class="chat-row-bot">
-                    <span class="chat-preview chat-preview--read">
-                        {{ Str::limit($preview, 50) }}
-                    </span>
+                    @if($isPurchaseLink)
+                        <span class="chat-preview chat-preview--link">
+                            <i class="bi bi-link-45deg" style="font-size: 13px; margin-right: 3px;"></i>Link Pembelian
+                        </span>
+                    @else
+                        <span class="chat-preview chat-preview--read">
+                            {{ $preview }}
+                        </span>
+                    @endif
                 </div>
 
             </div>

@@ -71,7 +71,7 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $query = Product::with(['productImages', 'category', 'user'])
-            ->where('status', 'dijual');
+            ->availableForSale();
 
         $catMap = [
             'elektronik' => 1, 'buku'       => 2, 'perabot'    => 3,
@@ -131,12 +131,19 @@ class ProductController extends Controller
     public function search(Request $request)
     {
         $keyword = $request->input('q');
-        $query   = Product::with(['productImages', 'category', 'user'])->where('status', 'dijual');
+        $query   = Product::with(['productImages', 'category', 'user'])->availableForSale();
 
         $catMap = [
-            'elektronik' => 1, 'buku'       => 2, 'perabot'    => 3,
-            'pakaian'    => 4, 'olahraga'   => 5, 'hobi'       => 6,
-            'kecantikan' => 7, 'lainnya'    => 8,
+            'elektronik'       => 1,
+            'buku'             => 2,
+            'perabot'          => 3,
+            'perlengkapan kos' => 3, // alias for mobile
+            'pakaian'          => 4,
+            'fashion'          => 4, // alias for mobile
+            'olahraga'         => 5,
+            'hobi'             => 6,
+            'kecantikan'       => 7,
+            'lainnya'          => 8,
         ];
 
         if ($request->filled('category') && $request->category !== 'semua') {

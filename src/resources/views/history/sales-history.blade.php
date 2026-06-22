@@ -34,10 +34,11 @@
                 <i class="bi bi-funnel filter-icon"></i>
                 <select class="filter-select" id="filterStatusSelect">
                     <option value="">Status: Semua</option>
-                <option value="status-menunggu">Menunggu Pembayaran</option>
-                <option value="status--dibayar">Menunggu Konfirmasi</option>
-                <option value="status-selesai">Selesai</option>
-            </select>
+                    <option value="status-menunggu">Menunggu Pembayaran</option>
+                    <option value="status-dibayar">Menunggu Konfirmasi</option>
+                    <option value="status-selesai">Selesai</option>
+                    <option value="status-gagal">Gagal</option>
+                </select>
         </div>
     </div>
 </section>
