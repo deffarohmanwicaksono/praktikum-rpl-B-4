@@ -143,10 +143,7 @@ class ProductController extends Controller
         }
 
         if ($request->filled('q')) {
-            $query->where(function ($q) use ($keyword) {
-                $q->where('name', 'like', "%{$keyword}%")
-                  ->orWhere('description', 'like', "%{$keyword}%");
-            });
+            $query->where('name', 'like', "%{$keyword}%");
         }
 
         if ($request->filled('sort')) {
