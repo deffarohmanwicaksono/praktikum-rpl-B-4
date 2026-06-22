@@ -107,18 +107,20 @@ class CheckoutController extends Controller
             'payment_method' => 'required|string',
         ]);
 
-        $chat = $purchaseLink->chat;
+        $transaction = Transaction::where(
+            'purchase_link_id',
+            $purchaseLink->id
+        )->first();
 
-        $transaction = Transaction::create([
-            'purchase_link_id' => $purchaseLink->id,
-            'buyer_id'         => auth()->id(),
-            'product_id'       => $chat->product_id,
-            'total_price'      => $purchaseLink->deal_price,
-            'status'           => 'menunggu_pembayaran',
-            'payment_method'   => $validated['payment_method'],
+        if (!$transaction) {
+            return response()->json([
+                'message' => 'Transaksi tidak ditemukan.'
+            ], 404);
+        }
+
+        $transaction->update([
+            'payment_method' => $validated['payment_method'],
         ]);
-
-        $purchaseLink->update(['is_used' => true]);
 
         return response()->json([
             'message'        => 'Checkout berhasil! Silakan upload bukti pembayaran.',
@@ -149,6 +151,9 @@ class CheckoutController extends Controller
             'payment_proof' => $path,
             'status'        => 'dibayar',
         ]);
+
+        // Tandai link sudah dipakai setelah bukti pembayaran berhasil dikirim
+        $transaction->purchaseLink->update(['is_used' => true]);
 
         return response()->json([
             'message'           => 'Bukti pembayaran berhasil dikirim! Menunggu konfirmasi seller.',
