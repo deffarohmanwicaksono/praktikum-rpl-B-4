@@ -40,7 +40,6 @@ class ProductSeeder extends Seeder
                 'name' => 'Buku Kalkulus Stewart',
                 'description' => "Buku Kalkulus karya James Stewart edisi terbaru, salah satu referensi kalkulus paling populer dan direkomendasikan di berbagai universitas, termasuk UNS. Mencakup materi kalkulus satu variabel dan multivariabel secara lengkap dengan penjelasan yang sistematis dan banyak contoh soal beserta pembahasannya.\n\nKondisi buku sekitar 90%, halaman lengkap tidak ada yang robek atau hilang. Terdapat sedikit coretan stabilo kuning dan hijau pada beberapa bagian bab 1-3, sisanya bersih. Sampul sedikit lecek di sudut tapi isi buku masih sangat layak baca.\n\nCocok untuk mahasiswa teknik, MIPA, dan informatika yang mengambil mata kuliah Kalkulus 1 maupun Kalkulus 2. Dijual karena sudah lulus mata kuliah ini.",
                 'price' => 80000,
-                'stock' => 2,
                 'status' => 'sold_out',
             ],
             [

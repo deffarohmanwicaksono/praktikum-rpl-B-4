@@ -53,14 +53,10 @@ class CheckoutController extends Controller
 
         $chat = $purchaseLink->chat;
 
-        // Buat transaksi — link belum ditandai 'used' karena buyer belum upload bukti
-        $transaction = Transaction::create([
-            'purchase_link_id' => $purchaseLink->id,
-            'buyer_id'         => auth()->id(),
-            'product_id'       => $chat->product_id,
-            'total_price'      => $purchaseLink->deal_price,
-            'status'           => 'menunggu_pembayaran',
-            'payment_method'   => $validated['payment_method'],
+        // Update status transaksi setelah buyer upload bukti payment
+        $transaction = $purchaseLink->transaction;
+        $transaction->update([
+            'payment_method' => $validated['payment_method'],
         ]);
 
         return redirect()->route('checkout.uploadProofForm', $transaction->id)

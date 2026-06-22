@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Chat;
 use App\Models\Message;
 use App\Models\PurchaseLink;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Events\MessageSent;
@@ -158,6 +159,7 @@ class ChatController extends Controller
         $activeLink = PurchaseLink::where('chat_id', $chat->id)
             ->where('is_used', false)
             ->where('expired_at', '>', now())
+            ->latest()
             ->first();
 
         if ($activeLink) {
@@ -187,6 +189,13 @@ class ChatController extends Controller
 
         $token = Str::uuid()->toString();
 
+        $product = $chat->product;
+        if ($product->status === 'sold_out') {
+            return back()->withErrors([
+                'product' => 'Produk sudah terjual dan tidak dapat dibuatkan link pembelian lagi.'
+            ]);
+        }
+
         $purchaseLink = PurchaseLink::create([
             'chat_id'         => $chat->id,
             'token'           => $token,
@@ -197,11 +206,32 @@ class ChatController extends Controller
             'payment_methods' => $paymentMethodsArray,
         ]);
 
+        $transaction = Transaction::create([
+            'purchase_link_id' => $purchaseLink->id,
+            'buyer_id'         => $chat->buyer_id,
+            'product_id'       => $chat->product_id,
+            'total_price'      => $purchaseLink->deal_price,
+            'status'           => 'menunggu_pembayaran',
+        ]);
+
+        $transaction->update([
+            'transaction_code' =>
+                'TRX-' .
+                now()->format('Y') .
+                '-' .
+                str_pad($transaction->id, 3, '0', STR_PAD_LEFT),
+        ]);
+        $transaction->save();
+
         $message = Message::create([
             'chat_id'   => $chat->id,
             'sender_id' => $userId,
             'message'   => '[PURCHASE_LINK:' . $token . ']',
         ]);
+
+        //Reload livewire
+        $chat->touch();
+        $chat->load(['messages.sender', 'purchaseLinks']);
 
         // Kirim Notifikasi Link Pembelian ke buyer
         \App\Models\Notification::create([

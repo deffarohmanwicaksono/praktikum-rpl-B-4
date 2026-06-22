@@ -19,7 +19,6 @@ return new class extends Migration
             $table->string('name', 200);
             $table->string('description', 1000) ->nullable();
             $table->decimal('price', 18, 2);
-            $table->integer('stock')->default(1);
             $table->enum('condition', [
                 'bekas_seperti_baru',
                 'bekas_baik',

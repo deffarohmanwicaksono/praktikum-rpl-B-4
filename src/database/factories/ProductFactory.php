@@ -34,7 +34,6 @@ class ProductFactory extends Factory
                 10000,
                 1000000
             ),
-            'stock' => $status === 'sold_out' ?0 :1,
             'condition' => fake()->randomElement([
                 'bekas_seperti_baru',
                 'bekas_baik',

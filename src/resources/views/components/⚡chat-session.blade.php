@@ -22,6 +22,14 @@ new class extends Component
 
         $this->chat = $chat;
         $this->chat->load(['buyer', 'seller', 'product.productImages', 'messages.sender', 'purchaseLinks']);
+        //
+        $this->chat = Chat::with([
+            'buyer',
+            'seller',
+            'product.productImages',
+            'messages.sender',
+            'purchaseLinks'
+        ])->find($chat->id);
     }
 
     public function getListeners()

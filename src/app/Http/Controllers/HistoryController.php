@@ -18,7 +18,7 @@ class HistoryController extends Controller
 
         $statusClassMap = [
             'menunggu_pembayaran' => 'status-menunggu',
-            'dibayar' => 'status-menunggu',
+            'dibayar' => 'status-dibayar',
             'selesai' => 'status-selesai',
             'gagal' => 'status-gagal',
         ];
@@ -85,9 +85,19 @@ class HistoryController extends Controller
             return response()->json(['message' => 'Anda tidak memiliki akses untuk menutup transaksi ini.'], 403);
         }
 
+        if ($transaction->status !== 'dibayar') {
+            return response()->json([
+                'message' => 'Transaksi belum dapat diselesaikan.'
+            ], 400);
+        }
+
         $transaction->update([
             'status' => 'selesai',
             'completed_at' => now(),
+        ]);
+
+        $transaction->product->update([
+            'status' => 'sold_out'
         ]);
 
         return response()->json([
