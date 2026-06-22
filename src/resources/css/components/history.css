@@ -250,6 +250,7 @@
 }
 
 .status-menunggu { background: var(--status-menunggu-bg); border-color: var(--status-menunggu-border); color: var(--status-menunggu-text); }
+.status-dibayar { background: var(--status-dibayar-bg); border-color: var(--status-dibayar-border); color: var(--status-dibayar-text); }
 .status-selesai { background: var(--status-selesai-bg); border-color: var(--status-selesai-border); color: var(--status-selesai-text); }
 .status-gagal { background: var(--status-gagal-bg); border-color: var(--status-gagal-border); color: var(--status-gagal-text); }
 

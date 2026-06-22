@@ -146,8 +146,7 @@ class TransactionSeeder extends Seeder
         $eligibleLinks = PurchaseLink::where('is_used', true)
             ->doesntHave('transaction')
             ->whereHas('chat.product', function ($q) {
-                $q->where('status', 'dijual')
-                ->where('stock', '>', 0);
+                $q->where('status', 'dijual');
             })
             ->get();
 
@@ -169,14 +168,8 @@ class TransactionSeeder extends Seeder
             }
             if ( $transaction->status === 'selesai' ) {
                 $product = $transaction->product;
-                $product->decrement(
-                    'stock',
-                    $transaction->quantity
-                );
-                $product->refresh();
-
-                if ($product->stock <= 0) {
-                    $product->update([
+                if ($transaction->status === 'selesai') {
+                    $transaction->product->update([
                         'status' => 'sold_out'
                     ]);
                 }

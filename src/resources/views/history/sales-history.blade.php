@@ -35,6 +35,7 @@
                 <select class="filter-select" id="filterStatusSelect">
                     <option value="">Status: Semua</option>
                 <option value="status-menunggu">Menunggu Pembayaran</option>
+                <option value="status--dibayar">Menunggu Konfirmasi</option>
                 <option value="status-selesai">Selesai</option>
             </select>
         </div>
@@ -127,7 +128,7 @@
                                 Detail
                             </button>
 
-                            @if($trx->status_class !== 'status-selesai')
+                            @if($trx->status_class === 'status-dibayar')
                                 <button
                                     class="btn-action btn-close-sale"
                                     data-id="TRX-{{ str_pad($trx->id, 4, '0', STR_PAD_LEFT) }}"

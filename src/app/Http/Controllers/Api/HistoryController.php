@@ -132,6 +132,10 @@ class HistoryController extends Controller
             'completed_at' => now(),
         ]);
 
+        $transaction->product->update([
+            'status' => 'sold_out'
+        ]);
+
         return response()->json([
             'message'      => 'Transaksi berhasil diselesaikan.',
             'status'       => 'selesai',

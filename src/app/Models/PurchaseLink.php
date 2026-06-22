@@ -27,7 +27,10 @@ class PurchaseLink extends Model
     //Cek apakah link masih valid (belum dipakai & belum expired)
     public function isValid(): bool
     {
-        return !$this->is_used && $this->expired_at->isFuture();
+        return 
+            !$this->is_used 
+            && $this->expired_at->isFuture()
+            && $this->product?->status !== 'sold_out';
     }
 
     // Relasi dengan model lain
