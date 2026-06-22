@@ -62,7 +62,10 @@ class TransactionFactory extends Factory
             }
             elseif ( in_array( $status, ['dibayar', 'selesai', 'gagal'] )) {
                 $paidAt = Carbon::parse( $transactionDate )->addMinutes( rand(5, 180) );
-                $paymentMethod = fake()->randomElement( $link->payment_methods );
+                $selectedPayment = fake()->randomElement( $link->payment_methods );
+                $paymentMethod = is_array($selectedPayment) 
+                    ? ($selectedPayment['label'] ?? null) 
+                    : $selectedPayment;
                 $proofImages = [
                     'images/payments/bukti_transfer_001.jpg',
                     'images/payments/bukti_transfer_002.jpg',

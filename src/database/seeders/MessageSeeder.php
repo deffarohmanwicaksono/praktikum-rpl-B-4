@@ -279,25 +279,12 @@ class MessageSeeder extends Seeder
         $emptyChats = Chat::doesntHave('messages')->get();
 
         foreach ($emptyChats as $chat) {
-            $messageCount = rand(2, 5);
-            $currentTime = $chat->created_at;
-
-            for ($i = 1; $i <= $messageCount; $i++) {
-
-                $senderId = ($i % 2)
-                    ? $chat->buyer_id
-                    : $chat->seller_id;
-
-                Message::factory()->create([
-                    'chat_id' => $chat->id,
-                    'sender_id' => $senderId,
-                    'created_at' => $currentTime,
-                    'updated_at' => $currentTime,
-                ]);
-
-                $currentTime = Carbon::parse($currentTime)
-                    ->addSeconds(rand(30, 300));
-            }
+            Message::factory()->create([
+                'chat_id' => $chat->id,
+                'sender_id' => $chat->buyer_id,
+                'created_at' => $chat->created_at,
+                'updated_at' => $chat->created_at,
+            ]);
         }
     }
 }

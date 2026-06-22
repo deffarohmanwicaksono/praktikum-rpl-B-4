@@ -26,7 +26,7 @@ class PurchaseLinkFactory extends Factory
         return [
             'token' => 'SEMART-LINK-' . Str::upper(Str::random(10)),
             'deal_price' => 0,
-            'expired_at' => now()->addDays(1),
+            'expired_at' => now()->addMinutes(rand(15, 1440)),
             'is_used' => fake()->boolean(40),
         ];
     }
@@ -49,8 +49,26 @@ class PurchaseLinkFactory extends Factory
 
             $availableMethods = $seller
                 ->paymentAccounts
-                ->pluck('payment_method')
-                ->toArray();
+                ->map(function ($account) {
+
+                    return [
+                        'id' => $account->id,
+                        'label' => $account->payment_method,
+                        'number' => $account->account_number,
+                        'owner' => $account->account_name,
+
+                        'type' => in_array(
+                            $account->payment_method,
+                            ['Dana', 'ShopeePay']
+                        ) ? 'ewallet' : 'bank',
+
+                        'icon' => in_array(
+                            $account->payment_method,
+                            ['Dana', 'ShopeePay']
+                        ) ? 'wallet2' : 'bank2',
+                    ];
+                })
+                ->values()->toArray();
 
             return [
                 'chat_id' => $chat->id,
@@ -68,7 +86,7 @@ class PurchaseLinkFactory extends Factory
 
                 'created_at' => $linkDate,
                 'updated_at' => $linkDate,
-                'expired_at' => Carbon::parse($linkDate)->addDays(rand(1, 5)),
+                'expired_at' => Carbon::parse($linkDate)->addMinutes(rand(15, 1440)),
             ];
         });
     }
