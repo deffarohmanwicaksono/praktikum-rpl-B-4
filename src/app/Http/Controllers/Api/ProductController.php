@@ -23,10 +23,19 @@ class ProductController extends Controller
         if (!$imageUrl) {
             return asset('images/placeholder.png');
         }
+
+        // Unsplash / external URL
         if (str_starts_with($imageUrl, 'http')) {
             return $imageUrl;
         }
-        return asset('storage/' . $imageUrl);
+
+        // Upload user
+        if (str_starts_with($imageUrl, 'products/')) {
+            return asset('storage/' . $imageUrl);
+        }
+
+        // Asset bawaan repo
+        return asset($imageUrl);
     }
 
     /**
