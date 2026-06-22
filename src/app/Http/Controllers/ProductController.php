@@ -140,15 +140,10 @@ class ProductController extends Controller
             if (isset($catMap[$request->category])) {
                 $query->where('category_id', $catMap[$request->category]);
             }
+        }
 
-            $keyword = null;
-        } else {
-            if ($request->filled('q')) {
-                $query->where(function ($q) use ($keyword) {
-                    $q->where('name', 'like', "%{$keyword}%")
-                      ->orWhere('description', 'like', "%{$keyword}%");
-                });
-            }
+        if ($request->filled('q')) {
+            $query->where('name', 'like', "%{$keyword}%");
         }
 
         if ($request->filled('sort')) {
