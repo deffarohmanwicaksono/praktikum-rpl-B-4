@@ -32,7 +32,11 @@ class CheckoutController extends Controller
 
         $imageUrl = $product->productImages->first()?->image_url ?? null;
         if ($imageUrl && !str_starts_with($imageUrl, 'http')) {
-            $imageUrl = asset('storage/' . $imageUrl);
+            if (str_starts_with($imageUrl, 'products/')) {
+                $imageUrl = asset('storage/' . $imageUrl);
+            } else {
+                $imageUrl = asset($imageUrl);
+            }
         }
 
         // Ambil filter metode pembayaran yang dipilih seller saat membuat link
