@@ -398,6 +398,11 @@
     font-weight: 400;
 }
 
+.chat-preview--link {
+    color: var(--gray-text);
+    font-weight: 400;
+}
+
 .chat-badge {
     display: inline-flex;
     align-items: center;

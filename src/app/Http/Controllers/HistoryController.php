@@ -47,7 +47,7 @@ class HistoryController extends Controller
      */
     public function purchaseHistory()
     {
-        $transactions = Transaction::with(['product.productImages', 'product.user', 'purchaseLink.chat'])
+        $transactions = Transaction::with(['product.productImages', 'product.user', 'purchaseLink.chat', 'review'])
             ->where('buyer_id', auth()->id())
             ->orderBy('created_at', 'desc')
             ->get();
@@ -63,7 +63,7 @@ class HistoryController extends Controller
     public function salesHistory()
     {
         // Cari semua transaksi di mana produk dari transaksi tersebut dimiliki oleh user saat ini
-        $transactions = Transaction::with(['product.productImages', 'buyer', 'purchaseLink.chat'])
+        $transactions = Transaction::with(['product.productImages', 'buyer', 'purchaseLink.chat', 'review'])
             ->whereHas('product', function ($query) {
                 $query->where('user_id', auth()->id());
             })
