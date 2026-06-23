@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Transaction;
+use App\Models\Review;
 use Illuminate\Http\Request;
 
 class HistoryController extends Controller
@@ -142,5 +143,46 @@ class HistoryController extends Controller
             'status_label' => 'Selesai',
             'completed_at' => $transaction->completed_at?->toDateTimeString(),
         ]);
+    }
+
+    /**
+     * Buyer memberikan review/rating setelah transaksi selesai.
+     */
+    public function postReview(Request $request, Transaction $transaction)
+    {
+        // Hanya buyer yang boleh review
+        if ($transaction->buyer_id !== auth()->id()) {
+            return response()->json(['message' => 'Anda tidak memiliki akses untuk mereview transaksi ini.'], 403);
+        }
+
+        // Transaksi harus sudah selesai
+        if ($transaction->status !== 'selesai') {
+            return response()->json(['message' => 'Transaksi belum selesai, tidak dapat direview.'], 422);
+        }
+
+        // Cegah review duplikat
+        if (Review::where('transaction_id', $transaction->id)->exists()) {
+            return response()->json(['message' => 'Anda sudah memberikan review untuk transaksi ini.'], 422);
+        }
+
+        $validated = $request->validate([
+            'rating'  => 'required|integer|min:1|max:5',
+            'comment' => 'nullable|string|max:500',
+        ]);
+
+        $review = Review::create([
+            'transaction_id' => $transaction->id,
+            'rating'         => $validated['rating'],
+            'comment'        => $validated['comment'] ?? null,
+        ]);
+
+        return response()->json([
+            'message' => 'Review berhasil dikirim.',
+            'review'  => [
+                'id'      => $review->id,
+                'rating'  => $review->rating,
+                'comment' => $review->comment,
+            ],
+        ], 201);
     }
 }
