@@ -44,7 +44,8 @@
                 <i class="bi bi-funnel filter-icon"></i>
                 <select class="filter-select" id="filterStatusSelect">
                     <option value="">Status: Semua</option>
-                    <option value="status-menunggu">Menunggu Konfirmasi</option>
+                    <option value="status-menunggu">Menunggu Pembayaran</option>
+                    <option value="status-dibayar">Menunggu Konfirmasi</option>
                     <option value="status-selesai">Selesai</option>
                     <option value="status-gagal">Gagal</option>
                 </select>
@@ -125,13 +126,26 @@
                         </button>
 
                         @if($trx->status_class === 'status-selesai')
-                        <button class="btn-action btn-review-write" 
-                                data-name="{{ $trx->product->name }}"
-                                data-seller="{{ $trx->product->user->name ?? 'Unknown Seller' }}"
-                                data-image="{{ $trx->image_url }}"
-                                title="Berikan Ulasan">
-                            <i class="bi bi-star-fill"></i> Ulasan
-                        </button>
+                            @if($trx->review)
+                            <button class="btn-action btn-review-view" 
+                                    data-name="{{ $trx->product->name }}"
+                                    data-seller="{{ $trx->product->user->name ?? 'Unknown Seller' }}"
+                                    data-image="{{ $trx->image_url }}"
+                                    data-rating="{{ $trx->review->rating }}"
+                                    data-comment="{{ $trx->review->comment }}"
+                                    title="Lihat Ulasan">
+                                <i class="bi bi-star"></i> Ulasan
+                            </button>
+                            @else
+                            <button class="btn-action btn-review-write" 
+                                    data-id="{{ $trx->id }}"
+                                    data-name="{{ $trx->product->name }}"
+                                    data-seller="{{ $trx->product->user->name ?? 'Unknown Seller' }}"
+                                    data-image="{{ $trx->image_url }}"
+                                    title="Berikan Ulasan">
+                                <i class="bi bi-star-fill"></i> Ulasan
+                            </button>
+                            @endif
                         @endif
                     </div>
                 </td>
@@ -220,7 +234,8 @@
                 <i class="bi bi-x-lg"></i>
             </button>
         </div>
-        <form id="formSubmitReview" action="#" method="POST" onsubmit="event.preventDefault(); alert('Ulasan berhasil disimpan!'); document.getElementById('modalReviewPurchase').classList.remove('open');">
+        <form id="formSubmitReview" action="" method="POST" style="display: flex; flex-direction: column; flex: 1; min-height: 0; overflow: hidden;">
+            @csrf
             <div class="modal-body-simple text-left-align">
                 
                 <div class="product-review-header">
@@ -248,15 +263,63 @@
 
                 <div class="review-textarea-container">
                     <label for="reviewCommentTextarea" class="rating-field-label">Tulis Ulasan Anda</label>
-                    <textarea id="reviewCommentTextarea" class="review-custom-textarea" rows="4" placeholder="Bagikan pengalaman Anda saat berbelanja" required></textarea>
+                    <textarea name="comment" id="reviewCommentTextarea" class="review-custom-textarea" rows="4" placeholder="Bagikan pengalaman Anda saat berbelanja"></textarea>
                 </div>
 
             </div>
-            <div class="modal-footer-custom">
+            <div class="modal-footer-custom review-footer">
                 <button type="button" class="btn-modal-cancel" data-modal="modalReviewPurchase">Batal</button>
                 <button type="submit" class="btn-modal-submit-primary" id="btnSubmitReviewAction">Kirim Ulasan</button>
             </div>
         </form>
+    </div>
+</div>
+
+{{-- =============================================
+     MODAL 3: LIHAT ULASAN
+     ============================================= --}}
+<div class="modal-overlay" id="modalViewReview">
+    <div class="modal-card">
+        <div class="modal-header-custom">
+            <h3 class="modal-title-custom">Ulasan Anda</h3>
+            <button class="modal-close-btn" data-modal="modalViewReview">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+        <div class="modal-body-simple text-left-align">
+            
+            <div class="product-review-header">
+                <div class="review-avatar-wrap">
+                    <img id="viewReviewProductImage" src="" alt="Thumbnail" class="review-avatar">
+                </div>
+                <div class="review-meta-wrap">
+                    <h4 id="viewReviewProductName" class="review-product-title"></h4>
+                    <p id="viewReviewSellerName" class="review-product-seller"></p>
+                </div>
+            </div>
+
+            <div class="rating-input-container">
+                <label class="rating-field-label">Kualitas Produk & Pelayanan</label>
+                <div class="star-rating-row" id="viewStarRatingRow">
+                    <i class="bi bi-star-fill review-star-item" style="color: #FFD700;"></i>
+                    <i class="bi bi-star-fill review-star-item" style="color: #FFD700;"></i>
+                    <i class="bi bi-star-fill review-star-item" style="color: #FFD700;"></i>
+                    <i class="bi bi-star-fill review-star-item" style="color: #FFD700;"></i>
+                    <i class="bi bi-star-fill review-star-item" style="color: #FFD700;"></i>
+                </div>
+            </div>
+
+            <div class="review-textarea-container">
+                <label class="rating-field-label">Ulasan Anda</label>
+                <p id="viewReviewComment" class="review-custom-textarea" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px; font-size: 13.5px;"></p>
+            </div>
+
+        </div>
+        <div class="modal-footer-custom">
+            <button class="btn-modal-cancel" data-modal="modalViewReview">Tutup</button>
+        </div>
+    </div>
+</div>
     </div>
 </div>
 
@@ -269,3 +332,72 @@
 </div>
 
 @endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Handling form submission logic for reviews (add action URL dynamically)
+    const writeReviewBtns = document.querySelectorAll('.btn-review-write');
+    const formSubmitReview = document.getElementById('formSubmitReview');
+    
+    writeReviewBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const trxId = this.getAttribute('data-id');
+            formSubmitReview.action = `/transactions/${trxId}/review`;
+            // Also reset stars and inputs
+            document.getElementById('ratingValueInput').value = "0";
+            document.getElementById('reviewCommentTextarea').value = "";
+            document.querySelectorAll('#starRatingRow .review-star-item').forEach(star => {
+                star.classList.remove('bi-star-fill', 'active');
+                star.classList.add('bi-star');
+                star.style.color = ''; // Clear inline styles
+            });
+            document.getElementById('ratingHintText').textContent = "Pilih bintang untuk memberi nilai";
+        });
+    });
+
+    // Handling view review modal
+    const viewReviewBtns = document.querySelectorAll('.btn-review-view');
+    const modalViewReview = document.getElementById('modalViewReview');
+
+    viewReviewBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const name = this.getAttribute('data-name');
+            const seller = this.getAttribute('data-seller');
+            const image = this.getAttribute('data-image');
+            const rating = parseInt(this.getAttribute('data-rating'));
+            const comment = this.getAttribute('data-comment');
+
+            document.getElementById('viewReviewProductName').textContent = name;
+            document.getElementById('viewReviewSellerName').textContent = seller;
+            document.getElementById('viewReviewProductImage').src = image;
+            document.getElementById('viewReviewComment').textContent = comment || 'Tidak ada komentar';
+
+            const stars = document.querySelectorAll('#viewStarRatingRow .review-star-item');
+            stars.forEach((star, index) => {
+                if (index < rating) {
+                    star.classList.remove('bi-star');
+                    star.classList.add('bi-star-fill');
+                    star.style.color = '#FFD700';
+                } else {
+                    star.classList.remove('bi-star-fill');
+                    star.classList.add('bi-star');
+                    star.style.color = '#cbd5e1';
+                }
+            });
+
+            // Open modal manually or rely on existing generic logic if it uses data-modal
+            // if the existing script doesn't catch it, we open it:
+            modalViewReview.classList.add('open');
+        });
+    });
+    
+    // Bind close button for view review
+    document.querySelectorAll('[data-modal="modalViewReview"]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            modalViewReview.classList.remove('open');
+        });
+    });
+});
+</script>
+@endpush

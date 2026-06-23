@@ -107,7 +107,7 @@
 }
 
 .review-star-item.active {
-    color: var(--primary-blue);
+    color: #FFD700;
 }
 
 .rating-hint-text {

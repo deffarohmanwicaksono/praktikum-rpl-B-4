@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Transaction;
-use App\Models\Review;
 use Illuminate\Http\Request;
 
 class HistoryController extends Controller
@@ -23,7 +22,7 @@ class HistoryController extends Controller
 
         $statusClassMap = [
             'menunggu_pembayaran' => 'status-menunggu',
-            'dibayar'             => 'status-menunggu',
+            'dibayar'             => 'status-dibayar',
             'selesai'             => 'status-selesai',
             'gagal'               => 'status-gagal',
         ];
@@ -75,6 +74,10 @@ class HistoryController extends Controller
             'date_label'       => $trx->created_at?->translatedFormat('d F Y'),
             'time_label'       => $trx->created_at?->format('H:i') . ' WIB',
             'completed_at'     => $trx->completed_at?->toDateTimeString(),
+            'review'           => $trx->review ? [
+                'rating'  => $trx->review->rating,
+                'comment' => $trx->review->comment,
+            ] : null,
         ];
     }
 
@@ -88,6 +91,7 @@ class HistoryController extends Controller
                 'product.user',
                 'purchaseLink.chat',
                 'buyer',
+                'review',
             ])
             ->where('buyer_id', auth()->id())
             ->orderBy('created_at', 'desc')
@@ -107,6 +111,7 @@ class HistoryController extends Controller
                 'product.productImages',
                 'buyer',
                 'purchaseLink.chat',
+                'review',
             ])
             ->whereHas('product', fn($q) => $q->where('user_id', auth()->id()))
             ->orderBy('created_at', 'desc')
@@ -128,6 +133,12 @@ class HistoryController extends Controller
             ], 403);
         }
 
+        if ($transaction->status !== 'dibayar') {
+            return response()->json([
+                'message' => 'Transaksi belum dapat diselesaikan.'
+            ], 400);
+        }
+
         $transaction->update([
             'status'       => 'selesai',
             'completed_at' => now(),
@@ -143,46 +154,5 @@ class HistoryController extends Controller
             'status_label' => 'Selesai',
             'completed_at' => $transaction->completed_at?->toDateTimeString(),
         ]);
-    }
-
-    /**
-     * Buyer memberikan review/rating setelah transaksi selesai.
-     */
-    public function postReview(Request $request, Transaction $transaction)
-    {
-        // Hanya buyer yang boleh review
-        if ($transaction->buyer_id !== auth()->id()) {
-            return response()->json(['message' => 'Anda tidak memiliki akses untuk mereview transaksi ini.'], 403);
-        }
-
-        // Transaksi harus sudah selesai
-        if ($transaction->status !== 'selesai') {
-            return response()->json(['message' => 'Transaksi belum selesai, tidak dapat direview.'], 422);
-        }
-
-        // Cegah review duplikat
-        if (Review::where('transaction_id', $transaction->id)->exists()) {
-            return response()->json(['message' => 'Anda sudah memberikan review untuk transaksi ini.'], 422);
-        }
-
-        $validated = $request->validate([
-            'rating'  => 'required|integer|min:1|max:5',
-            'comment' => 'nullable|string|max:500',
-        ]);
-
-        $review = Review::create([
-            'transaction_id' => $transaction->id,
-            'rating'         => $validated['rating'],
-            'comment'        => $validated['comment'] ?? null,
-        ]);
-
-        return response()->json([
-            'message' => 'Review berhasil dikirim.',
-            'review'  => [
-                'id'      => $review->id,
-                'rating'  => $review->rating,
-                'comment' => $review->comment,
-            ],
-        ], 201);
     }
 }

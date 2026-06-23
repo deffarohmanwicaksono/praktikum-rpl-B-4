@@ -64,4 +64,21 @@ class Product extends Model
     {
         return $this->hasOne(ProductVerification::class);
     }
+
+    /**
+     * Scope untuk mendapatkan produk yang benar-benar tersedia (belum dibeli/dibooking)
+     */
+    public function scopeAvailableForSale($query)
+    {
+        return $query->where('status', 'dijual')
+            ->whereDoesntHave('transactions', function($q) {
+                $q->whereIn('status', ['dibayar', 'selesai'])
+                  ->orWhere(function($subQ) {
+                      $subQ->where('status', 'menunggu_pembayaran')
+                           ->whereHas('purchaseLink', function($pl) {
+                               $pl->where('expired_at', '>', now());
+                           });
+                  });
+            });
+    }
 }

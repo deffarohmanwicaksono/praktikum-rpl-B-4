@@ -108,6 +108,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/purchase-history', [\App\Http\Controllers\HistoryController::class, 'purchaseHistory'])->name('history.purchase-history');
     Route::get('/sales-history', [\App\Http\Controllers\HistoryController::class, 'salesHistory'])->name('history.sales-history');
     Route::post('/transactions/{transaction}/close', [\App\Http\Controllers\HistoryController::class, 'closeTransaction'])->name('history.close-transaction');
+    Route::post('/transactions/{transaction}/review', [\App\Http\Controllers\ReviewController::class, 'store'])->name('history.review.store');
 
     // Seller
     Route::get('/dashboard-seller', [ProductController::class, 'sellerDashboard'])->name('seller.dashboard-seller');

@@ -61,5 +61,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/purchase-history',                  [HistoryController::class, 'purchaseHistory']);
     Route::get('/sales-history',                     [HistoryController::class, 'salesHistory']);
     Route::patch('/transaction/{transaction}/close', [HistoryController::class, 'closeTransaction']); // seller selesaikan
-    Route::post('/transaction/{transaction}/review', [HistoryController::class, 'postReview']);       // buyer beri review
+    Route::post('/transaction/{transaction}/review', [\App\Http\Controllers\Api\ReviewController::class, 'store']);
 });

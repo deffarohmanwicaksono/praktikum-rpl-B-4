@@ -23,7 +23,11 @@ class ChatController extends Controller
         $latestMsg    = $chat->latestMessage;
 
         if ($imageUrl && !str_starts_with($imageUrl, 'http')) {
-            $imageUrl = asset('storage/' . $imageUrl);
+            if (str_starts_with($imageUrl, 'products/')) {
+                $imageUrl = asset('storage/' . $imageUrl);
+            } else {
+                $imageUrl = asset($imageUrl);
+            }
         }
 
         return [
@@ -94,15 +98,25 @@ class ChatController extends Controller
     /**
      * Daftar semua chat milik user (sebagai buyer atau seller).
      */
-    public function index()
+    public function index(Request $request)
     {
         $userId = auth()->id();
 
-        $chats = Chat::with(['buyer', 'seller', 'product.productImages', 'latestMessage'])
-            ->where('buyer_id', $userId)
-            ->orWhere('seller_id', $userId)
-            ->latest('updated_at')
-            ->get();
+        $query = Chat::with(['buyer', 'seller', 'product.productImages', 'latestMessage']);
+
+        $pov = $request->query('pov');
+        if ($pov === 'buyer') {
+            $query->where('buyer_id', $userId);
+        } elseif ($pov === 'seller') {
+            $query->where('seller_id', $userId);
+        } else {
+            $query->where(function($q) use ($userId) {
+                $q->where('buyer_id', $userId)
+                  ->orWhere('seller_id', $userId);
+            });
+        }
+
+        $chats = $query->latest('updated_at')->get();
 
         return response()->json([
             'data' => $chats->map(fn($c) => $this->formatChat($c, $userId)),
@@ -223,6 +237,19 @@ class ChatController extends Controller
             return response()->json(['message' => 'Hanya seller yang dapat mengirim link pembelian.'], 403);
         }
 
+        // Cek apakah masih ada link aktif yang belum kedaluwarsa untuk chat ini
+        $activeLink = PurchaseLink::where('chat_id', $chat->id)
+            ->where('is_used', false)
+            ->where('expired_at', '>', now())
+            ->latest()
+            ->first();
+
+        if ($activeLink) {
+            return back()->withErrors([
+                'active_link' => 'Masih ada link pembelian aktif yang belum kedaluwarsa. Tunggu hingga link tersebut digunakan oleh buyer atau habis masa berlakunya.',
+            ]);
+        }
+
         // Bersihkan titik ribuan dari deal_price
         if ($request->has('deal_price')) {
             $request->merge([
@@ -239,6 +266,13 @@ class ChatController extends Controller
         ]);
 
         $token = Str::uuid()->toString();
+
+        $product = $chat->product;
+        if ($product->status === 'sold_out') {
+            return response()->json([
+                'message' => 'Produk sudah terjual.'
+            ], 422);
+        }
 
         $purchaseLink = PurchaseLink::create([
             'chat_id'         => $chat->id,

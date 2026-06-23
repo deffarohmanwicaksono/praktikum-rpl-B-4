@@ -32,7 +32,11 @@ class CheckoutController extends Controller
 
         $imageUrl = $product->productImages->first()?->image_url ?? null;
         if ($imageUrl && !str_starts_with($imageUrl, 'http')) {
-            $imageUrl = asset('storage/' . $imageUrl);
+            if (str_starts_with($imageUrl, 'products/')) {
+                $imageUrl = asset('storage/' . $imageUrl);
+            } else {
+                $imageUrl = asset($imageUrl);
+            }
         }
 
         // Ambil filter metode pembayaran yang dipilih seller saat membuat link
@@ -107,18 +111,20 @@ class CheckoutController extends Controller
             'payment_method' => 'required|string',
         ]);
 
-        $chat = $purchaseLink->chat;
+        $transaction = Transaction::where(
+            'purchase_link_id',
+            $purchaseLink->id
+        )->first();
 
-        $transaction = Transaction::create([
-            'purchase_link_id' => $purchaseLink->id,
-            'buyer_id'         => auth()->id(),
-            'product_id'       => $chat->product_id,
-            'total_price'      => $purchaseLink->deal_price,
-            'status'           => 'menunggu_pembayaran',
-            'payment_method'   => $validated['payment_method'],
+        if (!$transaction) {
+            return response()->json([
+                'message' => 'Transaksi tidak ditemukan.'
+            ], 404);
+        }
+
+        $transaction->update([
+            'payment_method' => $validated['payment_method'],
         ]);
-
-        $purchaseLink->update(['is_used' => true]);
 
         return response()->json([
             'message'        => 'Checkout berhasil! Silakan upload bukti pembayaran.',
@@ -149,6 +155,9 @@ class CheckoutController extends Controller
             'payment_proof' => $path,
             'status'        => 'dibayar',
         ]);
+
+        // Tandai link sudah dipakai setelah bukti pembayaran berhasil dikirim
+        $transaction->purchaseLink->update(['is_used' => true]);
 
         return response()->json([
             'message'           => 'Bukti pembayaran berhasil dikirim! Menunggu konfirmasi seller.',
