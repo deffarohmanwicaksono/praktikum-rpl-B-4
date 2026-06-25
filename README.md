@@ -120,8 +120,9 @@ npm run dev
 
 ### 6. Jalankan Server
 
+Untuk mengizinkan koneksi dari Emulator Android atau perangkat di jaringan WiFi yang sama, gunakan perintah berikut:
 ```bash
-php artisan serve
+php artisan serve --host=0.0.0.0 --port=8000
 ```
 
 ### 7. Jalankan Reverb (Realtime Chat)
@@ -129,7 +130,7 @@ php artisan serve
 Buka terminal baru dan jalankan:
 
 ```bash
-php artisan reverb:start
+php artisan reverb:start --host=0.0.0.0 --port=8080
 ```
 
 > Reverb harus berjalan bersamaan dengan server agar fitur chat bisa berfungsi secara realtime.
